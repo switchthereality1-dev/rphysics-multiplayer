@@ -1,0 +1,8 @@
+{
+  "name": "rphysics-server",
+  "version": "1.0.0",
+  "description": "Rphysics room server",
+  "main": "rphysics-server.js",
+  "scripts": { "start": "node rphysics-server.js" },
+  "engines": { "node": ">=18" }
+}
