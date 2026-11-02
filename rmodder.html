@@ -1,0 +1,542 @@
+<!DOCTYPE html><html lang="ru"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RModder — блочный моддер для Rphysics</title>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#0f1320;color:#e9f1ff;font-family:system-ui,-apple-system,Segoe UI,sans-serif}
+body{display:flex;flex-direction:column;overflow:hidden}
+header{display:flex;align-items:center;gap:12px;padding:10px 16px;background:linear-gradient(90deg,#1b2340,#2a1b40 60%,#402a1b);border-bottom:1px solid #2b3556;flex-wrap:wrap}
+header h1{margin:0;font-size:19px;letter-spacing:.5px}
+header .sub{font-size:12px;opacity:.7}
+header .sp{flex:1}
+button{font:600 13px system-ui;color:#fff;background:#2b3556;border:1px solid #465a8c;border-radius:9px;padding:8px 12px;cursor:pointer}
+button:hover{background:#37456e}
+button.go{background:linear-gradient(90deg,#e94560,#ff8a5c);border-color:#ff8a5c}
+button.ok{background:#2f9e6e;border-color:#48c48b}
+main{flex:1;display:grid;grid-template-columns:216px 1fr 400px;gap:10px;padding:10px;min-height:0}
+@media(max-width:1100px){main{grid-template-columns:1fr;overflow:auto;display:block}main>*{margin-bottom:10px}}
+.col{background:#151b2c;border:1px solid #26304c;border-radius:12px;display:flex;flex-direction:column;min-height:0}
+.col h2{margin:0;padding:9px 12px;font-size:13px;letter-spacing:.06em;text-transform:uppercase;opacity:.8;border-bottom:1px solid #26304c}
+.body{padding:10px;overflow:auto;min-height:0}
+.pal{display:flex;flex-direction:column;gap:8px}
+.pl{border:0;border-radius:10px;padding:10px 12px;text-align:left;font:700 13px system-ui;color:#fff;cursor:pointer;position:relative;box-shadow:0 2px 0 rgba(0,0,0,.35)}
+.pl small{display:block;font-weight:400;font-size:11px;opacity:.85;margin-top:2px}
+.pl.meta{background:#ffab19}.pl.skin{background:#9966ff}.pl.tune{background:#4cbfe6}
+.pl.npc{background:#59c059}.pl.prop{background:#ff8c1a}.pl.script{background:#ff6680}
+.pl.mob{background:#5a4bff}.pl.spawner{background:#8a5cff}.pl.item{background:#b06cff}
+.stack{display:flex;flex-direction:column;gap:6px}
+.blk{border-radius:12px;padding:10px 12px 12px;color:#fff;position:relative;box-shadow:0 3px 0 rgba(0,0,0,.35)}
+.blk::before{content:'';position:absolute;left:16px;bottom:-6px;width:26px;height:7px;border-radius:0 0 6px 6px;background:inherit}
+.blk::after{content:'';position:absolute;left:16px;top:-6px;width:26px;height:7px;border-radius:6px 6px 0 0;background:rgba(0,0,0,.18)}
+.blk.meta{background:#ffab19}.blk.skin{background:#9966ff}.blk.tune{background:#4cbfe6}
+.blk.npc{background:#59c059}.blk.prop{background:#ff8c1a}.blk.script{background:#ff6680}
+.blk.mob{background:#5a4bff}.blk.spawner{background:#8a5cff}.blk.item{background:#b06cff}
+.blk .hd{display:flex;align-items:center;gap:8px;font:800 13px system-ui;text-shadow:0 1px 2px rgba(0,0,0,.35)}
+.blk .hd .sp{flex:1}
+.blk .hd button{background:rgba(0,0,0,.22);border:1px solid rgba(255,255,255,.3);padding:2px 7px;border-radius:7px;font-size:12px}
+.blk .row{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:7px;font-size:12.5px}
+.blk input[type=text],.blk input[type=number],.blk select,.blk textarea{
+ font:600 12.5px system-ui;color:#101828;background:#fff;border:0;border-radius:999px;padding:5px 10px;min-width:62px}
+.blk textarea{border-radius:10px;min-height:90px;width:100%;font:12px ui-monospace,monospace;padding:8px}
+.blk input[type=color]{width:34px;height:26px;border:0;border-radius:7px;background:#fff;padding:0}
+.blk .lbl{opacity:.92}
+.empty{opacity:.55; font-size:13px; text-align:center; padding:26px 8px; line-height:1.6}
+pre{margin:0;font:12px ui-monospace,monospace;white-space:pre-wrap;word-break:break-word;color:#cfe3ff}
+textarea.big{width:100%;height:100%;min-height:300px;resize:none;background:#0d1220;color:#cfe3ff;border:1px solid #26304c;border-radius:10px;
+ font:12px ui-monospace,monospace;padding:10px;line-height:1.45}
+.tabs{display:flex;gap:6px;padding:8px 10px 0;flex-wrap:wrap}
+.tabs button{padding:6px 10px;font-size:12px;background:#1b2236;border-color:#2b3556}
+.tabs button.on{background:#3a5cff;border-color:#6f8bff}
+.foot{display:flex;gap:8px;flex-wrap:wrap;align-items:center;padding:10px 14px;background:#121728;border-top:1px solid #26304c;font-size:12px}
+.foot .sp{flex:1}
+.toast{position:fixed;left:50%;bottom:74px;transform:translateX(-50%);background:#2f9e6e;color:#fff;padding:9px 16px;border-radius:10px;
+ font:700 13px system-ui;opacity:0;transition:opacity .25s;pointer-events:none;z-index:50}
+.toast.on{opacity:1}
+canvas#pv{display:block;margin:0 auto;background:#0d1220;border-radius:10px;border:1px solid #26304c}
+.hint{font-size:11.5px;opacity:.65;line-height:1.5;margin-top:8px}
+</style></head>
+<body>
+<header>
+  <h1>🧩 RModder</h1>
+  <span class="sub">блочный моддер для Rphysics · сохранение в меню модов</span>
+  <span class="sp"></span>
+  <button id="bOpen">📂 Открыть .rmod</button>
+  <button id="bCat">🐱 Коты-камикадзе</button><button id="bBomber">✈ Бомбардировщики</button><button id="bEx">✨ Пример: неоновый нож</button>
+  <button id="bReset">🗑 Сброс</button>
+  <input type="file" id="fIn" accept=".rmod,.json,application/json" style="display:none">
+</header>
+
+<main>
+  <section class="col">
+    <h2>Блоки</h2>
+    <div class="body pal">
+      <button class="pl meta" data-add="meta">Мод<small>имя, автор, описание</small></button>
+      <button class="pl skin" data-add="skin">Скин предмета<small>цвета + размер (нож, бита…)</small></button>
+      <button class="pl tune" data-add="tune">Тюнинг<small>урон, скорость бега</small></button>
+      <button class="pl npc" data-add="npc">Цвет NPC<small>добавить в палитру</small></button>
+      <button class="pl prop" data-add="prop">Предмет на карту<small>спавн при загрузке</small></button>
+      <button class="pl item" data-add="item">Свой предмет<small>оружие: урон, скорость, цвета</small></button>
+      <button class="pl mob" data-add="mob">Существо<small>кот, камикадзе, бомбардировщик</small></button>
+      <button class="pl spawner" data-add="spawner">Спавнер<small>рожать существ по таймеру</small></button>
+      <button class="pl script" data-add="script">Скрипт<small>свой код (для ИИ)</small></button>
+      <button class="pl script" data-add="msg">Сообщение при старте<small>текст на экране</small></button>
+    </div>
+  </section>
+
+  <section class="col">
+    <h2>Сценарий мода</h2>
+    <div class="body">
+      <div class="stack" id="stack"></div>
+      <div class="empty" id="empty">Слева выбери блоки — они появятся здесь.<br>Блоки собираются сверху вниз, как в Scratch.</div>
+    </div>
+  </section>
+
+  <section class="col">
+    <div class="tabs">
+      <button class="on" data-tab="json">Код мода</button>
+      <button data-tab="ai">Промпт для ИИ</button>
+      <button data-tab="how">Как это работает</button>
+    </div>
+    <div class="body">
+      <div id="tab-json">
+        <pre id="json"></pre>
+      </div>
+      <div id="tab-ai" style="display:none">
+        <textarea class="big" id="prompt" readonly></textarea>
+      </div>
+      <div id="tab-how" style="display:none;font-size:13px;line-height:1.65">
+        <b>1.</b> Собери мод блоками слева.<br>
+        <b>2.</b> Нажми <b>«Скачать .rmod»</b> — получится файл мода.<br>
+        <b>3.</b> Открой игру <code>rphysics/index.html</code> → меню <b>🧩 Моды (RModder)</b> → <b>📂 Файл .rmod</b>.<br>
+        <b>4.</b> Мод появится в списке, его можно включать/выключать.<br><br>
+        <b>Через ИИ:</b> нажми «Промпт для ИИ», скопируй текст и отдай любой нейросети (Arena, DeepSeek, что угодно).
+        Она вернёт JSON — вставь его в меню модов игры в поле «Вставить мод из текста». Или загрузи этот JSON
+        сюда кнопкой «Открыть .rmod», чтобы доработать блоками.<br><br>
+        <b>Что умеет мод:</b> скины предметов (цвета и размер), свои предметы с уроном, тюнинг боя и бега,
+        новые цвета NPC, предметы на картах, <b>свои существа</b> (летающие коты-камикадзе, бомбардировщики,
+        любые твари из кубиков), <b>спавнеры</b> по таймеру и свой JS-скрипт с хуком <code>onFrame</code>.<br><br>
+        <canvas id="pv" width="180" height="200"></canvas>
+        <div class="hint">Так нож выглядит с выбранными цветами.</div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="foot">
+  <button class="go" id="bDl">💾 Скачать .rmod</button>
+  <button id="bCopyJson">📋 Копировать JSON</button>
+  <button id="bCopyPrompt">🤖 Копировать промпт для ИИ</button>
+  <span class="sp"></span>
+  <span id="stats" style="opacity:.7"></span>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+"use strict";
+const KINDS=[['knife','нож'],['crowbar','монтировка'],['bat','бита'],['axe','топор'],['medkit','аптечка']];
+const PROP_KINDS=['knife','crowbar','bat','axe','medkit','ball','melon','heavy','gren','bomb','pistol','smg','shotgun','rpg','pan','trash','egg','balloon','lighter','cam','hammer','sledge','bcrate','angry'];
+const MAPS=[['','любая карта'],['construct','rpe_construct'],['surf','rpe_surf'],['flatgrass','rpe_flatgrass'],['aero','rpe_aero'],
+  ['office','rpe_office'],['dream','rpe_dream'],['warehouse','rpe_warehouse'],['town','rpe_town'],['space','rpe_space'],
+  ['forest','rpe_forest'],['castle','rpe_castle']];
+const TITLES={meta:'Мод',skin:'Скин предмета',tune:'Тюнинг',npc:'Цвет NPC',prop:'Предмет на карту',item:'Свой предмет',mob:'Существо',spawner:'Спавнер',script:'Скрипт',msg:'Сообщение при старте'};
+const CATS={meta:'meta',skin:'skin',tune:'tune',npc:'npc',prop:'prop',item:'item',mob:'mob',spawner:'spawner',script:'script',msg:'script'};
+const YN=[['да','да'],['нет','нет']];
+let blocks=[];
+let uid=1;
+
+function el(tag,cls,txt){const e=document.createElement(tag);if(cls)e.className=cls;if(txt!==undefined)e.textContent=txt;return e}
+function toast(t){const b=document.getElementById('toast');b.textContent=t;b.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>b.classList.remove('on'),1600)}
+
+function defaults(type){
+  switch(type){
+    case 'meta': return {id:'my_mod_'+(uid++),name:'Мой мод',author:'я',desc:'Что делает этот мод'};
+    case 'skin': return {kind:'knife',a:'#0ff0ff',b:'#ff00ff',c:'#ffffff',scale:1};
+    case 'tune': return {meleeMul:1.5,runMul:1.2};
+    case 'npc': return {color:'#00ffcc'};
+    case 'prop': return {kind:'knife',map:'',x:0,y:1,z:0};
+    case 'item': return {id:'chainsaw',name:'Бензопила',type:'melee',dmg:55,cd:0.35,reach:2,
+      color:'#d7a03c',color2:'#cfd8e3',color3:'#ffffff'};
+    case 'mob': return {id:'kamikaze_cat',name:'Кот-камикадзе',color:'#e8823c',color2:'#f7d7a8',size:1,
+      hp:6,speed:6,fly:'да',hover:2.4,kamikaze:'да',boomR:4,boomDmg:45,bomber:'нет',dropEvery:2.5,
+      ears:'да',wings:'нет',tail:'да'};
+    case 'spawner': return {mob:'',every:6,count:1,max:4,map:''};
+    case 'script': return {code:'// api: msg(), mk(), P, hands, MOD, onFrame(cb)\napi.onFrame((dt,ctx)=>{ /* твой код каждый кадр */ });'};
+    case 'msg': return {text:'Привет из мода!'};
+  }
+  return {};
+}
+function addBlock(type){
+  const b={t:type,...defaults(type)};
+  blocks.push(b);
+  if(type==='meta'&&blocks.filter(x=>x.t==='meta').length>1){} // несколько мета-блоков объединяются
+  render();
+}
+function moveBlock(i,d){const j=i+d;if(j<0||j>=blocks.length)return;const t=blocks[i];blocks[i]=blocks[j];blocks[j]=t;render()}
+function delBlock(i){blocks.splice(i,1);render()}
+
+function field(parent,label,node){
+  const w=el('span','lbl',label);w.style.display='inline-flex';w.style.alignItems='center';w.style.gap='5px';
+  w.append(node);parent.append(w);return node;
+}
+function inputText(obj,key,ph){const i=el('input');i.type='text';i.value=obj[key]??'';i.placeholder=ph||'';i.oninput=()=>{obj[key]=i.value;sync()};return i}
+function inputNum(obj,key,step){const i=el('input');i.type='number';i.step=step||'0.1';i.value=obj[key]??0;i.style.minWidth='70px';
+  i.oninput=()=>{obj[key]=parseFloat(i.value)||0;sync()};return i}
+function inputColor(obj,key){const i=el('input');i.type='color';i.value=obj[key]||'#ffffff';i.oninput=()=>{obj[key]=i.value;sync()};return i}
+function select(obj,key,opts){const s=el('select');for(const [v,l] of opts){const o=el('option',null,l);o.value=v;s.append(o)}
+  s.value=obj[key]??opts[0][0];s.onchange=()=>{obj[key]=s.value;sync()};return s}
+
+function render(){
+  const st=document.getElementById('stack');st.innerHTML='';
+  document.getElementById('empty').style.display=blocks.length?'none':'block';
+  blocks.forEach((b,i)=>{
+    const e=el('div','blk '+CATS[b.t]);
+    const hd=el('div','hd');hd.append(el('span',null,TITLES[b.t]));
+    const sp=el('span','sp');hd.append(sp);
+    const up=el('button',null,'↑');up.onclick=()=>moveBlock(i,-1);
+    const dn=el('button',null,'↓');dn.onclick=()=>moveBlock(i,1);
+    const rm=el('button',null,'✕');rm.onclick=()=>delBlock(i);
+    hd.append(up,dn,rm);e.append(hd);
+    const row=el('div','row');
+    if(b.t==='meta'){
+      field(row,'id',inputText(b,'id','мой_мод'));
+      field(row,'название',inputText(b,'name','Мой мод'));
+      field(row,'автор',inputText(b,'author','я'));
+      const d=el('div','row');d.style.marginTop='6px';field(d,'описание',inputText(b,'desc','что делает'));
+      e.append(row,d);
+    }else if(b.t==='skin'){
+      field(row,'предмет',select(b,'kind',KINDS));
+      field(row,'осн.',inputColor(b,'a'));
+      field(row,'второй',inputColor(b,'b'));
+      field(row,'блик',inputColor(b,'c'));
+      field(row,'размер',inputNum(b,'scale','0.1'));
+      e.append(row);
+    }else if(b.t==='tune'){
+      field(row,'урон ближнего боя ×',inputNum(b,'meleeMul','0.1'));
+      field(row,'скорость бега ×',inputNum(b,'runMul','0.1'));
+      e.append(row);
+    }else if(b.t==='npc'){
+      field(row,'цвет рубашки',inputColor(b,'color'));e.append(row);
+    }else if(b.t==='prop'){
+      field(row,'предмет',select(b,'kind',PROP_KINDS.map(k=>[k,k])));
+      field(row,'карта',select(b,'map',MAPS));
+      const r2=el('div','row');r2.style.marginTop='6px';
+      field(r2,'x',inputNum(b,'x','0.5'));field(r2,'y',inputNum(b,'y','0.5'));field(r2,'z',inputNum(b,'z','0.5'));
+      e.append(row,r2);
+    }else if(b.t==='item'){
+      field(row,'id',inputText(b,'id','chainsaw'));
+      field(row,'название',inputText(b,'name','Бензопила'));
+      field(row,'тип',select(b,'type',[['melee','ближний бой'],['gun','стреляет']]));
+      const r2=el('div','row');r2.style.marginTop='6px';
+      field(r2,'урон',inputNum(b,'dmg','1'));field(r2,'перезарядка, с',inputNum(b,'cd','0.05'));
+      field(r2,'дистанция',inputNum(b,'reach','0.1'));
+      const r3=el('div','row');r3.style.marginTop='6px';
+      field(r3,'рукоять',inputColor(b,'color'));field(r3,'клинок',inputColor(b,'color2'));field(r3,'блик',inputColor(b,'color3'));
+      e.append(row,r2,r3);
+    }else if(b.t==='mob'){
+      field(row,'id',inputText(b,'id','kamikaze_cat'));
+      field(row,'название',inputText(b,'name','Кот-камикадзе'));
+      const r2=el('div','row');r2.style.marginTop='6px';
+      field(r2,'тело',inputColor(b,'color'));field(r2,'голова',inputColor(b,'color2'));
+      field(r2,'размер',inputNum(b,'size','0.1'));
+      const r3=el('div','row');r3.style.marginTop='6px';
+      field(r3,'hp',inputNum(b,'hp','1'));field(r3,'скорость',inputNum(b,'speed','0.5'));
+      field(r3,'летает',select(b,'fly',YN));field(r3,'высота',inputNum(b,'hover','0.5'));
+      const r4=el('div','row');r4.style.marginTop='6px';
+      field(r4,'камикадзе',select(b,'kamikaze',YN));field(r4,'радиус',inputNum(b,'boomR','0.5'));
+      field(r4,'урон',inputNum(b,'boomDmg','5'));
+      const r5=el('div','row');r5.style.marginTop='6px';
+      field(r5,'бомбардир',select(b,'bomber',YN));field(r5,'бомба каждые',inputNum(b,'dropEvery','0.5'));
+      const r6=el('div','row');r6.style.marginTop='6px';
+      field(r6,'уши',select(b,'ears',YN));field(r6,'крылья',select(b,'wings',YN));field(r6,'хвост',select(b,'tail',YN));
+      e.append(row,r2,r3,r4,r5,r6);
+    }else if(b.t==='spawner'){
+      const mobs=blocks.filter(x=>x.t==='mob').map(x=>[x.id,x.name||x.id]);
+      field(row,'существо',select(b,'mob',mobs.length?mobs:[['','— сначала добавь существо —']]));
+      field(row,'каждые, с',inputNum(b,'every','0.5'));
+      const r2=el('div','row');r2.style.marginTop='6px';
+      field(r2,'по сколько',inputNum(b,'count','1'));field(r2,'макс',inputNum(b,'max','1'));
+      field(r2,'карта',select(b,'map',MAPS));
+      e.append(row,r2);
+    }else if(b.t==='msg'){
+      field(row,'текст',inputText(b,'text','Привет!'));e.append(row);
+    }else if(b.t==='script'){
+      const ta=el('textarea');ta.value=b.code;ta.oninput=()=>{b.code=ta.value;sync()};
+      e.append(row,ta);
+    }
+    st.append(e);
+  });
+  sync();
+}
+
+function buildMod(){
+  const meta=blocks.find(b=>b.t==='meta')||{};
+  const mod={format:'rmod/2',id:(meta.id||'mod_'+Date.now()).replace(/\s+/g,'_'),name:meta.name||'Мод без названия',
+    author:meta.author||'неизвестно',desc:meta.desc||''};
+  const skins={},tuning={},shirts=[],props=[],scripts=[];
+  for(const b of blocks){
+    if(b.t==='skin'){skins[b.kind]=skins[b.kind]||{};skins[b.kind].a=b.a;skins[b.kind].b=b.b;skins[b.kind].c=b.c;
+      if(b.scale&&b.scale!==1)skins[b.kind].scale=b.scale}
+    else if(b.t==='tune'){if(b.meleeMul&&b.meleeMul!==1)tuning.meleeMul=b.meleeMul;if(b.runMul&&b.runMul!==1)tuning.runMul=b.runMul}
+    else if(b.t==='npc'){if(b.color)shirts.push(b.color)}
+    else if(b.t==='prop'){props.push({kind:b.kind,map:b.map||undefined,x:b.x,y:b.y,z:b.z})}
+    else if(b.t==='msg'){scripts.push('api.msg('+JSON.stringify(b.text||'')+');')}
+    else if(b.t==='script'){if(b.code&&b.code.trim())scripts.push(b.code)}
+  }
+  const mobs=[],spawners=[],items=[];
+  for(const b of blocks){
+    if(b.t==='mob'){
+      if(!b.id)continue;
+      const o={id:String(b.id).replace(/\s+/g,'_'),name:b.name||b.id,color:b.color,color2:b.color2,
+        size:+b.size||1,hp:+b.hp||6,speed:+b.speed||3,fly:b.fly==='да'};
+      if(o.fly)o.hover=+b.hover||3;
+      if(b.kamikaze==='да'){o.kamikaze=true;o.boomR=+b.boomR||4;o.boomDmg=+b.boomDmg||40}
+      if(b.bomber==='да'){o.bomber=true;o.dropEvery=+b.dropEvery||2.5;o.fly=true;if(o.hover===undefined)o.hover=6}
+      if(b.ears==='нет')o.ears=false;
+      if(b.wings==='да')o.wings=true;
+      if(b.tail==='нет')o.tail=false;
+      mobs.push(o);
+    }else if(b.t==='item'){
+      if(!b.id)continue;
+      items.push({id:String(b.id).replace(/\s+/g,'_'),name:b.name||b.id,type:b.type||'melee',
+        dmg:+b.dmg||30,cd:+b.cd||.4,reach:+b.reach||1.7,
+        color:b.color,color2:b.color2,color3:b.color3});
+    }else if(b.t==='spawner'){
+      const sp={mob:b.mob,every:+b.every||6,count:+b.count||1,max:+b.max||4};
+      if(b.map)sp.map=b.map;
+      spawners.push(sp);
+    }
+  }
+  if(items.length)mod.items=items;
+  if(mobs.length)mod.mobs=mobs;
+  if(spawners.length)mod.spawners=spawners;
+  if(Object.keys(skins).length)mod.skins=skins;
+  if(Object.keys(tuning).length)mod.tuning=tuning;
+  if(shirts.length)mod.npcShirts=shirts;
+  if(props.length)mod.props=props;
+  if(scripts.length)mod.script=scripts.join('\n');
+  return mod;
+}
+function modText(){return JSON.stringify(buildMod(),null,2)}
+
+function promptText(){
+  const m=buildMod();
+  return `Ты пишешь мод для игры Rphysics (одностраничная браузерная игра на WebGL, файл index.html).
+В игре есть встроенный моддер RModder. Мод — это ОДИН JSON-объект формата "rmod/1".
+Ответь ТОЛЬКО этим JSON, без пояснений, без markdown-обёрток.
+
+=== ФОРМАТ МОДА (rmod/1) ===
+{
+  "format": "rmod/1",
+  "id": "уникальный_ид_латиницей",
+  "name": "Название мода",
+  "author": "кто сделал",
+  "desc": "что делает мод",
+  "skins": { "<предмет>": { "a": "#hex", "b": "#hex", "c": "#hex", "scale": 1.4 } },
+  "tuning": { "meleeMul": 2, "runMul": 1.5 },
+  "npcShirts": ["#00ffcc", "#ff00aa"],
+  "props": [ { "kind": "knife", "map": "flatgrass", "x": 5, "y": 1, "z": 5 } ],
+  "items": [ { "id": "chainsaw", "name": "Бензопила", "type": "melee", "dmg": 55, "cd": 0.35, "reach": 2,
+               "color": "#d7a03c", "color2": "#cfd8e3", "color3": "#ffffff" } ],
+  "mobs": [
+    { "id": "kamikaze_cat", "name": "Кот-камикадзе", "color": "#e8823c", "color2": "#f7d7a8",
+      "size": 1, "hp": 6, "speed": 6, "fly": true, "hover": 2.4,
+      "kamikaze": true, "boomR": 4, "boomDmg": 45, "ears": true, "tail": true },
+    { "id": "bomber", "name": "Бомбардировщик", "color": "#4a5b8a", "color2": "#9fb3e0",
+      "size": 1.2, "hp": 10, "speed": 4.5, "fly": true, "hover": 7,
+      "bomber": true, "dropEvery": 2.5, "fuse": 2.2, "wings": true }
+  ],
+  "spawners": [ { "mob": "kamikaze_cat", "every": 8, "count": 2, "max": 4, "map": "flatgrass" } ],
+  "script": "api.msg('привет'); api.onFrame((dt,ctx)=>{ /* код каждый кадр */ });"
+}
+
+=== СВОИ ПРЕДМЕТЫ (items) ===
+  id — уникальный id (латиницей), name — название;
+  type — "melee" (удар ЛКМ) или "gun" (стреляет как пистолет);
+  dmg — урон, cd — перезарядка в секундах, reach — дальность удара (м);
+  color / color2 / color3 — рукоять / клинок (ствол) / блик.
+После загрузки мода предмет появляется в меню модов («взять в руку»), его можно класть на карту через props.
+
+=== СУЩЕСТВА (mobs) ===
+Каждое существо — объект в массиве mobs. Поля:
+  id — уникальное имя (латиницей), name — подпись в игре;
+  color — цвет тела, color2 — цвет головы/лап, size — масштаб (1 = кот среднего размера);
+  hp — здоровье, speed — скорость преследования (м/с);
+  fly — true: летает; hover — высота над игроком (м);
+  kamikaze — true: взрывается, догнав игрока; boomR — радиус взрыва, boomDmg — урон;
+  bomber — true: летает сверху и сбрасывает бомбы; dropEvery — как часто (с), fuse — задержка взрыва бомбы;
+  ears / tail / wings — true/false: уши, хвост, крылья (по умолчанию уши и хвост есть);
+  touchDmg — урон при касании (необязательно), keepDist — держать дистанцию (м).
+Существа можно убить ножом и пулями; камикадзе при смерти всё равно взрывается.
+
+=== СПАВНЕРЫ (spawners) ===
+  mob — id существа, every — каждые N секунд, count — сколько за раз, max — сколько одновременно,
+  map — id карты (пусто = любая).
+
+=== ПОЛЯ ===
+skins — внешний вид предметов. Предметы: knife, crowbar, bat, axe, medkit.
+  a — основной цвет (рукоять), b — второй (клинок/головка), c — третий (блик/остриё), scale — размер (1 = как в игре).
+tuning — meleeMul умножает урон ближнего боя (база: нож 34, монтировка 30, бита 24, топор 42),
+         runMul умножает скорость бега (база 3.2 м/с, с Shift 1.62×).
+npcShirts — массив hex-цветов, добавляется в палитру рубашек NPC.
+props — предметы, которые спавнятся при загрузке карты. kind — любой из:
+  knife,crowbar,bat,axe,medkit,ball,melon,heavy,gren,bomb,pistol,smg,shotgun,rpg,pan,trash,egg,balloon,lighter,cam,hammer,sledge,bcrate,angry.
+  map — id карты: construct, surf, flatgrass, aero, office, dream, warehouse, town, space, forest, castle (пусто = любая).
+script — JS-код, выполняется при загрузке мода. Доступен объект api:
+  api.msg(text) — сообщение на экране;
+  api.mk(kind,x,y,z) — создать предмет;
+  api.spawn(kind) — предмет перед игроком;
+  api.P — игрок {x,y,z,vx,vy,vz,hp}, api.hands — две руки, api.SKIN — скины, api.TUNE — тюнинг;
+  api.onFrame((dt,ctx)=>{...}) — вызывается каждый кадр (ctx: {P,hands,ents,balls,msg,mk,cam});
+  api.log(...) — вывод в консоль.
+Скрипт не должен кидать исключения и не должен содержать export/import/await на верхнем уровне.
+
+=== ЗАДАЧА ===
+Сделай мод: ${m.desc || m.name}.
+Можно использовать всё: скины оружия, тюнинг, цвета NPC, предметы на картах, СУЩЕСТВ (mobs) и их СПАВНЕРЫ (spawners), скрипт.
+Например «летающие коты-камикадзе» — это mobs:[{fly:true,kamikaze:true,...}] + spawners:[{mob:"...",every:8}],
+«бомбардировщики» — mobs:[{fly:true,hover:8,bomber:true,dropEvery:2.5,wings:true}]. Сохрани id="${m.id}" и name="${m.name}".
+Вот заготовка, собранная в RModder, — доработай и верни готовый JSON:
+${JSON.stringify(m, null, 2)}
+
+Верни только JSON мода формата rmod/1.`;
+}
+
+function sync(){
+  document.getElementById('json').textContent=modText();
+  document.getElementById('prompt').value=promptText();
+  const m=buildMod();
+  const parts=[];
+  if(m.skins)parts.push('скины: '+Object.keys(m.skins).length);
+  if(m.tuning)parts.push('тюнинг: '+Object.keys(m.tuning).length);
+  if(m.props)parts.push('предметов: '+m.props.length);
+  document.getElementById('stats').textContent=parts.join(' · ')||'мод пустой';
+  drawPreview(m);
+}
+
+/* мини-превью предмета */
+function drawPreview(mod){
+  const c=document.getElementById('pv');if(!c)return;
+  const g=c.getContext('2d'),W=c.width,H=c.height;
+  g.clearRect(0,0,W,H);
+  g.fillStyle='#0d1220';g.fillRect(0,0,W,H);
+  const skin=(mod&&mod.skins)||{};
+  const k=blocks.find(b=>b.t==='skin');
+  const kind=k?k.kind:'knife';
+  const s=skin[kind]||{a:'#3a3f48',b:'#cfd8e3',c:'#eef3f8',scale:1};
+  const sc=(s.scale&&s.scale>0)?s.scale:1;
+  g.save();g.translate(W/2,H/2+20);g.scale(sc,sc);g.rotate(-0.25);
+  const R=(x,y,w,h,col)=>{g.fillStyle=col;g.beginPath();if(g.roundRect)g.roundRect(x,y,w,h,4);else g.rect(x,y,w,h);g.fill()};
+  if(kind==='knife'){
+    R(-9,-10,18,70,s.a||'#3a3f48');
+    R(-6,-72,12,66,s.b||'#cfd8e3');
+    g.fillStyle=s.c||'#eef3f8';g.beginPath();g.moveTo(-6,-72);g.lineTo(6,-72);g.lineTo(0,-96);g.closePath();g.fill();
+    g.fillStyle='rgba(255,255,255,.25)';g.fillRect(-2,-100,3,90);
+  }else if(kind==='crowbar'){
+    R(-7,-40,14,110,s.a||'#d0453a');
+    g.strokeStyle=s.b||'#d0453a';g.lineWidth=13;g.lineCap='round';
+    g.beginPath();g.moveTo(0,-40);g.quadraticCurveTo(34,-52,30,-16);g.stroke();
+    g.strokeStyle=s.c||'#b03a30';g.lineWidth=9;g.beginPath();g.moveTo(0,-40);g.quadraticCurveTo(34,-52,30,-16);g.stroke();
+  }else if(kind==='bat'){
+    R(-8,-74,16,150,s.a||'#c9a06a');
+    R(-14,-92,28,30,s.b||'#b98d55');
+  }else if(kind==='axe'){
+    R(-7,-30,14,120,s.a||'#8a5a2b');
+    g.fillStyle=s.b||'#8a8f98';g.beginPath();g.moveTo(0,-34);g.quadraticCurveTo(46,-46,44,-6);g.quadraticCurveTo(30,-16,0,-12);g.closePath();g.fill();
+    g.fillStyle=s.c||'#6b727d';g.fillRect(-24,-26,10,20);
+  }else{
+    R(-46,-62,92,64,s.a||'#e64545');
+    R(-30,-36,60,12,s.b||'#ffffff');
+    R(-6,-54,12,44,s.b||'#ffffff');
+  }
+  g.restore();
+  g.fillStyle='rgba(255,255,255,.6)';g.font='600 12px system-ui';g.textAlign='center';
+  g.fillText((KINDS.find(x=>x[0]===kind)||['',kind])[1],W/2,H-12);
+}
+
+/* ---- файлы ---- */
+function download(){
+  const txt=modText();
+  const blob=new Blob([txt],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download=buildMod().id+'.rmod';
+  document.body.append(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href),4000);
+  toast('Файл '+buildMod().id+'.rmod скачан');
+}
+function loadMod(obj){
+  if(typeof obj==='string'){try{obj=JSON.parse(obj)}catch(e){toast('Это не JSON');return false}}
+  if(!obj||typeof obj!=='object'){toast('Пустой файл');return false}
+  blocks=[];
+  blocks.push({t:'meta',id:obj.id||'mod_'+Date.now(),name:obj.name||'Импорт',author:obj.author||'',desc:obj.desc||''});
+  if(obj.skins)for(const k in obj.skins){const s=obj.skins[k]||{};
+    blocks.push({t:'skin',kind:k,a:s.a||'#3a3f48',b:s.b||'#cfd8e3',c:s.c||'#eef3f8',scale:s.scale||1})}
+  if(obj.tuning)blocks.push({t:'tune',meleeMul:obj.tuning.meleeMul||1,runMul:obj.tuning.runMul||1});
+  if(Array.isArray(obj.npcShirts))for(const c of obj.npcShirts)blocks.push({t:'npc',color:c});
+  if(Array.isArray(obj.props))for(const p of obj.props)blocks.push({t:'prop',kind:p.kind||'knife',map:p.map||'',x:p.x||0,y:p.y||1,z:p.z||0});
+  if(Array.isArray(obj.items))for(const it of obj.items)blocks.push({t:'item',id:it.id||'item',
+    name:it.name||it.id||'Предмет',type:it.type||'melee',dmg:it.dmg||30,cd:it.cd||.4,reach:it.reach||1.7,
+    color:it.color||'#8a8f98',color2:it.color2||'#cfd8e3',color3:it.color3||'#ffffff'});
+  if(Array.isArray(obj.mobs))for(const mo of obj.mobs)blocks.push({t:'mob',id:mo.id||'mob',
+    name:mo.name||mo.id||'Существо',color:mo.color||'#e8823c',color2:mo.color2||'#f7d7a8',size:mo.size||1,
+    hp:mo.hp||6,speed:mo.speed||3,fly:mo.fly?'да':'нет',hover:mo.hover||3,
+    kamikaze:mo.kamikaze?'да':'нет',boomR:mo.boomR||4,boomDmg:mo.boomDmg||40,
+    bomber:mo.bomber?'да':'нет',dropEvery:mo.dropEvery||2.5,
+    ears:mo.ears===false?'нет':'да',wings:mo.wings?'да':'нет',tail:mo.tail===false?'нет':'да'});
+  if(Array.isArray(obj.spawners))for(const sp of obj.spawners)blocks.push({t:'spawner',mob:sp.mob||'',
+    every:sp.every||6,count:sp.count||1,max:sp.max||4,map:sp.map||''});
+  if(obj.script)blocks.push({t:'script',code:obj.script});
+  render();toast('Мод открыт: '+blocks[0].name);return true;
+}
+
+/* ---- события ---- */
+document.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>addBlock(b.dataset.add));
+document.getElementById('bDl').onclick=download;
+function copyText(t,okMsg){try{navigator.clipboard.writeText(t).then(()=>toast(okMsg),()=>fallbackCopy(t,okMsg))}catch(e){fallbackCopy(t,okMsg)}}
+function fallbackCopy(t,okMsg){try{const ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.opacity='0';document.body.append(ta);ta.select();document.execCommand('copy');ta.remove();toast(okMsg+' (вручную: Ctrl+C)')}catch(e){toast('Скопируй вручную из поля')}}
+document.getElementById('bCopyJson').onclick=()=>copyText(modText(),'JSON скопирован');
+document.getElementById('bCopyPrompt').onclick=()=>copyText(promptText(),'Промпт скопирован — отдай его ИИ');
+document.getElementById('bReset').onclick=()=>{blocks=[];render();toast('Сценарий очищен')};
+document.getElementById('bOpen').onclick=()=>document.getElementById('fIn').click();
+document.getElementById('fIn').onchange=e=>{const f=e.target.files&&e.target.files[0];if(!f)return;const r=new FileReader();
+  r.onload=()=>loadMod(String(r.result));r.readAsText(f);e.target.value=''};
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('on',x===b));
+  for(const id of ['json','ai','how'])document.getElementById('tab-'+id).style.display=(id===b.dataset.tab)?'':'none';
+});
+document.getElementById('bCat').onclick=()=>{
+  blocks=[];
+  loadMod({format:'rmod/2',id:'kamikaze_cats',name:'Взрывные коты-камикадзе',author:'RModder',
+    desc:'Летающие коты гоняются за игроком и взрываются. Осторожно!',
+    mobs:[{id:'kamikaze_cat',name:'Кот-камикадзе',color:'#e8823c',color2:'#f7d7a8',size:1,hp:6,speed:6.5,
+      fly:true,hover:2.4,kamikaze:true,boomR:4,boomDmg:45,ears:true,tail:true}],
+    spawners:[{mob:'kamikaze_cat',every:7,count:2,max:5}],
+    npcShirts:['#e8823c']});
+  toast('Пресет: коты-камикадзе');
+};
+document.getElementById('bBomber').onclick=()=>{
+  blocks=[];
+  loadMod({format:'rmod/2',id:'bombers',name:'Бомбардировщики',author:'RModder',
+    desc:'Тяжёлые бомберы кружат над игроком и сыплют бомбы',
+    mobs:[{id:'bomber',name:'Бомбардировщик',color:'#4a5b8a',color2:'#9fb3e0',size:1.3,hp:14,speed:5,
+      fly:true,hover:8,bomber:true,dropEvery:2.2,fuse:2.2,wings:true,ears:false,tail:false}],
+    spawners:[{mob:'bomber',every:12,count:1,max:2}],
+    script:"api.msg('Бомбардировщики на подходе!');"});
+  toast('Пресет: бомбардировщики');
+};
+document.getElementById('bEx').onclick=()=>{
+  blocks=[];
+  loadMod({format:'rmod/1',id:'neon_knife',name:'Неоновый нож',author:'ARENA AI ARES DEV',desc:'Нож светится неоном, бьёт вдвое сильнее',
+    skins:{knife:{a:'#0b2a3a',b:'#39f6ff',c:'#ffffff',scale:1.25}},
+    tuning:{meleeMul:2},
+    npcShirts:['#39f6ff'],
+    props:[{kind:'knife',map:'surf',x:2,y:16,z:-8}],
+    script:"api.msg('Неоновый нож загружен');api.onFrame((dt,ctx)=>{if(ctx.hands[1].held&&ctx.hands[1].held.k==='knife'&&Math.random()<0.08)api.mk('ball',ctx.P.x,ctx.P.y+1.2,ctx.P.z);});"});
+  toast('Пример загружен');
+};
+
+/* стартовый сценарий */
+loadMod({format:'rmod/1',id:'my_mod',name:'Мой первый мод',author:'я',desc:'Неоновый нож и быстрый бег',
+  skins:{knife:{a:'#123046',b:'#39f6ff',c:'#ffffff',scale:1.2}},tuning:{meleeMul:1.5,runMul:1.3}});
+</script>
+</body></html>
