@@ -9,6 +9,19 @@ header{display:flex;align-items:center;gap:12px;padding:10px 16px;background:lin
 header h1{margin:0;font-size:19px;letter-spacing:.5px}
 header .sub{font-size:12px;opacity:.7}
 header .sp{flex:1}
+#modBar{display:flex;align-items:center;gap:10px;padding:9px 16px;flex-wrap:wrap;
+ background:linear-gradient(90deg,#132a22,#1b2340 55%,#2a1b40);border-bottom:1px solid #2b3556}
+#modBar .mb{font:800 13.5px system-ui;color:#fff;border-radius:11px;padding:10px 18px;cursor:pointer;border:1px solid;transition:.15s}
+#modBar .mb:hover{transform:translateY(-1px);filter:brightness(1.12)}
+#modBar .sc{background:linear-gradient(90deg,#e8a33d,#ffce7a);border-color:#ffd48a;color:#2a1a05}
+#modBar .im{background:#2f9e6e;border-color:#48c48b}
+#modBar .win{background:#2b3556;border-color:#465a8c}
+#modBar .mbx{display:flex;align-items:center;gap:7px;font:700 12.5px system-ui;color:#cfe0d6;
+ background:#1a2337;border:1px solid #2b3556;border-radius:10px;padding:9px 12px;cursor:pointer}
+#modBar .mbx input{width:15px;height:15px;cursor:pointer}
+#modBar .mbt{font:600 12px system-ui;opacity:.6;margin-left:auto}
+#dropHint{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;
+ background:rgba(8,14,24,.82);color:#dbe8ff;font:800 26px system-ui;border:4px dashed #48c48b}
 button{font:600 13px system-ui;color:#fff;background:#2b3556;border:1px solid #465a8c;border-radius:9px;padding:8px 12px;cursor:pointer}
 button:hover{background:#37456e}
 button.go{background:linear-gradient(90deg,#e94560,#ff8a5c);border-color:#ff8a5c}
@@ -18,6 +31,17 @@ main{flex:1;display:grid;grid-template-columns:216px 1fr 400px;gap:10px;padding:
 .col{background:#151b2c;border:1px solid #26304c;border-radius:12px;display:flex;flex-direction:column;min-height:0}
 .col h2{margin:0;padding:9px 12px;font-size:13px;letter-spacing:.06em;text-transform:uppercase;opacity:.8;border-bottom:1px solid #26304c}
 .body{padding:10px;overflow:auto;min-height:0}
+/* ИИ-панель */
+#ai{margin:0 0 12px;padding:12px;border-radius:14px;background:linear-gradient(160deg,rgba(122,215,255,.14),rgba(160,120,255,.10));border:1px solid rgba(122,215,255,.35)}
+#ai .aih{font:800 14px system-ui;color:#dff2ff;margin-bottom:8px}
+#ai .aih span{font:600 11.5px system-ui;color:#8fa8c8;margin-left:8px}
+#aiIn{width:100%;min-height:56px;resize:vertical;background:#0b1220;color:#eaf2ff;border:1px solid #2b3a5c;border-radius:10px;padding:9px 11px;font:500 13px/1.45 system-ui;outline:none}
+#aiIn:focus{border-color:#7ad7ff}
+#ai .aib{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+#ai button{background:#16233c;color:#dff2ff;border:1px solid #2f4468;border-radius:9px;padding:7px 11px;font:700 12px system-ui;cursor:pointer}
+#ai button:hover{background:#1e3054;border-color:#7ad7ff}
+#ai button.main{background:linear-gradient(90deg,#7ad7ff,#a78bfa);color:#0b1220;border:none}
+#aiLog{margin-top:8px;font:600 11.5px system-ui;color:#8fd0ff;min-height:15px}
 .pal{display:flex;flex-direction:column;gap:8px}
 .pl{border:0;border-radius:10px;padding:10px 12px;text-align:left;font:700 13px system-ui;color:#fff;cursor:pointer;position:relative;box-shadow:0 2px 0 rgba(0,0,0,.35)}
 .pl small{display:block;font-weight:400;font-size:11px;opacity:.85;margin-top:2px}
@@ -54,6 +78,65 @@ textarea.big{width:100%;height:100%;min-height:300px;resize:none;background:#0d1
 .toast.on{opacity:1}
 canvas#pv{display:block;margin:0 auto;background:#0d1220;border-radius:10px;border:1px solid #26304c}
 .hint{font-size:11.5px;opacity:.65;line-height:1.5;margin-top:8px}
+.blk .row button{padding:5px 11px;border-radius:999px;font-size:12px;background:#fff;color:#16203a;border:0;font-weight:700}
+.blk .row button:hover{background:#eaf3ff}
+#me{position:fixed;inset:0;background:rgba(4,7,14,.92);backdrop-filter:blur(3px);display:none;
+ align-items:center;justify-content:center;z-index:60;padding:10px}
+#me.on{display:flex}
+#meBox{background:#101625;border:1px solid #27314e;border-radius:18px;width:min(1240px,100%);max-height:97vh;
+ overflow:auto;box-shadow:0 40px 100px rgba(0,0,0,.7)}
+#meBox .hd2{display:flex;align-items:center;gap:12px;padding:13px 18px;border-bottom:1px solid #222b45;font:800 16px system-ui}
+#meBox .hd2 .sp{flex:1}
+#meBox .hd2 .sub{font:500 12px system-ui;opacity:.5}
+#meBox .hd2 button#meX{background:#1c2438;border:1px solid #2b3556;color:#c9d5f5;border-radius:9px;width:32px;height:32px;
+ font:700 15px system-ui;cursor:pointer}
+#meBox .hd2 button#meX:hover{background:#28334f}
+#meMain{display:grid;grid-template-columns:206px minmax(0,1fr) 178px;gap:14px;padding:14px 16px;align-items:start}
+@media(max-width:980px){#meMain{grid-template-columns:1fr}}
+#meTools,#meRight{display:flex;flex-direction:column;gap:7px}
+#meTools .ttl,#meRight .ttl{font:700 10px system-ui;letter-spacing:.12em;text-transform:uppercase;opacity:.45;margin:6px 0 1px}
+#meTools button.tool{display:flex;align-items:flex-start;gap:9px;border:1px solid #27314e;background:#171f31;color:#dbe4fb;
+ border-radius:11px;padding:10px 11px;text-align:left;font:700 13.5px system-ui;cursor:pointer;line-height:1.22;transition:.13s}
+#meTools button.tool svg{flex:0 0 auto;margin-top:1px;opacity:.85}
+#meTools button.tool small{display:block;font:500 11px system-ui;opacity:.5;margin-top:3px}
+#meTools button.tool:hover{background:#1e283e;border-color:#37436a}
+#meTools button.tool.on{background:#2c4fd0;border-color:#5b7bff;color:#fff;box-shadow:0 4px 16px rgba(58,92,255,.35)}
+#meTools button.tool.on small{opacity:.8}
+#meTools .cams{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+#meTools .cams button{padding:8px 6px;text-align:center;font:700 12px system-ui;background:#171f31;color:#cfdaf7;
+ border:1px solid #27314e;border-radius:9px;cursor:pointer}
+#meTools .cams button:hover{background:#1e283e}
+#meTools select{font:700 12.5px system-ui;color:#0f1729;background:#e8eefc;border:0;border-radius:9px;padding:8px 9px;width:100%}
+#meTools label.chk{display:flex;gap:8px;align-items:center;font:600 12.5px system-ui;color:#cfdaf7;padding:6px 2px;cursor:pointer}
+#meTools label.chk input{accent-color:#3f61ff;width:15px;height:15px}
+#meTools #meSample{margin-top:8px;background:#173425;border:1px solid #2b6a49;color:#c8f7d9;border-radius:10px;
+ padding:9px;font:700 12.5px system-ui;cursor:pointer;display:block;text-align:center}
+#meTools #meSample:hover{background:#1d4531}
+#meViewWrap{position:relative;min-width:0;border-radius:14px;overflow:hidden;border:1px solid #222b45;background:#0a0f1c;
+ height:min(560px,calc(100vh - 320px));min-height:320px}
+#meView{display:block;cursor:crosshair;touch-action:none;width:100%;height:100%}
+#meHelp{position:absolute;left:12px;right:12px;bottom:9px;font:600 11.5px system-ui;color:#a9bde6;opacity:.75;
+ text-shadow:0 1px 3px #000;pointer-events:none;text-align:center}
+#meStat2{position:absolute;left:11px;top:9px;font:700 11.5px system-ui;color:#b9c9ee;background:rgba(9,14,26,.75);
+ padding:5px 10px;border-radius:8px;pointer-events:none;border:1px solid rgba(90,120,200,.22)}
+#meSw{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.sw{aspect-ratio:1;border-radius:8px;border:2px solid transparent;cursor:pointer;padding:0;min-height:27px;transition:.12s}
+.sw:hover{transform:scale(1.06)}
+.sw.on{border-color:#fff;box-shadow:0 0 0 2px #3a5cff}
+#meRight input[type=color]{width:100%;height:36px;border:0;border-radius:10px;background:none;margin-bottom:5px;cursor:pointer}
+#mePal{display:flex;flex-wrap:wrap;gap:6px;margin-top:3px}
+#mePal i{width:23px;height:23px;border-radius:7px;display:block;cursor:pointer;border:1px solid rgba(0,0,0,.45)}
+#mePal i:hover{outline:2px solid #4c6dff}
+#meBox .rowb{display:flex;align-items:center;gap:8px;margin:2px 0 10px}
+#meBox .rowb input[type=range]{flex:1;accent-color:#e8a33d}
+#meBox .rowb span{font:600 11.5px system-ui;opacity:.7;min-width:64px;text-align:right}
+#meBox .foot2{display:flex;gap:9px;align-items:center;padding:12px 18px;border-top:1px solid #222b45;font:600 12.5px system-ui;color:#b9c6e6}
+#meBox .foot2 .sp{flex:1}
+#meBox .foot2 button{background:#1a2337;border:1px solid #2b3556;color:#d5e0f8;border-radius:10px;padding:9px 14px;
+ font:700 12.5px system-ui;cursor:pointer}
+#meBox .foot2 button:hover{background:#242f4a}
+#meBox .foot2 button.ok{background:#2fa06a;border-color:#3fc184;color:#fff;padding:9px 20px}
+#meBox .foot2 button.ok:hover{background:#37b678}
 </style></head>
 <body>
 <header>
@@ -61,15 +144,49 @@ canvas#pv{display:block;margin:0 auto;background:#0d1220;border-radius:10px;bord
   <span class="sub">блочный моддер для Rphysics · сохранение в меню модов</span>
   <span class="sp"></span>
   <button id="bOpen">📂 Открыть .rmod</button>
-  <button id="bCat">🐱 Коты-камикадзе</button><button id="bBomber">✈ Бомбардировщики</button><button id="bEx">✨ Пример: неоновый нож</button>
+  <button id="bCat">🐱 Коты-камикадзе</button><button id="bBomber">✈ Бомбардировщики</button><button id="bSculp">🎨 3D Скульптор</button>
+  <button id="bPrompt">📄 Промпт для ИИ (.txt)</button>
+  <button id="bJS" style="background:linear-gradient(135deg,#7a3cff,#ff3c9a);color:#fff;font-weight:800">🧠 JS-мод · полный доступ</button>
+  <button id="bEx">✨ Пример: неоновый нож</button>
   <button id="bReset">🗑 Сброс</button>
   <input type="file" id="fIn" accept=".rmod,.json,application/json" style="display:none">
 </header>
+<div id="modBar">
+  <button id="bSculp2" class="mb sc">🎨 3D Скульптор</button>
+  <button id="bObjIn" class="mb im">📦 Импорт модели (.obj / .json / .rmod / .html)</button>
+  <button id="bSculpWin" class="mb win">🌐 Открыть скульптор в новом окне</button>
+  <label class="mbx"><input type="checkbox" id="voxChk"> перевести в кубики</label>
+  <span class="mbt">…или просто перетащи файл модели в окно моддера</span>
+</div>
 
 <main>
   <section class="col">
     <h2>Блоки</h2>
-    <div class="body pal">
+    <div id="dropHint">отпусти файл модели 👍</div>
+<div id="sculp" style="display:none;position:fixed;inset:0;z-index:120;background:#0b0f16">
+  <div style="display:flex;align-items:center;gap:10px;padding:8px 12px;background:#141b28;border-bottom:1px solid #24304a;color:#dbe8ff;font:800 13.5px system-ui">
+    🎨 3D Скульптор <span style="font-weight:500;opacity:.65">слепил → «📦 Мод .rmod с моделью» или «🧊 Модель .json» → сюда</span>
+    <button id="sculpClose" style="margin-left:auto;background:#22304a;color:#dbe8ff;border:1px solid #33456b;border-radius:8px;padding:6px 12px;cursor:pointer">✕ Закрыть</button>
+  </div>
+  <iframe id="sculpFrame" style="width:100%;height:calc(100% - 41px);border:0;display:block"></iframe>
+</div>
+<input type="file" id="fModel" accept=".json,.rmodel,.obj,.rmod,.html,application/json,text/plain" style="display:none">
+<div id="ai">
+  <div class="aih">🧠 ИИ-МОДДЕРЫ <span>опиши словами — ИИ соберёт мод сам</span></div>
+  <textarea id="aiIn" spellcheck="false" placeholder="напиши что угодно: «неоновый меч» · «кот-камикадзе» · «ночной город с бассейном» · «худ со скоростью и кнопкой сброса» · «сделай бхоп и полёт»"></textarea>
+  <div class="aib">
+    <button data-ai="auto" class="main">🎁 Собери всё</button>
+    <button data-ai="model">🧊 Модель</button>
+    <button data-ai="weapon">🔫 Оружие</button>
+    <button data-ai="mob">🧟 Существо</button>
+    <button data-ai="map">🗺 Карта</button>
+    <button data-ai="gui">🖼 GUI</button>
+    <button data-ai="script">⚙ Скрипт</button>
+    <button data-ai="rand">🎲 Удиви меня</button>
+  </div>
+  <div id="aiLog">готов · выбери кнопку или нажми «Собери всё»</div>
+</div>
+<div class="body pal">
       <button class="pl meta" data-add="meta">Мод<small>имя, автор, описание</small></button>
       <button class="pl skin" data-add="skin">Скин предмета<small>цвета + размер (нож, бита…)</small></button>
       <button class="pl tune" data-add="tune">Тюнинг<small>урон, скорость бега</small></button>
@@ -77,9 +194,14 @@ canvas#pv{display:block;margin:0 auto;background:#0d1220;border-radius:10px;bord
       <button class="pl prop" data-add="prop">Предмет на карту<small>спавн при загрузке</small></button>
       <button class="pl item" data-add="item">Свой предмет<small>оружие: урон, скорость, цвета</small></button>
       <button class="pl mob" data-add="mob">Существо<small>кот, камикадзе, бомбардировщик</small></button>
+      <button class="pl mob" data-add="model">🧊 Модель (воксели)<small>любая моделька в игру</small></button>
+      <button class="pl mob" id="bModelIn">🧊 Модель из Скульптора<small>загрузить .json из 3D-скульптора</small></button>
       <button class="pl spawner" data-add="spawner">Спавнер<small>рожать существ по таймеру</small></button>
       <button class="pl script" data-add="script">Скрипт<small>свой код (для ИИ)</small></button>
       <button class="pl script" data-add="msg">Сообщение при старте<small>текст на экране</small></button>
+      <button class="pl prop" data-add="map">🗺 Карта (ИИ)<small>описание словами → карта</small></button>
+      <button class="pl script" data-add="gui">🖼 GUI<small>свои надписи и кнопки</small></button>
+      <button class="pl meta" data-add="extra">🧩 Свои поля (любой JSON)<small>вставить что угодно в мод</small></button>
     </div>
   </section>
 
@@ -95,6 +217,7 @@ canvas#pv{display:block;margin:0 auto;background:#0d1220;border-radius:10px;bord
     <div class="tabs">
       <button class="on" data-tab="json">Код мода</button>
       <button data-tab="ai">Промпт для ИИ</button>
+      <button data-tab="free">🆓 Свой JSON</button>
       <button data-tab="how">Как это работает</button>
     </div>
     <div class="body">
@@ -104,7 +227,20 @@ canvas#pv{display:block;margin:0 auto;background:#0d1220;border-radius:10px;bord
       <div id="tab-ai" style="display:none">
         <textarea class="big" id="prompt" readonly></textarea>
       </div>
+      <div id="tab-free" style="display:none">
+        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:6px">
+          <button id="freeLoad">⬇ Взять текущий мод</button>
+          <button id="freeApply" style="background:#7ad7ff;color:#0b1220">✅ Применить (свободный режим)</button>
+          <button id="freeOff">↩ Вернуться к блокам</button>
+          <button id="freeFmt">🪄 Выровнять</button>
+        </div>
+        <div class="hint" style="margin-bottom:6px">Полная свобода: пиши ЛЮБОЙ JSON мода <code>rmod/2</code>, включая поля, которых нет в блоках.
+          Пока режим включён, «Скачать .rmod» берёт именно этот JSON. Свойства движка доступны из скрипта через <code>api.E</code> / <code>window.RDBG</code>.</div>
+        <textarea class="big" id="freeTa" spellcheck="false" style="min-height:340px;font-family:ui-monospace,Consolas,monospace;font-size:12.5px"></textarea>
+        <div id="freeStat" class="hint" style="margin-top:6px;color:#8fd0ff">режим выключен — работает сборка из блоков</div>
+      </div>
       <div id="tab-how" style="display:none;font-size:13px;line-height:1.65">
+        <b>0.</b> Не хочешь блоки? Вкладка <b>🆓 Свой JSON</b> — пиши любой JSON мода руками, движок поддерживает всё. В скрипте доступен весь движок: <code>api.E</code> = <code>window.RDBG</code>.<br>
         <b>1.</b> Собери мод блоками слева.<br>
         <b>2.</b> Нажми <b>«Скачать .rmod»</b> — получится файл мода.<br>
         <b>3.</b> Открой игру <code>rphysics/index.html</code> → меню <b>🧩 Моды (RModder)</b> → <b>📂 Файл .rmod</b>.<br>
@@ -129,6 +265,45 @@ canvas#pv{display:block;margin:0 auto;background:#0d1220;border-radius:10px;bord
   <span class="sp"></span>
   <span id="stats" style="opacity:.7"></span>
 </div>
+<div id="me"><div id="meBox">
+  <div class="hd2"><span id="meTitle">Модель существа</span><span class="sub">лепим в 3D — как в Roblox Studio</span>
+    <span class="sp"></span><button id="meX">✕</button></div>
+  <div id="meMain">
+    <div id="meTools">
+      <div class="ttl">Инструмент</div>
+      <button id="meToolBuild" class="tool on" data-tool="build"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.6 20.5 7.3v9.4L12 21.4 3.5 16.7V7.3z"/><path d="M3.5 7.3 12 12l8.5-4.7M12 12v9.4"/></svg><span>Ставить<small>клик по грани или по полу</small></span></button>
+      <button id="meToolErase" class="tool" data-tool="erase"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><path d="M6.5 15.5 13 9l5 5-6.5 6.5H8z"/><path d="M13.5 8.5 16 6a1.6 1.6 0 0 1 2.3 0l2.7 2.7A1.6 1.6 0 0 1 21 11l-2.4 2.4"/></svg><span>Стирать<small>клик по кубику</small></span></button>
+      <button id="meToolPaint" class="tool" data-tool="paint"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3s6.5 6.6 6.5 10.3a6.5 6.5 0 1 1-13 0C5.5 9.6 12 3 12 3z"/><path d="M9.2 13.6a2.9 2.9 0 0 0 2.9 2.9"/></svg><span>Красить<small>клик — в текущий цвет</small></span></button>
+      <div class="ttl">Камера</div>
+      <div class="cams">
+        <button id="meCamIso">3/4</button><button id="meCamFront">Спереди</button>
+        <button id="meCamSide">Сбоку</button><button id="meCamTop">Сверху</button>
+      </div>
+      <div class="ttl">Рабочая зона</div>
+      <select id="meSize"><option value="6">6×6×6</option><option value="8" selected>8×8×8</option><option value="10">10×10×10</option><option value="12">12×12×12</option></select>
+      <label class="chk"><input type="checkbox" id="meMir">зеркало (X)</label>
+      <label class="chk"><input type="checkbox" id="meGnd" checked>плита-основание</label>
+      <button id="meSample"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10 4 4l4.5 3h7L20 4v6"/><path d="M20 11v5a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4v-5"/><path d="M9 12h.01M15 12h.01M11 16h2"/></svg> Пример: кот</button>
+    </div>
+    <div id="meViewWrap">
+      <canvas id="meView" width="640" height="560"></canvas>
+      <div id="meStat2">0 кубиков</div>
+      <div id="meHelp">ЛКМ — поставить кубик · потяни мышью — повернуть сцену · колесо — приблизить · ПКМ — тоже поворот</div>
+    </div>
+    <div id="meRight">
+      <div class="ttl">Цвет</div>
+      <input type="color" id="meCol" value="#e8823c">
+      <div id="meSw"></div>
+      <div class="ttl">Кисть</div>
+      <div class="rowb"><input type="range" id="meBrush" min="10" max="120" value="45"><span id="meBrushV">средняя</span></div>
+      <div class="ttl">В модели</div>
+      <div id="mePal"></div>
+    </div>
+  </div>
+  <div class="foot2"><span id="meStat">0 кубиков</span><span class="sp"></span>
+    <button id="meUndo">↶ Отменить</button><button id="meClear">Очистить</button>
+    <button id="meDel">Удалить модель</button><button class="ok" id="meOk">Готово</button></div>
+</div></div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -138,8 +313,8 @@ const PROP_KINDS=['knife','crowbar','bat','axe','medkit','ball','melon','heavy',
 const MAPS=[['','любая карта'],['construct','rpe_construct'],['surf','rpe_surf'],['flatgrass','rpe_flatgrass'],['aero','rpe_aero'],
   ['office','rpe_office'],['dream','rpe_dream'],['warehouse','rpe_warehouse'],['town','rpe_town'],['space','rpe_space'],
   ['forest','rpe_forest'],['castle','rpe_castle']];
-const TITLES={meta:'Мод',skin:'Скин предмета',tune:'Тюнинг',npc:'Цвет NPC',prop:'Предмет на карту',item:'Свой предмет',mob:'Существо',spawner:'Спавнер',script:'Скрипт',msg:'Сообщение при старте'};
-const CATS={meta:'meta',skin:'skin',tune:'tune',npc:'npc',prop:'prop',item:'item',mob:'mob',spawner:'spawner',script:'script',msg:'script'};
+const TITLES={extra:'🧩 Свои поля',model:'🧊 Модель',map:'🗺 Карта (ИИ)',gui:'🖼 GUI',meta:'Мод',skin:'Скин предмета',tune:'Тюнинг',npc:'Цвет NPC',prop:'Предмет на карту',item:'Свой предмет',mob:'Существо',spawner:'Спавнер',script:'Скрипт',msg:'Сообщение при старте'};
+const CATS={extra:'meta',model:'mob',map:'prop',gui:'script',meta:'meta',skin:'skin',tune:'tune',npc:'npc',prop:'prop',item:'item',mob:'mob',spawner:'spawner',script:'script',msg:'script'};
 const YN=[['да','да'],['нет','нет']];
 let blocks=[];
 let uid=1;
@@ -162,12 +337,19 @@ function defaults(type){
     case 'spawner': return {mob:'',every:6,count:1,max:4,map:''};
     case 'script': return {code:'// api: msg(), mk(), P, hands, MOD, onFrame(cb)\napi.onFrame((dt,ctx)=>{ /* твой код каждый кадр */ });'};
     case 'msg': return {text:'Привет из мода!'};
+    case 'extra': return {json:'{\n  "любое_поле": "любое значение"\n}'};
+    case 'model': return {id:'prop_'+uid++,name:'Модель',color:'#8a8f9a',color2:'#e0e4ea',size:1,hp:9999,speed:0,
+      fly:'нет',kamikaze:'нет',bomber:'нет',ears:'да',wings:'нет',tail:'да',openEditor:true};
+    case 'map': return {id:'arena',name:'Арена',desc:'Карта из мода',kind:'stadium',size:22,seed:7,
+      prompt:'футбольный стадион с воротами и трибунами',pieces:[],items:[{k:'football',x:0,y:1,z:0}]};
+    case 'gui': return {items:[{type:'text',id:'hud',text:'HUD мода'},{type:'btn',text:'Кнопка',act:'my_action'}]};
   }
   return {};
 }
 function addBlock(type){
   const b={t:type,...defaults(type)};
   blocks.push(b);
+  if(b.openEditor&&window.openModelEditor)setTimeout(()=>{delete b.openEditor;try{openModelEditor(b)}catch(e){}},60);
   if(type==='meta'&&blocks.filter(x=>x.t==='meta').length>1){} // несколько мета-блоков объединяются
   render();
 }
@@ -248,7 +430,32 @@ function render(){
       field(r5,'бомбардир',select(b,'bomber',YN));field(r5,'бомба каждые',inputNum(b,'dropEvery','0.5'));
       const r6=el('div','row');r6.style.marginTop='6px';
       field(r6,'уши',select(b,'ears',YN));field(r6,'крылья',select(b,'wings',YN));field(r6,'хвост',select(b,'tail',YN));
-      e.append(row,r2,r3,r4,r5,r6);
+      const r7=el('div','row');r7.style.marginTop='7px';
+      const mb=el('button',null,b.model?('🧊 Модель: '+rmMeshInfo(b.model)):'🧊 Сделать модель в 3D');
+      mb.onclick=()=>openModelEditor(b);r7.append(mb);
+      const mhint=el('span',null,b.model?' — открыть и долепить':' — мышью, как в Roblox Studio');
+      mhint.style.cssText='opacity:.55;font-size:11.5px;margin-left:6px';r7.append(mhint);
+      if(b.model){const xb=el('button',null,'✕ модель');xb.onclick=()=>{delete b.model;render()};r7.append(xb)}
+      e.append(row,r2,r3,r4,r5,r6,r7);
+    }else if(b.t==='model'){
+      field(row,'id',inputText(b,'id','prop_1'));
+      field(row,'название',inputText(b,'name','Модель'));
+      const r2=el('div','row');r2.style.marginTop='6px';
+      field(r2,'размер',inputNum(b,'size','1'));field(r2,'hp',inputNum(b,'hp','9999'));field(r2,'скорость',inputNum(b,'speed','0'));
+      const r7=el('div','row');r7.style.marginTop='7px';
+      const mb=el('button',null,b.model?('🧊 Модель: '+rmMeshInfo(b.model)):'🧊 Сделать модель в 3D');
+      mb.onclick=()=>openModelEditor(b);r7.append(mb);
+      const h=el('span',null,' — любой объект: машина, меч, дерево, кот… стоит на карте как проп');
+      h.style.cssText='opacity:.55;font-size:11.5px;margin-left:6px';r7.append(h);
+      e.append(row,r2,r7);
+    }else if(b.t==='extra'){
+      const ta=el('textarea');ta.className='big';ta.spellcheck=false;
+      ta.style.cssText='min-height:110px;font-family:ui-monospace,Consolas,monospace;font-size:12.5px';
+      ta.value=b.json||'{}';ta.oninput=()=>{b.json=ta.value;try{JSON.parse(ta.value);st.textContent='✓ JSON валиден';st.style.color='#7be04a'}catch(e){st.textContent='✕ '+e.message;st.style.color='#ff8a8a'}sync()};
+      const st=el('div','hint');st.textContent='вставь любые поля мода — они вльются в итоговый JSON';
+      const ex=el('button',null,'пример');ex.onclick=()=>{b.json=JSON.stringify({tuning:{meleeMul:2},customWhatever:['что угодно']},null,2);render()};
+      const r=el('div','row');r.append(ex);
+      e.append(r,ta,st);
     }else if(b.t==='spawner'){
       const mobs=blocks.filter(x=>x.t==='mob').map(x=>[x.id,x.name||x.id]);
       field(row,'существо',select(b,'mob',mobs.length?mobs:[['','— сначала добавь существо —']]));
@@ -257,6 +464,49 @@ function render(){
       field(r2,'по сколько',inputNum(b,'count','1'));field(r2,'макс',inputNum(b,'max','1'));
       field(r2,'карта',select(b,'map',MAPS));
       e.append(row,r2);
+    }else if(b.t==='map'){
+      field(row,'id',inputText(b,'id','arena'));
+      field(row,'название',inputText(b,'name','Арена'));
+      field(row,'тип',select(b,'kind',MAP_KINDS));
+      field(row,'размер',inputNum(b,'size','1'));
+      field(row,'seed',inputNum(b,'seed','1'));
+      const r2=el('div','row');r2.style.marginTop='6px';field(r2,'описание',inputText(b,'desc','Карта из мода'));
+      const r3=el('div','row');r3.style.marginTop='6px';
+      const ta=el('textarea');ta.placeholder='Опиши карту словами: «ночной город с небоскрёбами и бассейном»';
+      ta.value=b.prompt||'';ta.style.cssText='width:100%;min-height:52px';
+      ta.oninput=()=>{b.prompt=ta.value;sync()};
+      const r4=el('div','row');r4.style.marginTop='6px';
+      const gen=el('button',null,'✨ Сгенерировать карту (ИИ)');
+      gen.onclick=()=>{const n=aiMap(b);render();toast('Карта собрана: '+n+' блоков ('+b.kind+')')};
+      const clr=el('button',null,'✕ очистить');clr.onclick=()=>{b.pieces=[];render()};
+      r4.append(gen,clr);
+      const cv=el('canvas');cv.style.cssText='width:100%;height:150px;border-radius:10px;margin-top:8px;display:block';
+      e.append(row,r2,ta,r3,r4,cv);
+      setTimeout(()=>aiMapPreview(cv,b.pieces,b.kind+(b.pieces&&b.pieces.length?'':'')),0);
+    }else if(b.t==='gui'){
+      const list=b.items||(b.items=[]);
+      const box=el('div','row');box.style.cssText='flex-direction:column;align-items:stretch;gap:6px';
+      list.forEach((it,i)=>{
+        const r=el('div','row');
+        const tsel=select(it,'type',[['text','текст'],['btn','кнопка']]);
+        const tin=inputText(it,'text','текст на экране');
+        const rin=el('input');rin.type='text';rin.value=it.id||'';rin.placeholder='id (для hud)';rin.style.minWidth='90px';
+        rin.oninput=()=>{it.id=rin.value;sync()};
+        const ain=el('input');ain.type='text';ain.value=it.act||'';ain.placeholder='действие (onAct)';ain.style.minWidth='90px';
+        ain.oninput=()=>{it.act=ain.value;sync()};
+        const del=el('button',null,'✕');del.onclick=()=>{list.splice(i,1);render()};
+        r.append(tsel,tin,it.type==='btn'?ain:rin,del);box.append(r);
+      });
+      const r5=el('div','row');
+      const addT=el('button',null,'+ надпись');addT.onclick=()=>{list.push({type:'text',id:'t'+list.length,text:'Надпись'});render()};
+      const addB=el('button',null,'+ кнопка');addB.onclick=()=>{list.push({type:'btn',text:'Кнопка',act:'act'+list.length});render()};
+      r5.append(addT,addB);box.append(r5);
+      e.append(row,box);
+      const prev=el('div');prev.style.cssText='margin-top:8px;padding:8px;border:1px dashed #2d3a5c;border-radius:10px;background:#0d1220;font:700 12.5px system-ui;color:#eaf2ff;display:flex;flex-direction:column;gap:5px;align-items:flex-start';
+      list.forEach(it=>{if(it.type==='btn'){const bb=el('span',null,it.text||'Кнопка');bb.style.cssText='background:#7ad7ff;color:#0b1220;border-radius:8px;padding:4px 10px';prev.append(bb)}
+        else{const d=el('span',null,it.text||'');d.style.cssText='background:rgba(255,255,255,.08);border-radius:8px;padding:4px 9px';prev.append(d)}});
+      if(!list.length)prev.textContent='пусто';
+      e.append(prev);
     }else if(b.t==='msg'){
       field(row,'текст',inputText(b,'text','Привет!'));e.append(row);
     }else if(b.t==='script'){
@@ -268,7 +518,516 @@ function render(){
   sync();
 }
 
+
+// ================= ИИ-генератор карт (офлайн, без API) =================
+function rngFrom(seed){let s=(+seed||1)>>>0||1;return()=>{s^=s<<13;s>>>=0;s^=s>>17;s^=s<<5;s>>>=0;return s/4294967296}}
+const MAP_KINDS=[['stadium','🏟 стадион'],['forest','🌲 лес'],['town','🏙 город'],['castle','🏰 замок'],
+  ['space','🌌 космос'],['parkour','🟦 паркур'],['arena','⚔ арена'],['sandbox','🧪 песочница']];
+function aiMap(b){
+  const R=rngFrom(b.seed||1),S=Math.max(10,Math.min(48,+b.size||22));
+  const pr=String(b.prompt||'').toLowerCase();
+  const has=(...w)=>w.some(x=>pr.includes(x));
+  const P=[];
+  const bx=(x0,y0,z0,x1,y1,z1,c)=>P.push([Math.min(x0,x1),Math.min(y0,y1),Math.min(z0,z1),Math.max(x0,x1),Math.max(y0,y1),Math.max(z0,z1),c]);
+  let kind=b.kind||'sandbox';
+  if(has('стадион','футбол','сфера'))kind='stadium';
+  else if(has('лес','дерев','forest','тайг'))kind='forest';
+  else if(has('город','дом','улиц','town','небоскр'))kind='town';
+  else if(has('замок','башн','castle','крепост'))kind='castle';
+  else if(has('космос','space','лун','невесом'))kind='space';
+  else if(has('паркур','рамп','прыж','parkour','препятств'))kind='parkour';
+  else if(has('арен','боев','pvp','дуэл'))kind='arena';
+  const snow=has('снег','зим','лёд','лед'),night=has('ноч','тёмн','темн','night'),lava=has('лав','огн','вулкан');
+  const water=has('вод','бассейн','озер','мор');
+  const grass=snow?'#eef4f8':(night?'#2b3a30':'#5fa54a'),rock=snow?'#cfd8e0':(lava?'#3a2a28':'#8a9199');
+  const wood='#8a5a2b',acc=lava?'#ff6a3c':(night?'#7ad7ff':'#ffd166');
+  bx(-S,-1,-S,S,0,S,grass);                                    // пол
+  const wallH=4;
+  bx(-S,0,-S-1, S,wallH,-S,rock);bx(-S,0,S,S+1,wallH,S,rock);  // стены по краю
+  bx(-S-1,0,-S,S,wallH,S,rock);bx(S,0,-S,S+1,wallH,S,rock);
+  if(kind==='stadium'){
+    bx(-S+3,0,-S*.6,S-3,.06,S*.6,'#3f9b4a');
+    for(const gs of[1,-1])bx(gs*(S-3)-.3,0,-3.4,gs*(S-3)+.3,2.6,3.4,'#f2f6f8');
+    for(let i=0;i<5;i++)bx(-S+1,i*.9,S*.7+i*1.4,S-1,(i+1)*.9,S*.7+(i+1)*1.4,i%2?'#334663':'#2b3a55');
+    b.items=[{k:'football',x:0,y:1,z:0}];
+  }else if(kind==='forest'){
+    for(let i=0;i<18;i++){const x=(R()-.5)*S*1.6,z=(R()-.5)*S*1.6,h=3+R()*4;
+      bx(x-.35,0,z-.35,x+.35,h,z+.35,wood);bx(x-1.6,h-1.2,z-1.6,x+1.6,h+1,z+1.6,snow?'#dbe8f2':'#2f7a3a')}
+    bx(-3,0,-3,3,1,3,wood);bx(-2.4,1,-2.4,2.4,2.6,2.4,'#c8a06a');
+  }else if(kind==='town'){
+    for(let i=0;i<10;i++){const x=(R()-.5)*S*1.5,z=(R()-.5)*S*1.5,w=2+R()*3,d=2+R()*3,h=3+R()*9;
+      bx(x-w,0,z-d,x+w,h,z+d,['#9aa1a9','#c8a06a','#8fa8c8','#b58fb0'][i%4]);
+      bx(x-w*.4,h,z-d*.4,x+w*.4,h+.4,z+d*.4,acc)}
+    bx(-S,0,0,S,.2,2,'#4a4a52');
+  }else if(kind==='castle'){
+    for(const dx of[1,-1])for(const dz of[1,-1]){bx(dx*S*.7-1.6,0,dz*S*.7-1.6,dx*S*.7+1.6,10,dz*S*.7+1.6,rock);
+      bx(dx*S*.7-2,10,dz*S*.7-2,dx*S*.7+2,11,dz*S*.7+2,'#5a6472')}
+    bx(-S*.5,0,-S*.5,S*.5,6,S*.5,'#7d8794');bx(-3,6,-3,3,9,3,'#9aa6b3');
+  }else if(kind==='space'){
+    bx(-S,-1,-S,S,-.4,S,'#2a3140');
+    for(let i=0;i<14;i++){const x=(R()-.5)*S*1.6,z=(R()-.5)*S*1.6,w=1.5+R()*3;
+      bx(x-w,-.4,z-w,x+w,.2,z+w,['#4a5260','#6b7a90','#37d6ff'][i%3])}
+  }else if(kind==='parkour'){
+    bx(-S,-1,-S,S,0,S,'#2b3a55');
+    let x=0,y=.2,z=-S+4;
+    for(let i=0;i<12;i++){const w=2+R()*1.6;bx(x-w,y,z-w,x+w,y+.6,z+w,['#37d6ff','#ff7ac8','#ffd166','#7be04a'][i%4]);
+      x+=(R()-.5)*7;z+=3.4+R()*2;y+=R()<.45?.7:-.5;y=Math.max(.2,y)}
+  }else if(kind==='arena'){
+    bx(-S+2,0,-S+2,S-2,.1,S-2,'#5a5f68');
+    for(let i=0;i<6;i++){const a=i/6*6.2832,x=Math.cos(a)*S*.55,z=Math.sin(a)*S*.55;
+      bx(x-1.2,0,z-1.2,x+1.2,1.6,z+1.2,'#8a9199');bx(x-.6,1.6,z-.6,x+.6,2.2,z+.6,acc)}
+  }else{
+    for(let i=0;i<12;i++){const x=(R()-.5)*S*1.6,z=(R()-.5)*S*1.6,w=1+R()*2.5,y=R()*3;
+      bx(x-w,y,z-w,x+w,y+.6+R()*2,z+w,['#7ad7ff','#ff9b45','#9dff7a','#ff7ac8'][i%4])}
+  }
+  if(water)bx(-S*.5,-.6,-S*.5,S*.5,-.2,S*.5,'#3fa8e0');
+  if(lava)for(let i=0;i<8;i++){const x=(R()-.5)*S*1.4,z=(R()-.5)*S*1.4;bx(x-2,-.2,z-2,x+2,.05,z+2,'#ff4d1a')}
+  // чистим площадку вокруг точки спавна, чтобы не появляться в стене
+  const sp=b.spawn&&b.spawn.length===3?b.spawn:[0,0,-S+5];
+  b.kind=kind;
+  b.pieces=P.filter(p=>!(p[4]>.3&&p[0]<sp[0]+3&&p[3]>sp[0]-3&&p[2]<sp[2]+3&&p[5]>sp[2]-3));
+  b.spawn=sp;
+  b.floor=grass;b.lava=lava;b.night=night;b.snow=snow;
+  return b.pieces.length;
+}
+function modMapMeta(b){
+  const S=Math.max(10,Math.min(48,+b.size||22));
+  const floor=b.floor||'#5fa54a';
+  return {floor,grid:b.night?'#24314a':'#559a41',
+    sky:b.night?['#050b1a','#123a6b']:b.snow?['#9fd0ff','#eef8ff']:['#58a8f0','#d8efff'],
+    fog:b.night?[14,28,58]:b.snow?[226,240,252]:[205,226,244],bf:b.snow?4:0,g:b.night?1:1,
+    spawn:b.spawn||[0,0,-S+5],cam:[0,Math.round(S*.9),-Math.round(S*1.5),0,-.32]};
+}
+function aiMapPreview(cv,pieces,extra){
+  const g=cv.getContext('2d'),W=cv.width=cv.clientWidth||520,H=cv.height=150;
+  g.fillStyle='#0d1220';g.fillRect(0,0,W,H);
+  const ps=(pieces||[]).filter(p=>Array.isArray(p)&&p.length>=7);
+  if(!ps.length){g.fillStyle='#6b7794';g.font='600 12px system-ui';g.fillText('пусто — нажми «✨ Сгенерировать (ИИ)»',12,26);return}
+  let mnx=1e9,mxx=-1e9,mnz=1e9,mxz=-1e9;
+  for(const p of ps){mnx=Math.min(mnx,p[0]);mxx=Math.max(mxx,p[3]);mnz=Math.min(mnz,p[2]);mxz=Math.max(mxz,p[5])}
+  const sc=Math.min((W-16)/(mxx-mnx||1),(H-16)/(mxz-mnz||1));
+  const ox=(W-(mxx-mnx)*sc)/2,oz=(H-(mxz-mnz)*sc)/2;
+  const sorted=[...ps].sort((a,b)=>a[1]-b[1]);
+  for(const p of sorted){const h=Math.min(1,Math.max(.15,(p[4]-p[1])/10));
+    g.fillStyle=p[6]||'#888';g.globalAlpha=.35+h*.65;
+    g.fillRect(ox+(p[0]-mnx)*sc,oz+(p[2]-mnz)*sc,Math.max(1,(p[3]-p[0])*sc),Math.max(1,(p[5]-p[2])*sc))}
+  g.globalAlpha=1;g.fillStyle='#cfe0ff';g.font='600 11px system-ui';
+  g.fillText('блоков: '+ps.length+(extra?' · '+extra:''),8,14);
+}
+
+
+// ==================== ИИ-МОДДЕРЫ ====================
+const AICOLS={'красн':'#e8453c','алый':'#e8453c','син':'#3f8ae0','голуб':'#4fc3f7','зелён':'#4caf50','зелен':'#4caf50','жёлт':'#ffd166','желт':'#ffd166',
+ 'чёрн':'#24262e','черн':'#24262e','бел':'#f2f4f8','сер':'#8a8f9a','оранж':'#ff9b45','фиолет':'#a78bfa','розов':'#ff7aa8','золот':'#ffd166',
+ 'неон':'#7ad7ff','лёд':'#bfe9ff','лед':'#bfe9ff','огон':'#ff6a3c','огонь':'#ff6a3c','кост':'#e8e2d0','дерев':'#8a5a2b','металл':'#9aa6b3','токсич':'#9dff7a'};
+function aiPal(pr,dflt){for(const k in AICOLS)if(pr.includes(k))return AICOLS[k];return dflt}
+function voxBox(){const pal=[],idx=new Map(),v=[];
+  const put=(x,y,z,c)=>{if(x<0||y<0||z<0||x>11||y>11||z>11)return;if(!idx.has(c)){idx.set(c,pal.length);pal.push(c)}v.push([x,y,z,idx.get(c)])};
+  const box=(x0,y0,z0,x1,y1,z1,c)=>{for(let x=Math.min(x0,x1);x<=Math.max(x0,x1);x++)for(let y=Math.min(y0,y1);y<=Math.max(y0,y1);y++)for(let z=Math.min(z0,z1);z<=Math.max(z0,z1);z++)put(x,y,z,c)};
+  return {put,box,done:(name)=>({size:12,pal,v,name})};
+}
+const AI_MODELS={
+  cat:'кот',dog:'собак',robot:'робот',car:'машин',tree:'дерев',sword:'меч',gun:'пистолет|автомат|ружь|пушк',house:'дом|здан',skull:'череп',
+  heart:'сердц',mushroom:'гриб',rocket:'ракет',drone:'дрон|квадрокоптер',human:'человек|мужик|игрок|нпс|npc',ball:'мяч|шар|сфер',tank:'танк'};
+function aiModelRaw(pr){
+  pr=String(pr||'').toLowerCase();
+  let kind='generic';for(const k in AI_MODELS)if(new RegExp(AI_MODELS[k]).test(pr))kind=k;
+  const A=aiPal(pr,'#ff9b45'),B=aiPal(pr.replace(new RegExp(AICOLS[Object.keys(AICOLS).find(k=>AICOLS[k]===A)||'x']||'zzz'),'g'),'#f2f4f8');
+  const C='#24262e',E='#7ad7ff',b=voxBox();
+  if(kind==='cat'){b.box(3,1,3,6,3,7,A);b.box(3,3,6,6,6,8,B);b.put(3,7,7,B);b.put(6,7,7,B);b.put(3,5,9,C);b.put(6,5,9,C);b.put(4,4,9,'#ff7aa8');b.box(3,3,7,6,4,7,A);for(const x of[3,6])for(const z of[3,5])b.put(x,0,z,A);b.box(5,2,1,5,4,2,A)}
+  else if(kind==='dog'){b.box(2,1,2,7,3,8,A);b.box(2,3,8,5,6,10,B);b.put(1,6,9,A);b.put(6,6,9,A);b.put(2,4,11,C);b.put(5,4,11,C);b.box(4,2,11,5,3,11,C);for(const x of[2,4,6])for(const z of[3,6])b.put(x,0,z,A);b.put(7,4,1,A);b.put(7,3,1,A)}
+  else if(kind==='robot'){b.box(3,2,4,7,6,7,'#9aa6b3');b.box(3,6,4,7,8,7,'#c8d0da');b.box(4,7,8,6,8,8,E);b.put(5,9,6,'#ff6a3c');b.box(2,3,5,2,6,6,'#7f8a96');b.box(8,3,5,8,6,6,'#7f8a96');b.box(3,0,5,4,1,6,'#5a6472');b.box(6,0,5,7,1,6,'#5a6472')}
+  else if(kind==='car'){b.box(1,1,2,10,3,8,A);b.box(3,4,3,8,5,7,B);b.box(3,4,7,8,5,7,'#3a4a66');b.box(1,1,3,1,1,7,'#1a1c22');b.box(10,1,3,10,1,7,'#1a1c22');for(const x of[2,4,7,9]){b.box(x,0,2,x,1,2,'#24262e');b.box(x,0,8,x,1,8,'#24262e')}b.box(10,2,4,10,2,6,'#ffe9a8')}
+  else if(kind==='tree'){b.box(5,0,5,6,4,6,'#8a5a2b');b.box(2,4,2,9,7,9,'#2f7a3a');b.box(3,7,3,8,9,8,'#3a8f45');b.put(5,10,5,'#4aa356')}
+  else if(kind==='sword'){b.box(5,4,4,6,11,5,A);b.box(3,3,4,8,3,5,'#c8a06a');b.box(5,1,4,6,3,5,B);b.put(5,0,4,'#ffd166')}
+  else if(kind==='gun'){b.box(2,6,4,9,7,5,'#3a3f48');b.box(2,6,5,3,8,5,'#2a2e36');b.box(3,4,4,4,6,5,'#24262e');b.box(9,6,4,10,8,5,'#4a5260');b.put(2,8,4,'#7ad7ff')}
+  else if(kind==='house'){b.box(1,0,1,10,6,10,'#c8a06a');b.box(0,6,0,11,7,11,A);b.box(1,7,1,10,9,10,A);b.box(2,8,2,9,10,9,A);b.box(4,0,10,7,4,10,'#6a4a2a');b.box(2,2,10,3,4,10,'#bfe9ff');b.box(8,2,10,9,4,10,'#bfe9ff')}
+  else if(kind==='skull'){b.box(3,2,4,8,9,8,'#e8e2d0');b.box(3,0,4,8,2,7,'#d8d2c0');b.put(4,6,9,'#24262e');b.put(7,6,9,'#24262e');b.put(5,4,9,'#24262e');b.put(6,4,9,'#24262e')}
+  else if(kind==='heart'){b.box(2,5,4,5,9,7,A);b.box(6,5,4,9,9,7,A);b.box(3,2,4,8,5,7,A);b.box(4,1,4,7,2,7,A);b.box(5,0,4,6,1,7,A)}
+  else if(kind==='mushroom'){b.box(4,0,4,7,5,7,'#e8e2d0');b.box(1,5,1,10,8,10,A);b.put(3,8,3,'#ffffff');b.put(8,8,7,'#ffffff');b.put(6,8,4,'#ffffff')}
+  else if(kind==='rocket'){b.box(4,0,4,7,8,7,'#e8edf2');b.box(5,8,4,6,10,7,A);b.box(3,0,2,3,3,2,A);b.box(8,0,9,8,3,9,A);b.box(4,0,4,7,0,7,'#ff6a3c');b.put(4,2,7,'#7ad7ff');b.put(7,2,7,'#7ad7ff')}
+  else if(kind==='drone'){b.box(4,4,4,7,6,7,'#3a3f48');b.box(1,5,5,4,5,6,'#5a6472');b.box(7,5,5,10,5,6,'#5a6472');b.box(1,5,2,4,5,2,'#5a6472');b.box(7,5,9,10,5,9,'#5a6472');b.put(1,6,2,E);b.put(10,6,9,E);b.put(5,7,5,'#ff6a3c')}
+  else if(kind==='human'){b.box(4,4,4,7,9,7,A);b.box(4,9,4,7,11,7,'#f0c9a0');b.put(3,10,5,'#24262e');b.put(8,10,5,'#24262e');b.box(2,4,5,3,8,6,A);b.box(8,4,5,9,8,6,A);b.box(4,0,4,4,4,5,'#3a4a66');b.box(7,0,4,7,4,5,'#3a4a66')}
+  else if(kind==='ball'){const R2=5.2;for(let x=1;x<=10;x++)for(let y=1;y<=10;y++)for(let z=1;z<=10;z++){const d=Math.hypot(x-5.5,y-5.5,z-5.5);if(d<=R2)b.put(x,y,z,Math.abs(d-3.1)<.6?C:A)}}
+  else if(kind==='tank'){b.box(1,0,1,10,3,10,'#4f5a3a');b.box(3,3,3,8,5,8,'#5f6a45');b.box(6,4,8,7,5,11,'#3a3f48');b.box(1,0,1,10,1,1,'#2a2e28');b.box(1,0,10,10,1,10,'#2a2e28')}
+  else{b.box(2,0,2,9,2,9,A);b.box(3,2,3,8,7,8,B);b.put(4,5,9,C);b.put(7,5,9,C);b.box(5,7,4,6,8,7,A)}
+  return b.done(kind);
+}
+function aiModel(prompt){return aiModelRaw(prompt)}
+function aiWeapon(pr,auto){
+  pr=String(pr||'').toLowerCase();
+  const ranged=/пистолет|автомат|ружь|пушк|лазер|дробов|гранатом|лук|снайпер|пулемёт|пулемет|бластер/.test(pr);
+  const fast=/быстр|скорострельн|автомат|миниган|пулемёт|пулемет/.test(pr);
+  const heavy=/мощн|сильн|тяжёл|снайпер|гранатом|молот|кувалд|двуручн/.test(pr);
+  const col=aiPal(pr,'#0ff0ff'),col2=aiPal(pr.slice(pr.length-6),'#ff00ff');
+  const nm=String(pr||'').trim().replace(/^(сделай|добавь|мод|оружие|меч|нож)\s+/,'').slice(0,26)||'Мой клинок';
+  return {id:('ai_'+nm.toLowerCase().replace(/[^a-zа-я0-9]+/g,'_')).slice(0,22),name:nm.charAt(0).toUpperCase()+nm.slice(1),
+    type:ranged?'ranged':'melee',dmg:heavy?95:fast?24:45,cd:fast?.12:heavy?.85:.35,reach:heavy?2.6:1.8,
+    color:col,color2:col2,color3:'#ffffff',model:aiModelRaw(pr)};
+}
+function aiMob(pr,auto){
+  pr=String(pr||'').toLowerCase();
+  const fly=/лета|крыл|птиц|дрон|дракон|призрак|дух/.test(pr);
+  const boom=/камикадз|взрыв|бомб|суицид|подрыв/.test(pr);
+  const big=/больш|гигант|огромн|титан/.test(pr),mini=/малень|мини|крош|мелк/.test(pr);
+  const fast=/быстр|шустр|молниенос/.test(pr);
+  const nm=String(pr||'').trim().slice(0,26)||'Существо';
+  return {id:('ai_'+nm.toLowerCase().replace(/[^a-zа-я0-9]+/g,'_')).slice(0,22),name:nm.charAt(0).toUpperCase()+nm.slice(1),
+    color:aiPal(pr,'#e8823c'),color2:aiPal(pr.slice(-6),'#f7d7a8'),size:big?1.9:mini?.55:1,
+    hp:big?40:mini?4:10,speed:fast?6.5:3.2,fly:fly?'да':'нет',hover:4,
+    kamikaze:boom?'да':'нет',boomR:4,boomDmg:40,bomber:'нет',ears:'да',wings:fly?'да':'нет',tail:'да',
+    model:aiModelRaw(pr)};
+}
+function aiGui(pr){
+  pr=String(pr||'').toLowerCase();
+  const items=[{type:'text',id:'hud',text:'📊 '+(pr.slice(0,34)||'HUD мода')}];
+  const parts=[];
+  if(/скорост|speed|бхоп|бхоп-|бхоп/.test(pr)){items.push({type:'text',id:'speed',text:'⚡ 0.0 м/с'});parts.push('speed')}
+  if(/прыж|прыжк|hop/.test(pr)){items.push({type:'text',id:'hops',text:'🌀 прыжков: 0'});parts.push('hops')}
+  if(/кнопк|сброс|reset|рестарт/.test(pr)){items.push({type:'btn',text:'♻ Сброс',act:'ai_reset'});parts.push('reset')}
+  if(/меню|панель|включ/.test(pr)&&items.filter(i=>i.type==='btn').length<2)items.push({type:'btn',text:'⚙ Включить',act:'ai_toggle'});
+  if(items.filter(i=>i.type==='btn').length===0)items.push({type:'btn',text:'✨ Кнопка',act:'ai_action'});
+  return {items,parts};
+}
+function aiGuiScript(parts){
+  const upd=[];
+  if(parts.includes('speed'))upd.push("const sp=Math.hypot(P.vx,P.vz);api.ui('speed')('⚡ '+sp.toFixed(1)+' м/с');");
+  if(parts.includes('hops'))upd.push("api.ui('hops')('🌀 прыжков: '+hops);");
+  if(parts.includes('reset'))upd.push("api.onAct('ai_reset',()=>{hops=0;msg('Сброшено');});");
+  return "// ИИ-скрипт для GUI\nlet hops=0;api.onAct('ai_toggle',()=>msg('Режим включён'));api.onAct('ai_action',()=>msg('Кнопка нажата'));\napi.onFrame((dt,ctx)=>{if(!P)return;if(P.y-P.gy<0.05&&P.vy>0.05)hops++;\n" + upd.join('\n') + "\n});";
+}
+const AI_SCRIPTS=[
+ [/бхоп|bhop|распрыжк/,`// Advanced Bhop от ИИ-моддера
+if(api.tuning)api.tuning.runMul=1.06;
+api.onFrame((dt,ctx)=>{const P2=ctx.P;if(!P2)return;
+  P2.vy=P2.vy||0;if(P2.y-P2.gy<0.05&&P2.vy>0.05)P2.vy=6.2;});`],
+ [/полёт|полет|флай|fly|нуклип|noclip/,`// Полёт / ноклип
+let fly=false;api.onFrame((dt,ctx)=>{const P2=ctx.P;if(!P2)return;
+  if(P2.y>3){P2.vy=Math.max(P2.vy,0);P2.y+=dt*4;}});`],
+ [/низк|луна|гравитац|гравит/,`// Низкая гравитация
+api.onFrame((dt,ctx)=>{const P2=ctx.P;if(!P2)return;P2.vy-=dt*(9.6*0.35);});`],
+ [/бескон|патрон|ammo|бесконечн/,`// Бесконечные патроны
+api.onFrame((dt,ctx)=>{for(const h of ctx.hands)if(h&&h.item)h.item.ammo=999;});`],
+ [/скор|быстр|speed|ускор/,`// Ускоренный бег
+api.tuning.runMul=1.6;`],
+ [/прыж|джамп|jump|высок/,`// Прыжок выше
+api.onFrame((dt,ctx)=>{const P2=ctx.P;if(!P2)return;if(P2.vy>0&&P2.vy<9)P2.vy*=1.02;});`],
+ [/телепорт|спавн|домой|respawn/,`// Телепорт на спавн при "R"
+window.addEventListener('keydown',e=>{if(e.code==='KeyT'){const P2=ctx0.P;const sp=api.MAPS[api.MAPID()].spawn||[0,1,0];P2.x=sp[0];P2.y=sp[1]+1;P2.z=sp[2];api.msg('Телепорт')}});
+const ctx0={P:null};api.onFrame((dt,c)=>{ctx0.P=c.P});`],
+ [/дождь|мяч|шарик|спавн.*шар|гравитац.*шар/,`// Дождь из мячей
+let t=0;api.onFrame((dt,ctx)=>{t+=dt;if(t>1.2){t=0;const P2=ctx.P||{x:0,y:8,z:0};api.mk('ball',P2.x+(Math.random()-.5)*8,P2.y+8,P2.z+(Math.random()-.5)*8);}});`],
+ [/убить|убива|чист|kill|очист/,`// Убить всех существ
+api.mobs().forEach(m=>{m.hp=0});api.msg('Все существа мертвы');`],
+ [/ночь|свет|фонар|dark/,`// Свет во тьме
+api.onFrame((dt,ctx)=>{const P2=ctx.P;if(P2&&api.mk&&!window.__light){window.__light=1;api.mk('ball',P2.x,P2.y+2,P2.z)}});`],
+ [/hud|худ|показ|скорост/,
+  aiGuiScript(['speed','hops'])],
+];
+function aiScript(pr){
+  pr=String(pr||'').toLowerCase();
+  for(const [re,code] of AI_SCRIPTS)if(re.test(pr))return code;
+  return "// ИИ-скрипт\ntry{api.msg('Мод включён: "+String(pr).replace(/'/g,'').slice(0,40)+"')}catch(e){}\napi.onFrame((dt,ctx)=>{/* тут твой код каждую кадр */});";
+}
+function aiAddBlock(type,props){
+  const b={t:type,...defaults(type),...props};
+  blocks.push(b);render();return b;
+}
+function aiLog(t){const el=document.getElementById('aiLog');if(el)el.textContent=t}
+function aiRun(kind){
+  const box=document.getElementById('aiIn');
+  let pr=(box&&box.value||'').trim();
+  if(kind==='rand'){const pool=['неоновый меч','кот-камикадзе','ночной город с бассейном','светящийся гриб','робот-охранник','худ со скоростью и кнопкой сброса','полёт и бхоп','ледяная арена','ракета-дрон','танк-босс','лес с деревьями и костром','неоновая пушка'];
+    pr=pool[Math.floor(Math.random()*pool.length)];if(box)box.value=pr}
+  if(!pr){aiLog('сначала напиши, что хочешь — например «неоновый меч»');document.getElementById('aiIn').focus();return}
+  const made=[];
+  const wantMap=/карт|город|лес|замок|космос|арен|паркур|стадион|поле|комнат|мир/i.test(pr);
+  const W=(re)=>new RegExp('(^|[^а-яёa-z])('+re+')([^а-яёa-z]|$)','i').test(pr);
+  const wantMob=W('кот|коты|кота|котик[а-я]*|кошк[а-я]*|пёс|пес|пса|собак[а-я]*|зомби|моб|мобы|моба|мобов|существ[а-я]*|дракон[а-я]*|робот[а-я]*|враг[а-я]*|босс[а-я]*|птиц[а-я]*|призрак[а-я]*|животн[а-я]*|нпс');
+  const wantGun=/меч|нож|пистолет|автомат|пушк|ружь|лазер|топор|бита|оружие|молот|катана|бластер/i.test(pr);
+  const wantGui=/hud|худ|gui|интерфейс|панел|кнопк|меню|надпис|скорост/i.test(pr);
+  const wantScript=/бхоп|bhop|полёт|полет|гравитац|патрон|прыж|телепорт|убить|дождь|ночь/i.test(pr);
+  const doAll=kind==='auto';
+  if(kind==='model'){const m=aiModel(pr);aiAddBlock('model',{id:(m.name!==undefined?'ai_'+m.name:('ai_'+uid++)),name:pr.slice(0,20),model:m,speed:0,hp:9999});made.push('модель '+m.name)}
+  if(kind==='weapon'||(doAll&&wantGun)){const w=aiWeapon(pr);aiAddBlock('item',w);made.push('оружие «'+w.name+'»')}
+  if(kind==='mob'||(doAll&&wantMob)){const m=aiMob(pr);aiAddBlock('mob',m);made.push('существо «'+m.name+'»')}
+  if(kind==='map'||(doAll&&wantMap)){const b=aiAddBlock('map',{id:'ai_'+uid++,name:pr.slice(0,22),prompt:pr,seed:Math.floor(Math.random()*9999)+1,kind:'sandbox'});
+    const n=aiMap(b);render();made.push('карта ('+n+' блоков, '+b.kind+')')}
+  if(kind==='gui'||(doAll&&wantGui)){const g=aiGui(pr);aiAddBlock('gui',g);made.push('GUI ('+g.items.length+' элементов)');
+    if(g.parts.length)aiAddBlock('script',{code:aiGuiScript(g.parts)})}
+  if(kind==='script'||(doAll&&wantScript)){aiAddBlock('script',{code:aiScript(pr)});made.push('скрипт')}
+  if(!made.length){aiAddBlock('script',{code:aiScript(pr)});made.push('скрипт')}
+  aiLog('✅ '+(made.length>1?'собрал: ':'сделал: ')+made.join(' · ')+' — смотри справа и жми «Экспорт»');
+  toast('ИИ: '+made.join(' · '));
+}
+function rmMeshInfo(m){
+  if(!m)return '';
+  if(m.mesh&&m.mesh.p&&m.mesh.p.length)return (((m.mesh.i?m.mesh.i.length/3:m.mesh.p.length/9)|0)+' треугольников');
+  if(m.v&&m.v.length)return m.v.length+' кубиков';
+  return '';
+}
+function rmModelBlock(model,name){
+  const isMesh=!!(model&&model.mesh&&model.mesh.p&&model.mesh.p.length);
+  const isVox=!!(model&&Array.isArray(model.v)&&model.v.length);
+  if(!isMesh&&!isVox){toast('В файле нет модели');return null}
+  const b={t:'model',...defaults('model'),id:'sculpt_'+uid++,name:name||'Модель из скульптора',model};
+  b.size=1;b.hp=9999;b.speed=0;
+  blocks.push(b);render();
+  toast('Модель добавлена: '+rmMeshInfo(model));
+  return b;
+}
+// ——— вокселизация треугольников (для .obj и .html из скульптора) ———
+function rmQuatRot(q,v){
+  const x=q[0],y=q[1],z=q[2],w=q[3],vx=v[0],vy=v[1],vz=v[2];
+  const ix=w*vx+y*vz-z*vy, iy=w*vy+z*vx-x*vz, iz=w*vz+x*vy-y*vx, iw=-x*vx-y*vy-z*vz;
+  return [ix*w+iw*-x+iy*-z-iz*-y, iy*w+iw*-y+iz*-x-ix*-z, iz*w+iw*-z+ix*-y-iy*-x];
+}
+function rmHexToRgb(h){ if(typeof h==='number')return [(h>>16)&255,(h>>8)&255,h&255];
+  const s=(''+h).replace('#',''); return [parseInt(s.substr(0,2),16)||200,parseInt(s.substr(2,2),16)||200,parseInt(s.substr(4,2),16)||200]; }
+function rmRgbToHex(r,g,b){ const f=n=>('0'+Math.max(0,Math.min(255,Math.round(n))).toString(16)).slice(-2); return '#'+f(r)+f(g)+f(b); }
+function rmVoxTris(tris,N){
+  N=Math.max(6,Math.min(24,N|0||14));
+  if(!tris.length)return null;
+  let mn=[1e9,1e9,1e9],mx=[-1e9,-1e9,-1e9];
+  tris.forEach(t=>t.pts.forEach(p=>{for(let k=0;k<3;k++){if(p[k]<mn[k])mn[k]=p[k];if(p[k]>mx[k])mx[k]=p[k]}}));
+  const span=Math.max(mx[0]-mn[0],mx[1]-mn[1],mx[2]-mn[2])||1;
+  const cell=span/(N-1.0001), hgt=(mx[1]-mn[1])||1;
+  const cells=new Map(),pal=[],pix=new Map();
+  const put=(p,hex)=>{
+    const x=Math.round((p[0]-mn[0])/cell),y=Math.round((p[1]-mn[1])/cell),z=Math.round((p[2]-mn[2])/cell);
+    if(x<0||y<0||z<0||x>=N||y>=N||z>=N)return;
+    const k=x+','+y+','+z; if(cells.has(k))return;
+    let ci=pix.get(hex); if(ci===undefined){ci=pal.length;pal.push(hex);pix.set(hex,ci)}
+    cells.set(k,[x,y,z,ci]);
+  };
+  tris.forEach(t=>{
+    const a=t.pts[0],b=t.pts[1],c=t.pts[2];
+    let hex=t.hex;
+    if(!hex){ // без цвета из файла — мягкий градиент по высоте
+      const f=(a[1]-mn[1])/hgt, base=[150,166,196], top=[246,250,255];
+      hex=rmRgbToHex(base[0]+(top[0]-base[0])*f, base[1]+(top[1]-base[1])*f, base[2]+(top[2]-base[2])*f);
+    }
+    const ab=[b[0]-a[0],b[1]-a[1],b[2]-a[2]],ac=[c[0]-a[0],c[1]-a[1],c[2]-a[2]];
+    const cr=[ab[1]*ac[2]-ab[2]*ac[1],ab[2]*ac[0]-ab[0]*ac[2],ab[0]*ac[1]-ab[1]*ac[0]];
+    const area=0.5*Math.sqrt(cr[0]*cr[0]+cr[1]*cr[1]+cr[2]*cr[2]);
+    const steps=Math.min(24,Math.max(2,Math.ceil(Math.sqrt(Math.max(area,1e-9))/cell*2.2)));
+    for(let i=0;i<=steps;i++)for(let j=0;j<=steps-i;j++){
+      const u=i/steps,v=j/steps,w=1-u-v;
+      put([a[0]*w+b[0]*u+c[0]*v, a[1]*w+b[1]*u+c[1]*v, a[2]*w+b[2]*u+c[2]*v],hex);
+    }
+  });
+  const has=(x,y,z)=>cells.has(x+','+y+','+z);
+  const v=[...cells.values()].filter(([x,y,z])=>!(has(x-1,y,z)&&has(x+1,y,z)&&has(x,y-1,z)&&has(x,y+1,z)&&has(x,y,z-1)&&has(x,y,z+1)));
+  if(!v.length)return null;
+  return {size:N,pal,v};
+}
+function rmParseOBJ(text){
+  const V=[],tris=[];
+  let colored=false;
+  text.split(/\r?\n/).forEach(line=>{
+    const p=line.trim().split(/\s+/);
+    if(p[0]==='v'&&p.length>=4){
+      let hex=null;
+      if(p.length>=7){
+        let r=+p[4],g=+p[5],b=+p[6];
+        if(r<=1&&g<=1&&b<=1&&(r<1||g<1||b<1)){r*=255;g*=255;b*=255}
+        if(isFinite(r)&&isFinite(g)&&isFinite(b)){hex=rmRgbToHex(r,g,b);colored=true}
+      }
+      V.push([+p[1],+p[2],+p[3],hex]);
+    } else if(p[0]==='f'&&p.length>=4){
+      const idx=p.slice(1).map(x=>{const n=parseInt(x.split('/')[0],10);return n<0?V.length+n:n-1}).filter(i=>i>=0&&i<V.length);
+      for(let i=1;i+1<idx.length;i++){
+        const a=V[idx[0]],b=V[idx[i]],c=V[idx[i+1]];
+        tris.push({pts:[[a[0],a[1],a[2]],[b[0],b[1],b[2]],[c[0],c[1],c[2]]],hex:colored?(a[3]||b[3]||c[3]):null});
+      }
+    }
+  });
+  return tris;
+}
+function rmTrisFromHTML(text){
+  const m=text.match(/const\s+DATA\s*=\s*(\[[\s\S]*?\]);\s*(?:\r?\n)/);
+  if(!m)return null;
+  let D; try{D=JSON.parse(m[1])}catch(e){return null}
+  const tris=[];
+  D.forEach(d=>{
+    const P=d.p||[]; if(P.length<9)return;
+    const q=d.q||[0,0,0,1], ps=d.pos||[0,0,0], sc=d.s||[1,1,1];
+    const W=[];
+    for(let i=0;i<P.length;i+=3){
+      const v=[P[i]/1000*sc[0],P[i+1]/1000*sc[1],P[i+2]/1000*sc[2]];
+      const r=rmQuatRot(q,v);
+      W.push([r[0]+ps[0],r[1]+ps[1],r[2]+ps[2]]);
+    }
+    const base=d.c!==undefined?('#'+('000000'+(d.c>>>0).toString(16)).slice(-6)):null;
+    const vc=d.vc;
+    const add=(a,b,c,ci)=>{
+      let hex=base;
+      if(vc&&base===null){const o=ci*3; hex=rmRgbToHex(vc[o],vc[o+1],vc[o+2])}
+      tris.push({pts:[W[a],W[b],W[c]],hex});
+    };
+    if(d.i&&d.i.length) for(let k=0;k+2<d.i.length;k+=3) add(d.i[k],d.i[k+1],d.i[k+2],d.i[k]);
+    else for(let k=0;k+2<W.length;k+=3) add(k,k+1,k+2,k);
+  });
+  return tris;
+}
+function rmMeshFromOBJ(text){
+  const V=[],tris=[],idx=[];
+  let colored=false;
+  const base='#c8d0e0';
+  text.split(/\r?\n/).forEach(line=>{
+    const p=line.trim().split(/\s+/);
+    if(p[0]==='v'&&p.length>=4){
+      let hex=null;
+      if(p.length>=7){let r=+p[4],g=+p[5],b=+p[6];
+        if(r<=1&&g<=1&&b<=1){r*=255;g*=255;b*=255}
+        if(isFinite(r)&&isFinite(g)&&isFinite(b)){hex=rmRgbToHex(r,g,b);colored=true}}
+      V.push([+p[1],+p[2],+p[3],hex]);
+    } else if(p[0]==='f'&&p.length>=4){
+      const f=p.slice(1).map(x=>{const n=parseInt(x.split('/')[0],10);return n<0?V.length+n:n-1}).filter(i=>i>=0&&i<V.length);
+      for(let i=1;i+1<f.length;i++){idx.push(f[0],f[i],f[i+1]);tris.push(1)}
+    }
+  });
+  if(!idx.length)return null;
+  const pos=[],col=[];
+  V.forEach(v=>{pos.push(v[0],v[1],v[2]);const h=colored?(v[3]||base):base;
+    const c=rmHexToRgb(h);col.push(c[0]/255,c[1]/255,c[2]/255)});
+  return {p:pos,c:col,i:idx};
+}
+function rmMeshFromHTML(text){
+  const m=text.match(/const\s+DATA\s*=\s*(\[[\s\S]*?\]);\s*(?:\r?\n)/);
+  if(!m)return null;
+  let D;try{D=JSON.parse(m[1])}catch(e){return null}
+  const pos=[],col=[],idx=[];
+  D.forEach(d=>{
+    const P=d.p||[];if(P.length<9)return;
+    const q=d.q||[0,0,0,1],ps=d.pos||[0,0,0],sc=d.s||[1,1,1];
+    const start=pos.length/3, n=P.length/3;
+    const base=d.c!==undefined?rmHexToRgb(d.c):null, vc=d.vc;
+    for(let i=0;i<n;i++){
+      const v=[P[i*3]/1000*sc[0],P[i*3+1]/1000*sc[1],P[i*3+2]/1000*sc[2]];
+      const r=rmQuatRot(q,v);
+      pos.push(r[0]+ps[0],r[1]+ps[1],r[2]+ps[2]);
+      let c=base;
+      if(vc&&vc.length>=i*3+3)c=[vc[i*3],vc[i*3+1],vc[i*3+2]];
+      if(!c)c=[200,208,224];
+      col.push(c[0]/255,c[1]/255,c[2]/255);
+    }
+    if(d.i&&d.i.length)for(let k=0;k<d.i.length;k++)idx.push(start+d.i[k]);
+    else for(let k=0;k<n;k++)idx.push(start+k);
+  });
+  if(!idx.length)return null;
+  return {p:pos,c:col,i:idx};
+}
+function rmWantedVox(){const c=document.getElementById('voxChk');return !!(c&&c.checked)}
+function rmReadModelText(txt,fname,gridN){
+  const name=(fname||'Модель').replace(/\.[a-z0-9]+$/i,'');
+  const head=(txt||'').trim().slice(0,200);
+  try{
+    // 1) обычный мод .rmod с моделью внутри
+    if(txt.indexOf('"rmod/')>0||txt.indexOf('"mobs"')>0){
+      const j=JSON.parse(txt);
+      const mm=(j.mobs||[]).find(x=>x&&x.model&&((Array.isArray(x.model.v)&&x.model.v.length)||(x.model.mesh&&x.model.mesh.p&&x.model.mesh.p.length)));
+      if(mm){rmModelBlock(mm.model,mm.name||name);return}
+    }
+    // 2) готовая воксельная модель
+    if(head[0]==='{'||head[0]==='['){
+      const j=JSON.parse(txt), m=j&&j.model?j.model:j;
+      if(m&&m.mesh&&m.mesh.p)      {rmModelBlock({mesh:m.mesh},(j&&j.name)||name);return}
+      if(m&&m.p&&m.p.length&&(m.i||m.c)){rmModelBlock({mesh:m},(j&&j.name)||name);return}
+      if(!m||!Array.isArray(m.v))throw new Error('в JSON нет модели (нужны поля v/pal или mesh/p)');
+      rmModelBlock(m,(j&&j.name)||name);return;
+    }
+    // 3) .obj
+    if(/^\s*(#|v\s|o\s|g\s|mtllib|usemtl)/m.test(head)&&/\n\s*f\s/.test(txt)){
+      if(!rmWantedVox()){
+        const mesh=rmMeshFromOBJ(txt);
+        if(!mesh)throw new Error('в OBJ нет полигонов');
+        const b=rmModelBlock({mesh},name);
+        if(b)toast('OBJ → '+rmMeshInfo(b.model)+' (гладкая)');
+        return;
+      }
+      const tris=rmParseOBJ(txt);
+      const model=rmVoxTris(tris,gridN||14);
+      if(!model)throw new Error('в OBJ нет полигонов');
+      const b=rmModelBlock(model,name+' (obj)');
+      if(b)toast('OBJ → '+model.v.length+' вокселей');
+      return;
+    }
+    // 4) .html — вьювер, сохранённый из скульптора
+    if(/<html|<!DOCTYPE/i.test(head)){
+      if(!rmWantedVox()){
+        const mesh=rmMeshFromHTML(txt);
+        if(!mesh)throw new Error('в HTML не нашёл геометрию (нужен файл из кнопки «💾 Скачать HTML»)');
+        const b=rmModelBlock({mesh},name);
+        if(b)toast('HTML → '+rmMeshInfo(b.model)+' (гладкая)');
+        return;
+      }
+      const tris=rmTrisFromHTML(txt);
+      if(!tris||!tris.length)throw new Error('в HTML не нашёл геометрию (нужен файл, сохранённый кнопкой «💾 Скачать HTML»)');
+      const model=rmVoxTris(tris,gridN||14);
+      if(!model)throw new Error('не удалось вокселизировать');
+      rmModelBlock(model,name+' (html)');
+      toast('HTML → '+model.v.length+' вокселей');return;
+    }
+    throw new Error('не понял формат файла (жду .obj, .json, .rmod или .html)');
+  }catch(e){toast('Не получилось: '+e.message)}
+}
+(function sculptWire(){
+  const sc=document.getElementById('sculp'), fr=document.getElementById('sculpFrame');
+  const open = ()=>{ if(fr&&!fr.src)fr.src='modelmaker.html'; if(sc)sc.style.display='block';
+    if(fr&&fr.contentWindow)try{fr.contentWindow.focus()}catch(e){} };
+  const openBtn=document.getElementById('bSculp');
+  if(openBtn)openBtn.onclick=open;
+  const ob2=document.getElementById('bSculp2'); if(ob2)ob2.onclick=open;
+  const obW=document.getElementById('bSculpWin'); if(obW)obW.onclick=()=>window.open('modelmaker.html','_blank');
+  const inBtn2=document.getElementById('bObjIn');
+  if(inBtn2)inBtn2.onclick=()=>document.getElementById('fModel').click();
+  (function dropWire(){
+    const hint=document.getElementById('dropHint');
+    let depth=0;
+    const show=v=>{if(hint)hint.style.display=v?'flex':'none'};
+    addEventListener('dragenter',e=>{e.preventDefault();depth++;show(true)});
+    addEventListener('dragover',e=>e.preventDefault());
+    addEventListener('dragleave',e=>{e.preventDefault();if(--depth<=0)show(false)});
+    addEventListener('drop',e=>{
+      e.preventDefault();depth=0;show(false);
+      const f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0];
+      if(!f)return;
+      const r=new FileReader();r.onload=()=>rmReadModelText(r.result,f.name);r.readAsText(f);
+    });
+  })();
+  const cl=document.getElementById('sculpClose');if(cl)cl.onclick=()=>{if(sc)sc.style.display='none'};
+  const inp=document.getElementById('fModel');
+  const inBtn=document.getElementById('bModelIn');
+  if(inBtn)inBtn.onclick=()=>{if(inp)inp.click()};
+  if(inp)inp.onchange=e=>{const f=e.target.files&&e.target.files[0];if(!f)return;
+    const r=new FileReader();r.onload=()=>rmReadModelText(r.result,f.name);r.readAsText(f);inp.value=''};
+  // модель, скопированная из скульптора в буфер
+  addEventListener('paste',e=>{
+    try{
+      const t=(e.clipboardData||window.clipboardData).getData('text');
+      if(t&&t.indexOf('"v"')>0&&t.indexOf('"pal"')>0){e.preventDefault();rmReadModelText(t,'Модель из буфера')}
+    }catch(x){}
+  });
+})();
+(function aiWire(){
+  const box=document.getElementById('aiIn');if(!box)return;
+  box.addEventListener('keydown',e=>{if(e.key==='Enter'&&(e.ctrlKey||e.metaKey)){e.preventDefault();aiRun('auto')}});
+  document.querySelectorAll('[data-ai]').forEach(b=>{b.onclick=()=>aiRun(b.getAttribute('data-ai'))});
+})();
+
+let FREE={on:false,obj:null};
+function deepMerge(a,b){
+  for(const k in b){
+    const v=b[k];
+    if(v&&typeof v==='object'&&!Array.isArray(v)&&a[k]&&typeof a[k]==='object'&&!Array.isArray(a[k]))deepMerge(a[k],v);
+    else if(Array.isArray(v)&&Array.isArray(a[k]))a[k]=a[k].concat(v);
+    else a[k]=v;
+  }
+  return a;
+}
 function buildMod(){
+  if(FREE.on&&FREE.obj)return JSON.parse(JSON.stringify(FREE.obj));
   const meta=blocks.find(b=>b.t==='meta')||{};
   const mod={format:'rmod/2',id:(meta.id||'mod_'+Date.now()).replace(/\s+/g,'_'),name:meta.name||'Мод без названия',
     author:meta.author||'неизвестно',desc:meta.desc||''};
@@ -282,9 +1041,26 @@ function buildMod(){
     else if(b.t==='msg'){scripts.push('api.msg('+JSON.stringify(b.text||'')+');')}
     else if(b.t==='script'){if(b.code&&b.code.trim())scripts.push(b.code)}
   }
+  const maps=[],ui=[];
+  for(const b of blocks){
+    if(b.t==='map'){
+      if(!Array.isArray(b.pieces)||!b.pieces.length)continue;
+      const meta=modMapMeta(b);
+      const m={id:String(b.id||'arena').replace(/\s+/g,'_'),name:b.name||b.id,d:b.desc||'Карта из мода',
+        ...meta,pieces:b.pieces.map(p=>p.map(v=>typeof v==='number'?Math.round(v*100)/100:v))};
+      if(Array.isArray(b.items)&&b.items.length)m.items=b.items;
+      maps.push(m);
+    }else if(b.t==='gui'&&Array.isArray(b.items)){
+      for(const it of b.items){if(!it)continue;
+        if(it.type==='btn')ui.push({type:'btn',text:it.text||'Кнопка',act:it.act||''});
+        else ui.push({type:'text',id:it.id||'t'+ui.length,text:it.text||''})}
+    }
+  }
+  if(maps.length)mod.maps=maps;
+  if(ui.length)mod.ui=ui;
   const mobs=[],spawners=[],items=[];
   for(const b of blocks){
-    if(b.t==='mob'){
+    if(b.t==='mob'||b.t==='model'){
       if(!b.id)continue;
       const o={id:String(b.id).replace(/\s+/g,'_'),name:b.name||b.id,color:b.color,color2:b.color2,
         size:+b.size||1,hp:+b.hp||6,speed:+b.speed||3,fly:b.fly==='да'};
@@ -294,12 +1070,15 @@ function buildMod(){
       if(b.ears==='нет')o.ears=false;
       if(b.wings==='да')o.wings=true;
       if(b.tail==='нет')o.tail=false;
+      if(b.model&&((Array.isArray(b.model.v)&&b.model.v.length)||(b.model.mesh&&b.model.mesh.p&&b.model.mesh.p.length)))o.model=b.model;
       mobs.push(o);
     }else if(b.t==='item'){
       if(!b.id)continue;
-      items.push({id:String(b.id).replace(/\s+/g,'_'),name:b.name||b.id,type:b.type||'melee',
+      const it={id:String(b.id).replace(/\s+/g,'_'),name:b.name||b.id,type:b.type||'melee',
         dmg:+b.dmg||30,cd:+b.cd||.4,reach:+b.reach||1.7,
-        color:b.color,color2:b.color2,color3:b.color3});
+        color:b.color,color2:b.color2,color3:b.color3};
+      if(b.model&&((Array.isArray(b.model.v)&&b.model.v.length)||(b.model.mesh&&b.model.mesh.p&&b.model.mesh.p.length)))it.model=b.model;
+      items.push(it);
     }else if(b.t==='spawner'){
       const sp={mob:b.mob,every:+b.every||6,count:+b.count||1,max:+b.max||4};
       if(b.map)sp.map=b.map;
@@ -314,93 +1093,19 @@ function buildMod(){
   if(shirts.length)mod.npcShirts=shirts;
   if(props.length)mod.props=props;
   if(scripts.length)mod.script=scripts.join('\n');
+  for(const b of blocks)if(b.t==='extra'&&b.json){try{deepMerge(mod,JSON.parse(b.json))}catch(e){}}
   return mod;
 }
 function modText(){return JSON.stringify(buildMod(),null,2)}
 
-function promptText(){
-  const m=buildMod();
-  return `Ты пишешь мод для игры Rphysics (одностраничная браузерная игра на WebGL, файл index.html).
-В игре есть встроенный моддер RModder. Мод — это ОДИН JSON-объект формата "rmod/1".
-Ответь ТОЛЬКО этим JSON, без пояснений, без markdown-обёрток.
-
-=== ФОРМАТ МОДА (rmod/1) ===
-{
-  "format": "rmod/1",
-  "id": "уникальный_ид_латиницей",
-  "name": "Название мода",
-  "author": "кто сделал",
-  "desc": "что делает мод",
-  "skins": { "<предмет>": { "a": "#hex", "b": "#hex", "c": "#hex", "scale": 1.4 } },
-  "tuning": { "meleeMul": 2, "runMul": 1.5 },
-  "npcShirts": ["#00ffcc", "#ff00aa"],
-  "props": [ { "kind": "knife", "map": "flatgrass", "x": 5, "y": 1, "z": 5 } ],
-  "items": [ { "id": "chainsaw", "name": "Бензопила", "type": "melee", "dmg": 55, "cd": 0.35, "reach": 2,
-               "color": "#d7a03c", "color2": "#cfd8e3", "color3": "#ffffff" } ],
-  "mobs": [
-    { "id": "kamikaze_cat", "name": "Кот-камикадзе", "color": "#e8823c", "color2": "#f7d7a8",
-      "size": 1, "hp": 6, "speed": 6, "fly": true, "hover": 2.4,
-      "kamikaze": true, "boomR": 4, "boomDmg": 45, "ears": true, "tail": true },
-    { "id": "bomber", "name": "Бомбардировщик", "color": "#4a5b8a", "color2": "#9fb3e0",
-      "size": 1.2, "hp": 10, "speed": 4.5, "fly": true, "hover": 7,
-      "bomber": true, "dropEvery": 2.5, "fuse": 2.2, "wings": true }
-  ],
-  "spawners": [ { "mob": "kamikaze_cat", "every": 8, "count": 2, "max": 4, "map": "flatgrass" } ],
-  "script": "api.msg('привет'); api.onFrame((dt,ctx)=>{ /* код каждый кадр */ });"
+const AI_DOC="=====================================================================\n ПРОМПТ ДЛЯ ИИ-МОДДЕРА · RPHYSICS · формат rmod/2\n Версия: 2.0 · 2026-11-02 · работает с DeepSeek / ChatGPT / Claude / Qwen / Gemini\n=====================================================================\n\nКАК ПОЛЬЗОВАТЬСЯ (3 шага)\n  1. Скопируй этот файл ЦЕЛИКОМ и вставь в чат ИИ первым сообщением.\n  2. Вторым сообщением вставь готовое ЗАДАНИЕ из раздела 10 (или напиши своё).\n  3. ИИ ответит одним JSON — сохрани его в файл с расширением .rmod и открой\n     в игре: меню «Моды (RModder)» → «Открыть .rmod». Готово.\n  Если ИИ добавил пояснения или ```json — попроси: «только JSON, без текста».\n  В моддере то же самое можно писать руками: вкладка «🆓 Свой JSON» (полная свобода, любая\n  структура) или блок «🧩 Свои поля (любой JSON)» — он вливает любые поля в мод.\n\n=====================================================================\n 1. ЧТО ЭТО ЗА ИГРА\n=====================================================================\nRphysics — одностраничная браузерная игра (WebGL, один файл index.html):\nфизика с моделью и рэгдоллом, оружие и ближний бой, NPC, 12 карт, подушки,\nмобы, моды. Мод — это ОДИН JSON-объект. Он умеет добавлять: оружие, существ,\nкарты, интерфейс (GUI), предметы на карту, скрипты-механики, скины и тюнинг.\nЕсть встроенный моддер rmodder.html с 3D-редактором воксельных моделей и\nИИ-моддерами, которые генерируют то же самое локально.\n\nГЛАВНОЕ ПРАВИЛО: ответ — ТОЛЬКО валидный JSON. Без markdown, без комментариев,\nбез текста до/после. Ключи в двойных кавычках, без висящих запятых.\n\n=====================================================================\n 2. СКЕЛЕТ МОДА (rmod/2)\n=====================================================================\n{\n  \"format\": \"rmod/2\",\n  \"id\": \"my_mod\",                 // латиница/цифры/подчёркивания, уникально\n  \"name\": \"Название мода\",        // как показывать в игре\n  \"author\": \"кто сделал\",\n  \"desc\": \"что делает мод, 1-2 строки\",\n\n  \"tuning\": { \"meleeMul\": 1.5, \"runMul\": 1.2 },   // необязательно\n  \"skins\": { \"knife\": { \"a\": \"#0ff0ff\", \"b\": \"#ff00ff\", \"c\": \"#ffffff\", \"scale\": 1.4 } },\n  \"npcShirts\": [\"#00ffcc\", \"#ff00aa\"],\n\n  \"props\":  [ { \"kind\": \"knife\", \"map\": \"flatgrass\", \"x\": 5, \"y\": 1, \"z\": 5 } ],\n  \"items\":  [ { ...своё оружие... } ],\n  \"mobs\":   [ { ...существо... } ],\n  \"spawners\": [ { ...спавнер... } ],\n  \"maps\":   [ { ...карта... } ],\n  \"ui\":     [ { ...элемент интерфейса... } ],\n  \"script\": \"JS-код мода\"\n}\nВсе разделы, кроме format/id/name, необязательны. Пустые можно не писать.\n\n=====================================================================\n 3. ОРУЖИЕ И ПРЕДМЕТЫ · items\n=====================================================================\n{ \"id\":\"chainsaw\", \"name\":\"Бензопила\", \"type\":\"melee\",\n  \"dmg\":55, \"cd\":0.35, \"reach\":2,\n  \"color\":\"#d7a03c\", \"color2\":\"#cfd8e3\", \"color3\":\"#ffffff\" }\n  id      — латиница, уникально\n  name    — название в игре\n  type    — \"melee\" (удар ЛКМ по площади) или \"gun\" (стрельба как из пистолета)\n  dmg     — урон (меч 40-60, тяжёлое 80-120, автомат 18-30)\n  cd      — пауза между ударами/выстрелами, сек (быстро 0.12, тяжело 0.8)\n  reach   — дальность удара в метрах (1.6-2.8)\n  color / color2 / color3 — рукоять / клинок-ствол / блик\n  model   — необязательно: воксельная модель в руке (см. раздел 6)\n\nМИРОВЫЕ ПРЕДМЕТЫ · props (спавнятся на карте при загрузке)\n{ \"kind\":\"medkit\", \"map\":\"flatgrass\", \"x\":2, \"y\":1, \"z\":-3 }\n  kind — только из списка: knife, crowbar, bat, axe, medkit, ball, melon, heavy,\n     gren, bomb, pistol, smg, shotgun, rpg, pan, trash, egg, balloon, lighter,\n     cam, hammer, sledge, bcrate, angry, football\n  map  — construct, stadium, surf, flatgrass, aero, office, dream, warehouse,\n     town, space, forest, castle  (пусто/нет поля = любая карта)\n  x,y,z — координаты в метрах, y вверх\n\n=====================================================================\n 4. СУЩЕСТВА · mobs\n=====================================================================\n{ \"id\":\"kamikaze_cat\", \"name\":\"Кот-камикадзе\",\n  \"color\":\"#e8823c\", \"color2\":\"#f7d7a8\", \"size\":1,\n  \"hp\":6, \"speed\":6, \"fly\":true, \"hover\":2.4,\n  \"kamikaze\":true, \"boomR\":4, \"boomDmg\":45,\n  \"ears\":true, \"tail\":true, \"wings\":false,\n  \"touchDmg\":0, \"keepDist\":0, \"model\": { ... } }\n  color/color2 — тело / голова-лапы, size — масштаб (1 = кот; 0.5 карлик, 2 гигант)\n  hp 2-40, speed 1-7 м/с, fly — летает, hover — высота над игроком (м)\n  kamikaze + boomR + boomDmg — взрыв, догнав игрока (и при смерти)\n  bomber + dropEvery + fuse — летает сверху и сбрасывает бомбы\n  ears / tail / wings — уши, хвост, крылья (false чтобы убрать)\n  touchDmg — урон при касании, keepDist — держать дистанцию (м)\n\nСПАВНЕРЫ · spawners\n{ \"mob\":\"kamikaze_cat\", \"every\":8, \"count\":2, \"max\":4, \"map\":\"flatgrass\" }\n  every — раз в N сек, count — сколько за раз, max — лимит одновременно\n\n=====================================================================\n 5. КАРТА ИЗ МОДА · maps\n=====================================================================\n{ \"id\":\"arena\", \"name\":\"Арена\", \"d\":\"боевая арена\",\n  \"floor\":\"#5fa54a\", \"grid\":\"#559a41\",\n  \"sky\":[\"#58a8f0\",\"#d8efff\"], \"fog\":[205,226,244],\n  \"spawn\":[0,0,-14], \"cam\":[0,22,-33,0,-0.32],\n  \"pieces\":[ [x0,y0,z0, x1,y1,z1, \"#цвет\"], ... ],\n  \"items\":[ { \"k\":\"football\", \"x\":0, \"y\":1, \"z\":0 } ] }\n  pieces — блоки: две противоположные точки в метрах + цвет. Всё что угодно:\n     пол, стены, дома, платформы, ворота. Координаты можно в любом порядке.\n  Цвета: пол \"#5fa54a\" трава, \"#eef4f8\" снег, \"#2a3140\" космос, стены \"#8a9199\".\n  sky — 2 цвета градиента, fog — [r,g,b], spawn — где появляется игрок,\n  cam — вид карты в меню: [x,y,z, yaw, pitch(-1..1)].\n  Лимиты: до 400 pieces (иначе тормоза), поле в пределах -60..60 по x/z.\n  Итог: карта появится в списке карт (клавиша L) как rpe_arena.\n\n=====================================================================\n 6. ВОКСЕЛЬНЫЕ МОДЕЛИ · model\n=====================================================================\n{ \"size\":8, \"pal\":[\"#e8823c\",\"#f7d7a8\",\"#20222a\"],\n  \"v\":[ [3,1,3,0], [3,1,4,0], [4,4,6,2] ] }\n  size — куб size×size×size (6-10, максимум 16)\n  pal  — палитра hex-цветов, v — воксели [x,y,z,индекс цвета]\n  x,y,z — целые от 0 до size-1; y вверх; z вперёд (морда/лицо смотрят в +z)\n  Правила: центрируй фигуру (не прижимай к краю), ставь на y=0 ноги/низ,\n  держи до ~400 вокселей. Модель можно ставить и существу, и оружию.\n\n=====================================================================\n 7. ИНТЕРФЕЙС · ui + скрипт\n=====================================================================\n\"ui\": [\n  { \"type\":\"text\", \"id\":\"hud\",   \"text\":\"📊 Мой HUD\" },\n  { \"type\":\"text\", \"id\":\"speed\", \"text\":\"⚡ 0.0 м/с\" },\n  { \"type\":\"btn\",  \"text\":\"♻ Сброс\", \"act\":\"my_reset\" }\n]\n  text — надпись в панели (id нужен, чтобы менять её из скрипта)\n  btn  — кнопка, у неё act — имя действия, которое ловит скрипт\n\n=====================================================================\n 8. СКРИПТ МОДА · script и объект api\n=====================================================================\nscript — обычный JS (ES5/ES2017), выполняется один раз при включении мода.\napi:\n  api.msg(текст)                 — сообщение на экране\n  api.mk(kind,x,y,z)             — создать предмет в мире\n  api.spawn(kind)                — предмет перед игроком\n  api.spawnAt(kind,x,y,z)\n  api.snd(name,vol)              — звук: 'hit','ui' и др.\n  api.emote(name)                — эмоция игрока ('wave' и др.)\n  api.P                          — игрок {x,y,z,vx,vy,vz,gy,hp}\n  api.hands                      — две руки (hands[0], hands[1])\n  api.balls, api.ents            — массивы мячей и предметов\n  api.cam                        — камера {yaw,pit}\n  api.KD / api.MAPS / api.ML / api.BUILD — база предметов, карт, список карт\n  api.SKIN / api.TUNE / api.MOD   — скины, тюнинг, сам мод\n  api.MAP                        — текущая карта, api.dt — дельта времени кадра\n  api.onFrame((dt,ctx)=>{})      — каждый кадр; ctx: {P,hands,ents,balls,msg,mk,cam}\n  api.ui(id)(текст) / api.hud(id)(текст) — обновить надпись из ui\n  api.onAct('имя', ()=>{})       — обработчик кнопки из ui\n  api.log(...)                   — в консоль браузера\n  api.E                          — ВЕСЬ движок (window.RDBG). Через него можно буквально всё:\n                                   api.E.WB — все блоки мира (можно добавлять/менять),\n                                   api.E.ents / api.E.balls / api.E.MOBS / api.E.MOBS.length,\n                                   api.E.MAPS / api.E.ML — карты и их список,\n                                   api.E.snd(name,vol), api.E.burst(x,y,z,n,colors,speed),\n                                   api.E.mk(kind,x,y,z), api.E.spawnMob(spec,x,y,z),\n                                   api.E.wbNear(x,z,r), api.E.buildMap(id), api.E.getCam()\n  api.world                      — {WB, ents, balls, MOBS, P, cam} — то же, но короче\n  api.fx                         — {burst, shk(v), snd}\nНестандартные поля мода разрешены: чего нет в этом описании — движок просто передаст в объект мода\n(api.MOD.<поле>), так что можно придумывать свои структуры данных.\nЗАПРЕЩЕНО: import/export, await на верхнем уровне, setTimeout для игровой логики\n(таймеры делай через api.dt в onFrame), любые обращения к DOM и сети.\nВсё в try/catch, если код может упасть. Никаких бесконечных циклов.\n\nПример: HUD со скоростью и кнопкой сброса\n  \"script\": \"let rec=0;api.onFrame((dt,ctx)=>{const sp=Math.hypot(ctx.P.vx,ctx.P.vz);if(sp>rec)rec=sp;api.ui('speed')('⚡ '+sp.toFixed(1)+' м/с   🏆 '+rec.toFixed(1));});api.onAct('my_reset',()=>{rec=0;});\"\n\n=====================================================================\n 9. ПРАВИЛА И ЛИМИТЫ (соблюдать обязательно)\n=====================================================================\n 1. id только латиницей/цифрами/подчёркиванием, уникальные внутри мода.\n 2. Цвета — только hex \"#rrggbb\".\n 3. Никаких комментариев в JSON, никаких внешних файлов и ссылок.\n 4. Производительность: pieces <= 400, вокселей <= 400, mobs <= 8, items <= 10.\n 5. Не трогай системные id (bhop, knife, pistol и т.п.), свои начинай со своих слов.\n 6. script без DOM/сети/import; без setTimeout; без исключений.\n 7. Ответ = один JSON-объект. Начало: {\"format\":\"rmod/2\", ...\n 8. Ограничений на выдумку нет: поддерживаются ЛЮБЫЕ поля мода и ЛЮБОЙ код в script.\n    Если задумка не влезает в готовые поля — делай своё поле или пиши код через api.E.\n\n=====================================================================\n 10. ГОТОВЫЕ ЗАДАНИЯ (вставь нужное вторым сообщением)\n=====================================================================\nA. КАРТА:  «Сделай карту rmod/2: ночной город с небоскрёбами, фонарями и бассейном.\n            Поля id, name, d, floor, grid, sky, fog, spawn, cam, pieces, items.\n            До 120 блоков, поле в пределах -40..40. В items положи football в центр.»\nB. МОДЕЛЬ: «Сделай мод с одним существом-пропом (hp 9999, speed 0) и воксельной\n            моделью «машина» size 10, до 150 вокселей, красная с чёрными колёсами.»\nC. ОРУЖИЕ: «Добавь оружие: неоновый двуручный меч, урон 95, медленный (cd 0.85),\n            дальность 2.6, цвета бирюза/белый; и лёгкий автомат: урон 22, cd 0.11,\n            type gun. Плюс props: положи меч на flatgrass рядом со спавном.»\nD. СУЩЕСТВО: «Добавь летающего дракона: hp 30, speed 5, hover 6, камикадзе-взрыв\n            радиусом 5 уроном 60, воксельная модель size 12 (крылья, пасть).»\nE. GUI:  «Добавь панель: надпись HUD, счётчик прыжков, счётчик голов и кнопку\n            «Сброс»; скрипт должен обновлять цифры и сбрасывать их по кнопке.»\nF. МЕХАНИКА: «Скрипт-мод: авто-бхоп при зажатом Space, стрейф-разгон, HUD со\n            скоростью и рекордом, кнопка сброса рекорда.»\nG. ПАК:  «Собери мод-пак: карта «ледяная арена», 2 существа, 1 оружие, GUI с\n            кнопкой, скрипт с HUD. Всё в одном JSON.»\n\n=====================================================================\n 11. ЧЕК-ЛИСТ ПЕРЕД ВЫДАЧЕЙ\n=====================================================================\n [ ] Это один JSON без markdown и текста вокруг\n [ ] format = \"rmod/2\", id, name есть\n [ ] Все id латиницей и не повторяются\n [ ] Цвета hex, pieces <= 400, вокселей <= 400\n [ ] script без DOM, без setTimeout, обёрнут в try/catch где нужно\n [ ] Проверил закрывающие скобки и запятые (JSON.parse проходит)\n\n=====================================================================\n 12. ЧТО УЖЕ УМЕЕТ ИГРА (чтобы не дублировать)\n=====================================================================\nКарта rpe_stadium с футбольным мячом и голами, бхоп-мод advanced_bhop.rmod,\nмобы (коты, камикадзе, бомбардировщики), 12 карт, мультиплеер, воксельный\nредактор моделей в rmodder.html, ИИ-моддеры (модель/оружие/существо/карта/\nGUI/скрипт) — они выдают тот же формат rmod/2.\n";
+const JS_DOC="=====================================================================\n 13. JS-МОДЫ: ПОЛНЫЙ ДОСТУП К ДВИЖКУ · api v3 (как в Garry's Mod)\n=====================================================================\nПоле \"script\" (или массив \"scripts\") — это обычный JavaScript, который получает объект api.\napi = window.RPhysicsAPI. Мод может ВСЁ: события, физика, спавн, свои мобы и предметы,\nгладкие меши, полноэкранные шейдеры на GLSL, окна и кнопки, звук, файлы, localStorage.\nОшибки мода ловятся: игра не падает, ошибка показывается в сообщении и считается в api.stats().\n\n-- СОБЫТИЯ (главное) ------------------------------------------------\napi.on('tick', d => {})        каждый физический тик, d.dt — шаг\napi.on('render', d => {})      после отрисовки кадра, d.gl — WebGL-контекст, d.W, d.H\napi.on('key', d => {})         клавиша: d.code ('KeyW'), d.key, d.shift\napi.on('shoot', d => {})       выстрел, d.gun\napi.on('boom', d => {})        взрыв: d.x,y,z,d.R,d.dmg\napi.on('hurt', d => {})        урон игроку: d.dmg, d.src ('boom'|'touch')\napi.on('mobSpawn', d => {})    появился моб: d.mob, d.spec\napi.on('mobKill', d => {})     моб погиб: d.mob, d.spec, координаты\napi.on('map', d => {})         смена карты: d.id\napi.emit('my_event', {})       свои события, api.on('my_event', fn) — ловят все моды\nconst off = api.on(...); off() — отписаться. api.once(name, fn).\napi.onFrame((dt, ctx) => {})   каждый кадр (короткая запись), возвращает функцию-отписку\n\n-- МИР ---------------------------------------------------------------\napi.world.gravity(0.4)         гравитация (1 — обычная, 0.2 — Луна, -1 — вверх)\napi.world.gravityNow           текущая\napi.world.sky('#120022','#ff2e88')   верх/низ неба\napi.world.fog(30,0,60, 70)     цвет тумана (r,g,b) + дальность\napi.world.filter('hue-rotate(90deg)')  CSS-фильтр всего 3D (пост-эффекты)\napi.world.weather('night')     clear|rain|snow|fog|night\napi.world.shake(0.8)           тряска камеры\napi.world.slowmo(3, 0.25)      замедление времени\napi.world.timeScale(0.3)\napi.world.items('melon',x,y,z) создать предмет (список kind — раздел 3)\napi.world.spawn('rpg')         предмет в руки\napi.world.mob(spec,x,y,z)      заспавнить существо\napi.world.boom(x,y,z,R,dmg)    взрыв (бьёт игрока, мобов, предметы)\napi.world.kill(mob)\napi.world.map('flatgrass')     сменить карту\napi.world.P / .Hd / .cam / .MAP / .balls / .ents / .MOBS / .blocks / .keys / .time\n\n-- ИГРОК -------------------------------------------------------------\napi.player.hp = 50             (чтение api.player.hp)\napi.player.pos = {x,y,z}       телепорт;  api.player.teleport(x,y,z)\napi.player.vel = {x,y,z}       скорость\napi.player.onGround            на земле?\napi.player.damage(20) / heal(20) / kill()\napi.player.look(yaw, pit)\n\n-- ЭФФЕКТЫ И ЗВУК ----------------------------------------------------\napi.fx.burst(x,y,z,40,['#ff0','#f50'],3)   частицы\napi.msg('текст')  api.fx.msg(...)  api.ui.big('БОСС!', 2000) — на весь экран\napi.audio.snd('boom')  api.audio.tone(440,.2,'square',.2,2)  api.audio.noise(.3,.4,900)\napi.audio.ctx()                WebAudio-контекст (своя музыка/синтез)\n\n-- ИНТЕРФЕЙС (HTML целиком) ------------------------------------------\napi.ui.hud('id','текст')       строка HUD справа (возвращает элемент)\napi.ui.del('id')\napi.ui.screen('<h1>...</h1>', {id:'menu', click:true, css:'background:#0008'})  слой на весь экран\napi.ui.panel({title:'Мой мод', html:'<b>привет</b>', x:60,y:120,w:300,h:400})\n   → возвращает {el, body, set(html), on(sel,ev,fn), close()}\napi.ui.toolbar([{text:'Кнопка', fn:()=>api.msg('нажато')}])\napi.ui.css('* { --мой-класс: 1 }')  свои стили\napi.ui.msg('строка внизу')\n\n-- ГЛАДКИЕ МОДЕЛИ ----------------------------------------------------\nconst m = api.mesh.obj('v 0 0 0\\nv 1 0 0\\nv 0 1 0\\nf 1 2 3')   OBJ-текст → {p,c,i}\nconst h = api.mesh.draw(m, x, y, z, {scale:2, yaw:0.5, color:'#ff00ff'})\nh.move(x,y,z); h.yaw(1); h.scale(3); h.rm()\napi.addMob({id:'boss', name:'Босс', hp:200, speed:3, size:2, model:{mesh:m}}) — моб из своего меша\napi.mesh.obj / api.files.obj — то же самое\n\n-- ШЕЙДЕРЫ (GLSL, полноэкранный пост-эффект) -------------------------\nconst fx = api.gfx.screen(`\n  precision highp float; uniform vec2 u_res; uniform float u_time;\n  void main(){ vec2 uv = gl_FragCoord.xy/u_res;\n    float v = 0.5+0.5*sin(uv.x*60.0+u_time*3.0);\n    gl_FragColor = vec4(v*0.3, 0.0, uv.y*0.4, 0.25); }`, {uniforms:{u_power:1.0}});\nfx.set('u_power', 2.0); fx.rm()\nГотовые униформы: u_res, u_time, u_cam, u_tex (если передал tex).\napi.gfx.texture(256,256,(ctx,w,h)=>{ctx.fillStyle='#f0f';ctx.fillRect(0,0,w,h)}) → текстура\napi.gfx.imageTexture(url, tex => fx.tex(tex))  — картинка как текстура\napi.gfx.program(vs, fs), api.gfx.gl() — сырой WebGL, если нужен свой рендер\napi.checkShader(fragSrc) → {ok:true} или {ok:false,err} — проверить код шейдера\n\n-- КОНТЕНТ, ФАЙЛЫ, ХРАНИЛИЩЕ ----------------------------------------\napi.addMob(spec)  api.addItem({id,type,dmg,...})  api.addSkin('knife',{a,b,c,scale})\napi.setTune('runMul', 1.5)  api.addSpawner({mob,every,count,max})  api.addProp({kind,x,y,z})\nconst txt = await api.files.text('data.json')   // в браузере по ссылке\nconst f = await api.files.pick('.obj')          // выбор файла пользователем → {name,text}\napi.save('key', {any:'data'})  api.load('key', defaultValue)  api.del('key')\napi.log('в консоль')  api.stats() → {calls, errors}  api.E → весь RDBG\n\n-- ПРИМЕР: «вирус-режим» (полный доступ) -----------------------------\napi.world.gravity(0.5);\napi.ui.hud('v','🦠 ВИРУС АКТИВЕН');\nlet t=0;\napi.on('tick', d => {\n  t+=d.dt;\n  if(t>5){ t=0;\n    const a=Math.random()*6.28, P=api.world.P;\n    api.world.mob({id:'iacre',name:'Заражённый',color:'#7dff4d',hp:20,speed:4,touchDmg:8,size:1.1},\n      P.x+Math.cos(a)*10, P.y+1, P.z+Math.sin(a)*10);\n  }\n});\napi.on('mobKill', d => { api.fx.burst(d.x,d.y,d.z,20,['#7dff4d','#fff']); });\napi.on('hurt', d => { api.world.filter('hue-rotate(-25deg) saturate(2)'); });\napi.gfx.screen('precision highp float;uniform vec2 u_res;void main(){vec2 uv=gl_FragCoord.xy/u_res;float v=sin(uv.y*900.0)*0.04;gl_FragColor=vec4(0.1,0.5,0.1,v);}');\n\n-- ПРАВИЛА ДЛЯ JS-МОДОВ ---------------------------------------------\n1. Всё через api; свои глобалы храни в замыкании (script выполняется как функция).\n2. Никаких бесконечных циклов; тяжёлое — по таймеру через on('tick').\n3. Ошибки: оборачивай рискованное в try/catch; считается api.stats().errors.\n4. Шейдеры — GLSL ES 1.0 (WebGL1): precision обязателен, никаких #version 300.\n5. Код в моде — одна строка JSON-строки: экранируй кавычки, переносы \\n.\n6. Можно всё, что умеет браузер: система не запрещает. Но мод, который роняет FPS или\n   сыпет ошибками, движок придушит сообщением — держи кадр дешёвым.\n\n=====================================================================\n 14. ШАБЛОНЫ JS-МОДОВ (копируй и меняй)\n=====================================================================\nA. Свой моб + спавнер из кода:\n   api.addMob({id:'reaver',name:'Жнец',color:'#b06bff',hp:40,speed:3.4,size:1.4,touchDmg:10});\n   api.addSpawner({mob:'reaver',every:9,count:1,max:3});\n\nB. Гравитация-хаос по кнопке:\n   api.ui.toolbar([{text:'Гравитация',fn:()=>api.world.gravity(--g||1)},{text:'Норма',fn:()=>api.world.gravity(1)}]);\n\nC. Оружие из кода: api.addItem({id:'shock',name:'Шокер',type:'melee',dmg:70,cd:.5,reach:2,color:'#39f6ff'});\n\nD. Шейдер «матрица» + фильтр: api.gfx.screen('...'), api.world.filter('saturate(1.6) contrast(1.2)'));\n\nE. Свой меш из скульптора: вставить JSON модели → api.mesh.draw(JSON.parse(txt).mobs[0].model.mesh, x,y,z,{scale:1})\n\nF. Мини-игра: on('mobKill') — считай очки, ui.hud('score',...), ui.panel с правилами.\n\n=====================================================================\n 15. ОТМЕНЯЕМЫЕ ХУКИ, КАСТОМНЫЕ СУЩНОСТИ, СЕТЬ, HOT-RELOAD\n=====================================================================\n-- ХУКИ С ОТМЕНОЙ (верни false — движок ничего не сделает) -----------\napi.on('beforeHurt',    d => {})  // d.dmg, d.src ('boom'|'touch'|'ball'|'rocket'|'npc'|'entity')\n                                  //   return false → урона НЕ будет (ни ХП, ни отбрасывания)\napi.on('beforeBoom',    d => {})  // d.x,y,z,R,dmg — return false → взрыва нет вообще\napi.on('beforeShoot',   d => {})  // d.gun, d.hand — return false → выстрел не происходит\napi.on('beforeKey',     d => {})  // d.code, d.key, d.shift — return false → клавиша не обрабатывается\napi.on('beforeGrab',    d => {})  // d.hand — return false → предмет не взять\napi.on('beforeMobKill', d => {})  // d.mob, d.spec — return false → моб не умирает\napi.on('beforeMap',     d => {})  // d.id — return false → карта не меняется\napi.on('chunkLoad',     d => {})  // d.id, d.chunks — карта построена (аналог onChunkLoad)\nВернуть true или ничего — обычное поведение движка.\n\n-- КАСТОМНЫЕ СУЩНОСТИ: новый физический объект целиком из кода ------\nconst e = api.world.customEntity({\n  id:'heli', mesh: api.mesh.obj(objText), x:0, y:6, z:8, scale:1.5,\n  hp:200, radius:1.2, gravity:true, touchDmg:0, color:null, yaw:0,\n  onSpawn:  e => {},                       // появился\n  onTick:   (dt, e) => { e.yaw += dt; },   // логика каждый тик — полный контроль\n  onDamage: (n, e) => {},                  // получил урон\n  onDeath:  e => {}                        // умер\n});\ne.x, e.y, e.z, e.vx, e.vy, e.vz, e.hp, e.maxhp\ne.move(x,y,z)  e.vel(x,y,z)  e.set({x,y,z,hp,yaw,scale})  e.meshSet(mesh)\ne.damage(25)   e.kill()      e.state   // своё хранилище для логики\napi.world.entities           // все сущности\napi.world.getEntity('heli')  // по id\napi.world.hurtBox(x,y,z,R,n) // урон всем сущностям в радиусе\n\n-- СЕТЬ ДЛЯ МОДОВ (канал поверх мультиплеера) ------------------------\napi.net.on      // true если в комнате\napi.net.host    // true если ты хост\napi.net.send('pos', {x,y,z})           // отправить всем\napi.net.on('pos', data => {})          // принять (только от своего же мода)\nСинхронизация сущности: хост в onTick вызывает api.net.send, остальные двигают по данным.\n\n-- ВНЕШНИЕ БИБЛИОТЕКИ (как аддоны мастерской) ------------------------\napi.files.script('https://cdn.../three.min.js').then(() => api.msg('three загружен'))\nawait api.files.scripts(['a.js','b.js'])   // несколько\nconst m = await api.files.module('https://site/mod.mjs')   // ES-модуль\nЗагруженное кэшируется, грузится один раз на игру.\n\n-- ЖИВОЙ КОДИНГ (hot-reload) ----------------------------------------\nВ моддере: 🧠 JS-мод → «⚡ Жить в игре» (или галочка «авто»). Код мгновенно уезжает\nв открытое окно игры через BroadcastChannel/localStorage, мод пересобирается на месте —\nперетаскивать .rmod не нужно. В игре: сообщение «⚡ Hot-reload: код обновлён».\n";
+function promptText(){return AI_DOC+'\n'+JS_DOC+'\n\n=====================================================================\n ТЕКУЩИЙ МОД (пример формата / возьми за основу и доработай)\n=====================================================================\n'+modText()}
+function aiPromptSave(){
+  try{const b=new Blob([AI_DOC+'\n'+JS_DOC],{type:'text/plain;charset=utf-8'});const a=document.createElement('a');
+    a.href=URL.createObjectURL(b);a.download='AI-МОДДИНГ-ПРОМПТ.txt';a.click();
+    setTimeout(()=>URL.revokeObjectURL(a.href),4000);toast('Промпт .txt сохранён')}catch(e){toast('Не вышло скачать')}
 }
-
-=== СВОИ ПРЕДМЕТЫ (items) ===
-  id — уникальный id (латиницей), name — название;
-  type — "melee" (удар ЛКМ) или "gun" (стреляет как пистолет);
-  dmg — урон, cd — перезарядка в секундах, reach — дальность удара (м);
-  color / color2 / color3 — рукоять / клинок (ствол) / блик.
-После загрузки мода предмет появляется в меню модов («взять в руку»), его можно класть на карту через props.
-
-=== СУЩЕСТВА (mobs) ===
-Каждое существо — объект в массиве mobs. Поля:
-  id — уникальное имя (латиницей), name — подпись в игре;
-  color — цвет тела, color2 — цвет головы/лап, size — масштаб (1 = кот среднего размера);
-  hp — здоровье, speed — скорость преследования (м/с);
-  fly — true: летает; hover — высота над игроком (м);
-  kamikaze — true: взрывается, догнав игрока; boomR — радиус взрыва, boomDmg — урон;
-  bomber — true: летает сверху и сбрасывает бомбы; dropEvery — как часто (с), fuse — задержка взрыва бомбы;
-  ears / tail / wings — true/false: уши, хвост, крылья (по умолчанию уши и хвост есть);
-  touchDmg — урон при касании (необязательно), keepDist — держать дистанцию (м).
-Существа можно убить ножом и пулями; камикадзе при смерти всё равно взрывается.
-
-=== СПАВНЕРЫ (spawners) ===
-  mob — id существа, every — каждые N секунд, count — сколько за раз, max — сколько одновременно,
-  map — id карты (пусто = любая).
-
-=== ПОЛЯ ===
-skins — внешний вид предметов. Предметы: knife, crowbar, bat, axe, medkit.
-  a — основной цвет (рукоять), b — второй (клинок/головка), c — третий (блик/остриё), scale — размер (1 = как в игре).
-tuning — meleeMul умножает урон ближнего боя (база: нож 34, монтировка 30, бита 24, топор 42),
-         runMul умножает скорость бега (база 3.2 м/с, с Shift 1.62×).
-npcShirts — массив hex-цветов, добавляется в палитру рубашек NPC.
-props — предметы, которые спавнятся при загрузке карты. kind — любой из:
-  knife,crowbar,bat,axe,medkit,ball,melon,heavy,gren,bomb,pistol,smg,shotgun,rpg,pan,trash,egg,balloon,lighter,cam,hammer,sledge,bcrate,angry.
-  map — id карты: construct, surf, flatgrass, aero, office, dream, warehouse, town, space, forest, castle (пусто = любая).
-script — JS-код, выполняется при загрузке мода. Доступен объект api:
-  api.msg(text) — сообщение на экране;
-  api.mk(kind,x,y,z) — создать предмет;
-  api.spawn(kind) — предмет перед игроком;
-  api.P — игрок {x,y,z,vx,vy,vz,hp}, api.hands — две руки, api.SKIN — скины, api.TUNE — тюнинг;
-  api.onFrame((dt,ctx)=>{...}) — вызывается каждый кадр (ctx: {P,hands,ents,balls,msg,mk,cam});
-  api.log(...) — вывод в консоль.
-Скрипт не должен кидать исключения и не должен содержать export/import/await на верхнем уровне.
-
-=== ЗАДАЧА ===
-Сделай мод: ${m.desc || m.name}.
-Можно использовать всё: скины оружия, тюнинг, цвета NPC, предметы на картах, СУЩЕСТВ (mobs) и их СПАВНЕРЫ (spawners), скрипт.
-Например «летающие коты-камикадзе» — это mobs:[{fly:true,kamikaze:true,...}] + spawners:[{mob:"...",every:8}],
-«бомбардировщики» — mobs:[{fly:true,hover:8,bomber:true,dropEvery:2.5,wings:true}]. Сохрани id="${m.id}" и name="${m.name}".
-Вот заготовка, собранная в RModder, — доработай и верни готовый JSON:
-${JSON.stringify(m, null, 2)}
-
-Верни только JSON мода формата rmod/1.`;
-}
-
 function sync(){
   document.getElementById('json').textContent=modText();
   document.getElementById('prompt').value=promptText();
@@ -453,6 +1158,549 @@ function drawPreview(mod){
   g.fillText((KINDS.find(x=>x[0]===kind)||['',kind])[1],W/2,H-12);
 }
 
+
+/* ================== РЕДАКТОР ВОКСЕЛЬНЫХ МОДЕЛЕЙ ================== */
+const PAL_SW=['#e8823c','#f7d7a8','#ffffff','#2a2a2a','#e94560','#4aa3ff','#7be04a','#ffd166','#b48cff','#7ad7ff','#8a5a2b','#d7a03c'];
+const FACES=[
+  {n:[0,1,0],  q:[[0,1,0],[0,1,1],[1,1,1],[1,1,0]]},
+  {n:[0,-1,0], q:[[0,0,0],[1,0,0],[1,0,1],[0,0,1]]},
+  {n:[1,0,0],  q:[[1,0,0],[1,0,1],[1,1,1],[1,1,0]]},
+  {n:[-1,0,0], q:[[0,0,0],[0,1,0],[0,1,1],[0,0,1]]},
+  {n:[0,0,1],  q:[[0,0,1],[0,1,1],[1,1,1],[1,0,1]]},
+  {n:[0,0,-1], q:[[0,0,0],[1,0,0],[1,1,0],[0,1,0]]},
+];
+const ME={block:null,size:8,color:'#e8823c',mirror:false,ground:true,tool:'build',dragTool:'build',
+  yaw:2.55,pit:0.30,zoom:1,vox:new Map(),undo:[],ghost:null,mesh:null};
+let ME_MESH=null;
+try{window.RME=ME}catch(e){}
+const key3=(x,y,z)=>x+','+y+','+z;
+const ME_CAMS={iso:[2.55,0.30],front:[Math.PI,0.05],side:[-Math.PI/2,0.05],top:[2.55,1.24]};
+
+function mePrepMesh(M,N){
+  const P=M.p;if(!P||!P.length)return null;
+  let mn=[1e9,1e9,1e9],mx=[-1e9,-1e9,-1e9];
+  for(let i=0;i<P.length;i+=3)for(let k=0;k<3;k++){const q=P[i+k];if(q<mn[k])mn[k]=q;if(q>mx[k])mx[k]=q}
+  const cx=(mn[0]+mx[0])/2,cz=(mn[2]+mx[2])/2,span=Math.max(mx[0]-mn[0],mx[1]-mn[1],mx[2]-mn[2])||1,k=N/span;
+  const n=P.length/3,pos=new Float32Array(P.length),col=new Float32Array(n*3);
+  for(let i=0;i<n;i++){
+    pos[i*3]=(P[i*3]-cx)*k; pos[i*3+1]=(P[i*3+1]-mn[1])*k-N/2; pos[i*3+2]=(P[i*3+2]-cz)*k;
+    const r=M.c?(M.c[i*3]>1?M.c[i*3]/255:M.c[i*3]):0.78;
+    const g=M.c?(M.c[i*3+1]>1?M.c[i*3+1]/255:M.c[i*3+1]):0.82;
+    const b2=M.c?(M.c[i*3+2]>1?M.c[i*3+2]/255:M.c[i*3+2]):0.88;
+    col[i*3]=r;col[i*3+1]=g;col[i*3+2]=b2;
+  }
+  let idx=M.i&&M.i.length?Uint32Array.from(M.i):null;
+  if(!idx){idx=new Uint32Array(n);for(let i=0;i<n;i++)idx[i]=i}
+  return {pos,col,idx,tris:(idx.length/3)|0,verts:n,src:M};
+}
+function meSnapshot(){
+  ME.undo.push(JSON.stringify({v:[...ME.vox],
+    c:ME.mesh?Array.from(ME.mesh.col):null,
+    i:ME.mesh?Array.from(ME.mesh.idx):null}));
+  if(ME.undo.length>60)ME.undo.shift();
+}
+function meUndo(){
+  const t=ME.undo.pop();if(!t)return;
+  const o=JSON.parse(t);
+  if(Array.isArray(o)){ME.vox=new Map(o)}
+  else{
+    ME.vox=new Map(o.v||[]);
+    if(ME.mesh&&o.c){ME.mesh.col=Float32Array.from(o.c);ME.mesh.idx=Uint32Array.from(o.i||[]);ME.mesh.tris=(ME.mesh.idx.length/3)|0}
+  }
+  meDraw();
+}
+function meCount(){return ME.vox.size}
+
+function openModelEditor(b){
+  ME.block=b;ME.vox=new Map();ME.undo=[];ME.ghost=null;ME.zoom=1;ME.mesh=null;
+  ME.yaw=ME_CAMS.iso[0];ME.pit=ME_CAMS.iso[1];ME.zoom=1;ME.size=8;
+  if(b&&b.model&&b.model.mesh&&b.model.mesh.p&&b.model.mesh.p.length){
+    ME.mesh=mePrepMesh(b.model.mesh,8);
+  }
+  if(b&&b.model&&Array.isArray(b.model.v)){
+    ME.size=Math.max(6,Math.min(12,b.model.size||8));
+    const pal=b.model.pal||[];
+    for(const v of b.model.v){
+      if(!Array.isArray(v)||v.length<3)continue;
+      ME.vox.set(key3(v[0]|0,v[1]|0,v[2]|0),pal[v[3]|0]||'#8a8f9a');
+    }
+  }
+  const sel=document.getElementById('meSize');if(sel)sel.value=String(ME.size);
+  const t=document.getElementById('meTitle');
+  if(t)t.textContent='Модель: '+((b&&(b.name||b.id))||'существо');
+  meSetTool('build');
+  document.getElementById('me').classList.add('on');
+  setTimeout(()=>{meFit();meDraw()},30);
+  meDraw();
+}
+
+/* ---------- камера и математика (как вьюпорт студии) ---------- */
+function meViewWH(){const c=document.getElementById('meView');return [c&&c.width||620,c&&c.height||500]}
+function meF(){const wh=meViewWH();return ME.zoom*Math.min(wh[0]*1.15,wh[1]*1.62)}
+function meShiftY(){return 0}
+function meFocusY(){return -ME.size*0.10}   /* смотрим чуть ниже центра — на рабочую зону, а не в пустоту */
+function meD(){return ME.size*1.9}
+function meRot(p){                        // мир → камера (положительный pit — камера сверху)
+  const cy=Math.cos(ME.yaw),sy=Math.sin(ME.yaw),cp=Math.cos(ME.pit),sp=Math.sin(ME.pit);
+  const x1=p[0]*cy+p[2]*sy,z1=-p[0]*sy+p[2]*cy;
+  return [x1,p[1]*cp+z1*sp,-p[1]*sp+z1*cp];
+}
+function meUnrot(p){
+  const cy=Math.cos(ME.yaw),sy=Math.sin(ME.yaw),cp=Math.cos(ME.pit),sp=Math.sin(ME.pit);
+  const y=p[1]*cp-p[2]*sp,z1=p[1]*sp+p[2]*cp;
+  return [p[0]*cy-z1*sy,y,p[0]*sy+z1*cy];
+}
+function meProj(p){                       // центрированные координаты вокселя → пиксели
+  const wh=meViewWH(),F=meF(),D=meD(),r=meRot([p[0],p[1]-meFocusY(),p[2]]),d=r[2]+D;
+  if(d<0.06)return null;
+  return [wh[0]/2+r[0]*F/d,wh[1]/2+meShiftY()-r[1]*F/d,d];
+}
+function meRay(mx,my){
+  const wh=meViewWH(),F=meF(),D=meD();
+  const u=(mx-wh[0]/2)/F,v=-(my-wh[1]/2-meShiftY())/F;
+  const o=meUnrot([0,0,-D]),q=meUnrot([u,v,1-D]);
+  o[1]+=meFocusY();q[1]+=meFocusY();
+  return {o,d:[q[0]-o[0],q[1]-o[1],q[2]-o[2]]};
+}
+function mePick(mx,my){                   // что под курсором: кубик и пустая клетка рядом
+  const N=ME.size,ray=meRay(mx,my),o=ray.o,d=ray.d;
+  const dl=Math.hypot(d[0],d[1],d[2])||1,st=.09;
+  const sx=d[0]/dl*st,sy=d[1]/dl*st,sz=d[2]/dl*st;
+  const cell=v=>Math.floor(v+N/2);
+  const inside=(x,y,z)=>x>=0&&y>=0&&z>=0&&x<N&&y<N&&z<N;
+  let x=o[0],y=o[1],z=o[2],py=y,prev=null;
+  for(let i=0;i<1400;i++){
+    const ix=cell(x),iy=cell(y),iz=cell(z);
+    if(inside(ix,iy,iz)){
+      if(ME.vox.has(key3(ix,iy,iz)))return {hit:[ix,iy,iz],place:prev};
+      prev=[ix,iy,iz];
+    }
+    if(ME.ground&&py>-N/2&&y<=-N/2){
+      const k=(py+N/2)/((py-y)||1),gx=x-sx+sx*k,gz=z-sz+sz*k,jx=cell(gx),jz=cell(gz);
+      if(jx>=0&&jx<N&&jz>=0&&jz<N)return {hit:null,place:[jx,0,jz]};
+      return null;
+    }
+    py=y;x+=sx;y+=sy;z+=sz;
+  }
+  return null;
+}
+function meSet(c,col){const k=key3(c[0],c[1],c[2]);if(col==null)ME.vox.delete(k);else ME.vox.set(k,col)}
+function meMirrorSet(c,col){const x=ME.size-1-c[0];if(x!==c[0])meSet([x,c[1],c[2]],col)}
+function meApply(px,py,tool){
+  tool=tool||ME.tool;
+  if(ME.mesh){
+    if(tool==='paint')return mePaintMesh(px,py,ME.color);
+    if(tool==='erase')return meEraseMesh(px,py);
+  }
+  const r=mePick(px,py);if(!r)return false;
+  if(tool==='erase'){if(!r.hit)return false;meSet(r.hit,null);if(ME.mirror)meMirrorSet(r.hit,null);return true}
+  if(tool==='paint'){if(!r.hit)return false;meSet(r.hit,ME.color);if(ME.mirror)meMirrorSet(r.hit,ME.color);return true}
+  const c=r.place||r.hit;if(!c)return false;
+  meSet(c,ME.color);if(ME.mirror)meMirrorSet(c,ME.color);
+  return true;
+}
+
+/* ---------- краска по гладкому мешу ---------- */
+function meRayMesh(mx,my){
+  const G=ME.mesh;if(!G)return null;
+  const ray=meRay(mx,my),o=ray.o,d=ray.d,P=G.pos,I=G.idx;
+  let best=null;
+  for(let t=0;t+2<I.length;t+=3){
+    const a=I[t]*3,b=I[t+1]*3,c=I[t+2]*3;
+    const e1x=P[b]-P[a],e1y=P[b+1]-P[a+1],e1z=P[b+2]-P[a+2];
+    const e2x=P[c]-P[a],e2y=P[c+1]-P[a+1],e2z=P[c+2]-P[a+2];
+    const px=d[1]*e2z-d[2]*e2y,py=d[2]*e2x-d[0]*e2z,pz=d[0]*e2y-d[1]*e2x;
+    const det=e1x*px+e1y*py+e1z*pz;
+    if(Math.abs(det)<1e-9)continue;
+    const inv=1/det;
+    const tx=o[0]-P[a],ty=o[1]-P[a+1],tz=o[2]-P[a+2];
+    const u=(tx*px+ty*py+tz*pz)*inv;
+    if(u<-1e-4||u>1.0001)continue;
+    const qx=ty*e1z-tz*e1y,qy=tz*e1x-tx*e1z,qz=tx*e1y-ty*e1x;
+    const v=(d[0]*qx+d[1]*qy+d[2]*qz)*inv;
+    if(v<-1e-4||u+v>1.0001)continue;
+    const dist=(e2x*qx+e2y*qy+e2z*qz)*inv;
+    if(dist<=1e-4)continue;
+    if(!best||dist<best.dist)best={dist,t,a,b,c,point:[o[0]+d[0]*dist,o[1]+d[1]*dist,o[2]+d[2]*dist]};
+  }
+  return best;
+}
+function mePaintMesh(mx,my,col){
+  const hit=meRayMesh(mx,my);if(!hit)return false;
+  const G=ME.mesh,P=G.pos,C=G.col,rgb=hex2rgb(col||ME.color),R=ME.brushR||0.5;
+  const r=rgb[0]/255,g2=rgb[1]/255,b2=rgb[2]/255;
+  const put=i=>{C[i*3]=r;C[i*3+1]=g2;C[i*3+2]=b2};
+  put(hit.a/3);put(hit.b/3);put(hit.c/3);                 // сам треугольник — всегда
+  for(let i=0;i<G.verts;i++){                              // и соседи в радиусе кисти
+    const dx=P[i*3]-hit.point[0],dy=P[i*3+1]-hit.point[1],dz=P[i*3+2]-hit.point[2];
+    if(dx*dx+dy*dy+dz*dz<=R*R)put(i);
+  }
+  return true;
+}
+function meEraseMesh(mx,my){
+  const hit=meRayMesh(mx,my);if(!hit)return false;
+  const G=ME.mesh,I=G.idx;
+  if(I.length<=3)return false;
+  const out=new Uint32Array(I.length-3);
+  let k=0;
+  for(let t=0;t+2<I.length;t+=3){
+    if(t===hit.t)continue;
+    out[k++]=I[t];out[k++]=I[t+1];out[k++]=I[t+2];
+  }
+  G.idx=out;G.tris=(out.length/3)|0;
+  return true;
+}
+
+/* ---------- отрисовка ---------- */
+function meDraw(){meDrawView();meStat();meSwatches();mePalList()}
+function meStat(){
+  let txt;
+  if(ME.mesh){
+    const n=ME.mesh.tris;
+    txt=n+' треугольников · гладкая модель ('+ME.mesh.verts+' вершин)';
+    if(ME.vox.size)txt+=' + '+ME.vox.size+' кубиков';
+  }else{
+    const n=meCount();
+    txt=n+(n%10===1&&n%100!==11?' кубик':(n%10>=2&&n%10<=4&&(n%100<10||n%100>=20)?' кубика':' кубиков'))
+      +' · сетка '+ME.size+'×'+ME.size+'×'+ME.size;
+  }
+  const a=document.getElementById('meStat');if(a)a.textContent=txt;
+  const b=document.getElementById('meStat2');if(b)b.textContent=txt;
+}
+function meSwatches(){
+  const box=document.getElementById('meSw');if(!box)return;
+  box.innerHTML='';
+  for(const c of PAL_SW){
+    const d=document.createElement('button');d.className='sw'+(c===ME.color?' on':'');
+    d.style.background=c;d.title=c;
+    d.onclick=()=>{ME.color=c;const ci=document.getElementById('meCol');if(ci)ci.value=c;meSwatches()};
+    box.append(d);
+  }
+}
+function mePalList(){
+  const box=document.getElementById('mePal');if(!box)return;
+  box.innerHTML='';
+  const seen=[];
+  for(const c of ME.vox.values())if(seen.indexOf(c)<0)seen.push(c);
+  if(ME.mesh){
+    const C=ME.mesh.col;
+    for(let i=0;i<C.length;i+=3){
+      const h='#'+[C[i],C[i+1],C[i+2]].map(v=>('0'+Math.round(Math.max(0,Math.min(1,v))*255).toString(16)).slice(-2)).join('');
+      if(seen.indexOf(h)<0)seen.push(h);
+    }
+  }
+  if(!seen.length){box.innerHTML='<span style="opacity:.45;font-size:11.5px">пока пусто</span>';return}
+  for(const c of seen){
+    const d=document.createElement('i');d.style.background=c;d.title=c+' — взять в руку';
+    d.onclick=()=>{ME.color=c;const ci=document.getElementById('meCol');if(ci)ci.value=c;meSwatches()};
+    box.append(d);
+  }
+}
+function hex2rgb(h){h=(h||'#888888').replace('#','');if(h.length===3)h=h[0]+h[0]+h[1]+h[1]+h[2]+h[2];
+  const n=parseInt(h,16);return [(n>>16)&255,(n>>8)&255,n&255]}
+function meFit(){
+  const c=document.getElementById('meView');if(!c||!c.getBoundingClientRect)return;
+  const r=c.getBoundingClientRect();
+  const w=Math.max(320,Math.round(r.width)),h=Math.max(280,Math.round(r.height));
+  if(c.width!==w||c.height!==h){c.width=w;c.height=h}
+}
+function meDrawView(){
+  const c=document.getElementById('meView');if(!c)return;
+  meFit();
+  const g=c.getContext('2d'),W=c.width,H=c.height,N=ME.size;
+  g.clearRect(0,0,W,H);
+  const bg=g.createLinearGradient(0,0,0,H);bg.addColorStop(0,'#121b31');bg.addColorStop(1,'#080c16');
+  g.fillStyle=bg;g.fillRect(0,0,W,H);
+  /* пол-подложка */
+  if(ME.ground){
+    const y0=-N/2;
+    const q=[[-N/2,y0,-N/2],[N/2,y0,-N/2],[N/2,y0,N/2],[-N/2,y0,N/2]].map(p=>meProj(p));
+    if(q.every(Boolean)){
+      g.beginPath();q.forEach((p,i)=>i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1]));g.closePath();
+      g.fillStyle='rgba(96,140,255,.13)';g.fill();
+    }
+    g.strokeStyle='rgba(122,168,255,.20)';g.lineWidth=1;
+    for(let i=0;i<=N;i++){
+      const a=meProj([i-N/2,y0,-N/2]),b=meProj([i-N/2,y0,N/2]);
+      if(a&&b){g.beginPath();g.moveTo(a[0],a[1]);g.lineTo(b[0],b[1]);g.stroke()}
+      const e=meProj([-N/2,y0,i-N/2]),f=meProj([N/2,y0,i-N/2]);
+      if(e&&f){g.beginPath();g.moveTo(e[0],e[1]);g.lineTo(f[0],f[1]);g.stroke()}
+    }
+    /* лёгкая тень под моделью */
+    if(ME.vox.size){
+      let x0=1e9,x1=-1e9,z0=1e9,z1=-1e9;
+      for(const k of ME.vox.keys()){
+        const a=k.split(',');
+        x0=Math.min(x0,+a[0]);x1=Math.max(x1,+a[0]+1);z0=Math.min(z0,+a[2]);z1=Math.max(z1,+a[2]+1);
+      }
+      const sp=[[x0,y0+.02,z0],[x1,y0+.02,z0],[x1,y0+.02,z1],[x0,y0+.02,z1]].map(p=>meProj(p));
+      if(sp.every(Boolean)){
+        g.beginPath();sp.forEach((p,i)=>i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1]));g.closePath();
+        g.fillStyle='rgba(0,0,0,.22)';g.fill();
+      }
+    }
+    if(q.every(Boolean)){
+      g.beginPath();q.forEach((p,i)=>i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1]));g.closePath();
+      g.strokeStyle='rgba(140,185,255,.4)';g.lineWidth=1.4;g.stroke();
+    }
+  }
+  /* гладкий меш: треугольники, дальние первыми */
+  if(ME.mesh){
+    const G=ME.mesh,f2=[],pos=G.pos,col=G.col,idx=G.idx;
+    const L=[0.42,0.78,0.46];
+    for(let t=0;t<idx.length;t+=3){
+      const a=idx[t]*3,b=idx[t+1]*3,c2=idx[t+2]*3;
+      const p0=meProj([pos[a],pos[a+1],pos[a+2]]);
+      const p1=meProj([pos[b],pos[b+1],pos[b+2]]);
+      const p2=meProj([pos[c2],pos[c2+1],pos[c2+2]]);
+      if(!p0||!p1||!p2)continue;
+      const ux=pos[b]-pos[a],uy=pos[b+1]-pos[a+1],uz=pos[b+2]-pos[a+2];
+      const vx=pos[c2]-pos[a],vy=pos[c2+1]-pos[a+1],vz=pos[c2+2]-pos[a+2];
+      let nx=uy*vz-uz*vy,ny=uz*vx-ux*vz,nz=ux*vy-uy*vx;
+      const nl=Math.hypot(nx,ny,nz)||1;nx/=nl;ny/=nl;nz/=nl;
+      const li=0.46+0.54*Math.abs(nx*L[0]+ny*L[1]+nz*L[2]);
+      const r=Math.round(((col[a]+col[b]+col[c2])/3)*255*li);
+      const gg=Math.round(((col[a+1]+col[b+1]+col[c2+1])/3)*255*li);
+      const bb=Math.round(((col[a+2]+col[b+2]+col[c2+2])/3)*255*li);
+      f2.push({pts:[p0,p1,p2],d:(p0[2]+p1[2]+p2[2])/3,c:'rgb('+r+','+gg+','+bb+')'});
+    }
+    f2.sort((x,y)=>y.d-x.d);
+    for(const f of f2){
+      g.beginPath();g.moveTo(f.pts[0][0],f.pts[0][1]);g.lineTo(f.pts[1][0],f.pts[1][1]);g.lineTo(f.pts[2][0],f.pts[2][1]);g.closePath();
+      g.fillStyle=f.c;g.fill();
+    }
+  }
+  /* кубики: только видимые грани, дальние первыми */
+  const faces=[];
+  for(const kv of ME.vox){
+    const p=kv[0].split(','),x=+p[0],y=+p[1],z=+p[2],col=kv[1];
+    for(const f of FACES){
+      if(ME.vox.has(key3(x+f.n[0],y+f.n[1],z+f.n[2])))continue;
+      const nr=meRot(f.n);if(nr[2]<=1e-4)continue;
+      let ok=true,dz=0;const pts=[];
+      for(const q of f.q){
+        const pr=meProj([x+q[0]-N/2,y+q[1]-N/2,z+q[2]-N/2]);
+        if(!pr){ok=false;break}
+        pts.push(pr);dz+=pr[2];
+      }
+      if(!ok)continue;
+      const li=.54+.46*Math.max(0,f.n[0]*.36+f.n[1]*.88+f.n[2]*.30);
+      const rgb=hex2rgb(col).map(v=>Math.min(255,Math.round(v*li)));
+      faces.push({pts:pts,d:dz/4,c:'rgb('+rgb[0]+','+rgb[1]+','+rgb[2]+')'});
+    }
+  }
+  faces.sort((a,b)=>b.d-a.d);
+  for(const f of faces){
+    g.beginPath();f.pts.forEach((p,i)=>i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1]));g.closePath();
+    g.fillStyle=f.c;g.fill();g.strokeStyle='rgba(0,0,0,.13)';g.lineWidth=1;g.stroke();
+  }
+  /* призрак под курсором */
+  if(ME.ghost&&ME.ghost.cell)meDrawGhost(g,ME.ghost.cell,ME.ghost.mode);
+  if(ME.mesh&&!ME.vox.size){
+    g.textAlign='center';
+    g.fillStyle='rgba(150,235,190,.85)';g.font='700 15px system-ui';
+    g.fillText('Гладкая модель: '+ME.mesh.tris+' треугольников',W/2,H*0.84);
+    g.fillStyle='rgba(200,225,255,.55)';g.font='600 13px system-ui';
+    g.fillText('«Красить» — краска по поверхности, «Стирать» — убрать треугольник. Лепить дальше — в 3D Скульпторе',W/2,H*0.84+21);
+  }
+  if(!ME.mesh&&!ME.vox.size){
+    g.textAlign='center';
+    g.fillStyle='rgba(225,236,255,.8)';g.font='700 15px system-ui';
+    g.fillText('Кликни по плите — встанет первый кубик',W/2,H*0.84);
+    g.fillStyle='rgba(200,215,255,.5)';g.font='600 13px system-ui';
+    g.fillText('Дальше кубики клеятся к граням — лепи снизу вверх, как из LEGO',W/2,H*0.84+21);
+  }
+  meDrawGizmo(g,W,H);
+}
+function meDrawGhost(g,c,mode){
+  const N=ME.size,P=[];
+  for(let i=0;i<8;i++){
+    const p=meProj([c[0]+(i&1)-N/2,c[1]+((i>>1)&1)-N/2,c[2]+((i>>2)&1)-N/2]);
+    if(!p)return;P.push(p);
+  }
+  const tint=mode==='erase'?'rgba(255,92,92,.20)':(mode==='paint'?'rgba(120,215,255,.20)':'rgba(255,214,90,.18)');
+  const Q=[[0,1,3,2],[4,6,7,5],[0,2,6,4],[1,5,7,3],[0,4,5,1],[2,3,7,6]];
+  g.fillStyle=tint;
+  for(const q of Q){g.beginPath();q.forEach((i,k)=>k?g.lineTo(P[i][0],P[i][1]):g.moveTo(P[i][0],P[i][1]));g.closePath();g.fill()}
+  const E=[[0,1],[1,3],[3,2],[2,0],[4,5],[5,7],[7,6],[6,4],[0,4],[1,5],[2,6],[3,7]];
+  g.strokeStyle=mode==='erase'?'#ff6b6b':(mode==='paint'?'#7ad7ff':'#ffd453');
+  g.lineWidth=2.4;
+  for(const e of E){g.beginPath();g.moveTo(P[e[0]][0],P[e[0]][1]);g.lineTo(P[e[1]][0],P[e[1]][1]);g.stroke()}
+}
+function meDrawGizmo(g,W,H){
+  const ox=42,oy=H-46,len=26;
+  const ax=[[[1,0,0],'#ff5b5b','X'],[[0,1,0],'#6ddc6d','Y'],[[0,0,1],'#6aa8ff','Z']];
+  for(const a of ax){
+    const r=meRot(a[0]),ex=ox+r[0]*len,ey=oy-r[1]*len;
+    g.strokeStyle=a[1];g.lineWidth=2.4;
+    g.beginPath();g.moveTo(ox,oy);g.lineTo(ex,ey);g.stroke();
+    g.fillStyle=a[1];g.font='700 10px system-ui';g.textAlign='center';
+    g.fillText(a[2],ex+r[0]*9,ey-r[1]*9+3);
+  }
+}
+
+/* ---------- инструменты и кнопки ---------- */
+function meSetTool(t){
+  ME.tool=t;
+  for(const id of ['meToolBuild','meToolErase','meToolPaint']){
+    const el=document.getElementById(id);if(!el)continue;
+    const on=el.dataset&&el.dataset.tool===t;
+    if(el.classList){el.classList.toggle('on',on)}
+  }
+  ME.ghost=null;meDrawView();
+}
+function meSetCam(k){
+  const c=ME_CAMS[k]||ME_CAMS.iso;ME.yaw=c[0];ME.pit=c[1];ME.ghost=null;meDrawView();
+}
+function meSampleCat(){
+  meSnapshot();ME.size=10;
+  const sel=document.getElementById('meSize');if(sel)sel.value='10';
+  ME.vox.clear();
+  const A='#ff9b45',H='#ffe3bb',C='#20222a',D='#ffffff',E='#ff7aa8';
+  const add=(x,y,z,c)=>{if(x>=0&&x<10&&y>=0&&y<10&&z>=0&&z<10)ME.vox.set(key3(x,y,z),c)};
+  for(let x=3;x<6;x++)for(let y=1;y<3;y++)for(let z=2;z<6;z++)add(x,y,z,A);        // туловище
+  for(let x=3;x<6;x++)for(let y=3;y<6;y++)for(let z=5;z<7;z++)add(x,y,z,H);        // голова
+  add(3,6,5,H);add(5,6,5,H);                                                   // уши
+  add(3,4,6,C);add(5,4,6,C);                                                   // глаза
+  add(4,3,6,E);                                                                // нос
+  add(3,3,5,A);add(5,3,5,A);                                                   // затылок
+  for(const x of [3,5])for(const z of [2,4])add(x,0,z,A);                       // лапы
+  add(4,2,1,A);add(4,3,1,A);add(4,4,1,A);                                      // хвост
+  meDraw();
+}
+
+(function meWire(){
+  const c=document.getElementById('meView');
+  if(!c)return;
+  let orbit=null,painting=false,down=null;
+  const pos=e=>{
+    const r=c.getBoundingClientRect?c.getBoundingClientRect():{left:0,top:0,width:c.width,height:c.height};
+    const kx=c.width/(r.width||c.width),ky=c.height/(r.height||c.height);
+    return [(e.clientX-(r.left||0))*kx,(e.clientY-(r.top||0))*ky];
+  };
+  c.addEventListener('contextmenu',e=>e.preventDefault());
+  c.addEventListener('pointerdown',e=>{
+    c.setPointerCapture&&c.setPointerCapture(e.pointerId);
+    if(e.button===2||e.ctrlKey){orbit={x:e.clientX,y:e.clientY};return}
+    if(e.button!==0)return;
+    const p=pos(e);
+    down={x:e.clientX,y:e.clientY,moved:false};
+    meSnapshot();
+    painting=meApply(p[0],p[1],e.shiftKey?'erase':ME.tool);
+    ME.dragTool=e.shiftKey?'erase':ME.tool;
+    meDraw();
+  });
+  c.addEventListener('pointermove',e=>{
+    const p=pos(e);
+    /* потянул мышью — это поворот камеры, а не «рисование»: откатываем кубик */
+    if(down&&!down.moved&&Math.hypot(e.clientX-down.x,e.clientY-down.y)>6){
+      down.moved=true;
+      const t=ME.undo.pop();if(t)ME.vox=new Map(JSON.parse(t));
+      orbit={x:e.clientX,y:e.clientY};painting=false;
+      ME.ghost=null;meDraw();return;
+    }
+    if(orbit){
+      ME.yaw+=(e.clientX-orbit.x)*0.011;
+      ME.pit=Math.max(-1.35,Math.min(1.35,ME.pit+(e.clientY-orbit.y)*0.009));
+      orbit={x:e.clientX,y:e.clientY};ME.ghost=null;meDrawView();return;
+    }
+    if(painting&&down&&down.moved===false){
+      /* повторные клики подряд без движения всё равно ставят кубики */
+      const r2=mePick(p[0],p[1]);
+      if(r2){meApply(p[0],p[1],ME.dragTool||ME.tool);meDraw()}
+      return;
+    }
+    const r=mePick(p[0],p[1]);
+    let gh=null;
+    if(r){
+      if(ME.tool==='build'){const cc=r.place||r.hit;if(cc)gh={cell:cc,mode:'build'}}
+      else if(r.hit)gh={cell:r.hit,mode:ME.tool};
+    }
+    ME.ghost=gh;meDrawView();
+  });
+  const stop=()=>{orbit=null;painting=false;down=null};
+  c.addEventListener('pointerup',stop);
+  c.addEventListener('pointerleave',()=>{stop();ME.ghost=null;meDrawView()});
+  c.addEventListener('wheel',e=>{
+    e.preventDefault();
+    ME.zoom=Math.max(.45,Math.min(3,ME.zoom*(e.deltaY>0?.92:1.08)));
+    meDrawView();
+  },{passive:false});
+
+  const on=(id,fn)=>{const el=document.getElementById(id);if(el)el.onclick=fn};
+  on('meToolBuild',()=>meSetTool('build'));
+  on('meToolErase',()=>meSetTool('erase'));
+  on('meToolPaint',()=>meSetTool('paint'));
+  on('meCamIso',()=>meSetCam('iso'));
+  on('meCamFront',()=>meSetCam('front'));
+  on('meCamSide',()=>meSetCam('side'));
+  on('meCamTop',()=>meSetCam('top'));
+  on('meSample',meSampleCat);
+  on('meUndo',meUndo);
+  on('meClear',()=>{meSnapshot();ME.vox.clear();ME.ghost=null;meDraw()});
+  on('meX',()=>document.getElementById('me').classList.remove('on'));
+  on('meDel',()=>{
+    if(ME.block)delete ME.block.model;
+    render();
+    document.getElementById('me').classList.remove('on');
+    toast('Модель удалена — существо будет стандартным');
+  });
+  on('meOk',()=>{
+    if(!ME.block){document.getElementById('me').classList.remove('on');return}
+    if(ME.mesh){   // гладкая модель: сохраняем покраску и форму
+      const src=ME.mesh.src||{},mesh={};
+      mesh.p=src.p; mesh.c=Array.from(ME.mesh.col); mesh.i=Array.from(ME.mesh.idx);
+      ME.block.model={mesh};
+      render();
+      document.getElementById('me').classList.remove('on');
+      toast('Гладкая модель сохранена: '+ME.mesh.tris+' треугольников');
+      return;
+    }
+    const N=ME.size,pal=[],idx=new Map(),v=[];
+    for(const kv of ME.vox){
+      const p=kv[0].split(','),x=+p[0],y=+p[1],z=+p[2],col=kv[1];
+      if(x<0||y<0||z<0||x>=N||y>=N||z>=N)continue;
+      if(!idx.has(col)){idx.set(col,pal.length);pal.push(col)}
+      v.push([x,y,z,idx.get(col)]);
+    }
+    if(!v.length){delete ME.block.model;toast('Модель пустая — будет стандартный вид')}
+    else{ME.block.model={size:N,pal:pal,v:v};toast('Модель сохранена: '+v.length+' кубиков')}
+    render();
+    document.getElementById('me').classList.remove('on');
+  });
+
+  if(window.addEventListener)window.addEventListener('resize',()=>{if(document.getElementById('me').classList.contains('on')){meFit();meDrawView()}});
+  const sizeSel=document.getElementById('meSize');
+  if(sizeSel)sizeSel.onchange=e=>{ME.size=+e.target.value;ME.ghost=null;meDraw()};
+  const mir=document.getElementById('meMir');
+  if(mir)mir.onchange=e=>ME.mirror=e.target.checked;
+  const gnd=document.getElementById('meGnd');
+  if(gnd)gnd.onchange=e=>{ME.ground=e.target.checked;meDrawView()};
+  const col=document.getElementById('meCol');
+  if(col)col.oninput=e=>{ME.color=e.target.value;meSwatches()};
+  const br=document.getElementById('meBrush'),brv=document.getElementById('meBrushV');
+  if(br){
+    const applyBrush=()=>{
+      const k=+br.value/100;                       // 0.10 … 1.20 в единицах сетки
+      ME.brushR=0.10+k*1.10;
+      if(brv)brv.textContent=k<0.3?'тонкая':(k<0.7?'средняя':(k<1.0?'широкая':'очень широкая'));
+    };
+    br.oninput=applyBrush;applyBrush();
+  }
+  document.addEventListener('keydown',e=>{
+    const md=document.getElementById('me');
+    if(!md||!md.classList||!md.classList.contains('on'))return;
+    const tag=(e.target&&e.target.tagName)||'';
+    if(tag==='INPUT'||tag==='SELECT'||tag==='TEXTAREA')return;
+    if(e.key==='1')meSetTool('build');
+    else if(e.key==='2')meSetTool('erase');
+    else if(e.key==='3')meSetTool('paint');
+    else if(e.key==='z'||e.key==='Z')meUndo();
+  });
+})();
+try{window.RMEF={meProj:meProj,mePick:mePick,meApply:meApply,meDraw:meDraw,meSetTool:meSetTool,
+  meSampleCat:meSampleCat,meDrawView:meDrawView,openModelEditor:openModelEditor};}catch(e){}
+
 /* ---- файлы ---- */
 function download(){
   const txt=modText();
@@ -482,7 +1730,8 @@ function loadMod(obj){
     hp:mo.hp||6,speed:mo.speed||3,fly:mo.fly?'да':'нет',hover:mo.hover||3,
     kamikaze:mo.kamikaze?'да':'нет',boomR:mo.boomR||4,boomDmg:mo.boomDmg||40,
     bomber:mo.bomber?'да':'нет',dropEvery:mo.dropEvery||2.5,
-    ears:mo.ears===false?'нет':'да',wings:mo.wings?'да':'нет',tail:mo.tail===false?'нет':'да'});
+    ears:mo.ears===false?'нет':'да',wings:mo.wings?'да':'нет',tail:mo.tail===false?'нет':'да',
+    model:(mo.model&&Array.isArray(mo.model.v)&&mo.model.v.length)?mo.model:undefined});
   if(Array.isArray(obj.spawners))for(const sp of obj.spawners)blocks.push({t:'spawner',mob:sp.mob||'',
     every:sp.every||6,count:sp.count||1,max:sp.max||4,map:sp.map||''});
   if(obj.script)blocks.push({t:'script',code:obj.script});
@@ -495,14 +1744,31 @@ document.getElementById('bDl').onclick=download;
 function copyText(t,okMsg){try{navigator.clipboard.writeText(t).then(()=>toast(okMsg),()=>fallbackCopy(t,okMsg))}catch(e){fallbackCopy(t,okMsg)}}
 function fallbackCopy(t,okMsg){try{const ta=document.createElement('textarea');ta.value=t;ta.style.position='fixed';ta.style.opacity='0';document.body.append(ta);ta.select();document.execCommand('copy');ta.remove();toast(okMsg+' (вручную: Ctrl+C)')}catch(e){toast('Скопируй вручную из поля')}}
 document.getElementById('bCopyJson').onclick=()=>copyText(modText(),'JSON скопирован');
+(function freeWire(){
+  const ta=document.getElementById('freeTa'),st=document.getElementById('freeStat');
+  const setStat=(t,c)=>{if(st){st.textContent=t;st.style.color=c||'#8fd0ff'}};
+  const load=document.getElementById('freeLoad');if(load)load.onclick=()=>{
+    const was=FREE.on;FREE.on=false;const j=JSON.stringify(buildMod(),null,2);FREE.on=was;
+    if(ta)ta.value=j;setStat('текущий мод выгружен в текст — правь что угодно',null)};
+  const app=document.getElementById('freeApply');if(app)app.onclick=()=>{
+    try{const o=JSON.parse(ta.value);if(!o||typeof o!=='object'||Array.isArray(o))throw new Error('нужен JSON-объект');
+      if(!o.format)o.format='rmod/2';if(!o.id)o.id='free_mod_'+Date.now();if(!o.name)o.name='Свободный мод';
+      FREE.on=true;FREE.obj=o;setStat('✅ свободный режим включён: '+(o.name||o.id)+' — скачивание берёт этот JSON','#7be04a');render();toast('Свободный режим включён')}
+    catch(e){setStat('✕ '+e.message,'#ff8a8a')}};
+  const off=document.getElementById('freeOff');if(off)off.onclick=()=>{FREE.on=false;FREE.obj=null;setStat('режим выключен — работает сборка из блоков');render();toast('Обратно к блокам')};
+  const fmt=document.getElementById('freeFmt');if(fmt)fmt.onclick=()=>{try{ta.value=JSON.stringify(JSON.parse(ta.value),null,2);setStat('✓ выровнено','#7be04a')}catch(e){setStat('✕ '+e.message,'#ff8a8a')}};
+  if(ta)ta.addEventListener('input',()=>{try{JSON.parse(ta.value);setStat('✓ JSON валиден (нажми «Применить»)',null)}catch(e){setStat('✕ '+e.message,'#ff8a8a')}});
+})();
 document.getElementById('bCopyPrompt').onclick=()=>copyText(promptText(),'Промпт скопирован — отдай его ИИ');
+const _bp=document.getElementById('bPrompt');if(_bp)_bp.onclick=()=>aiPromptSave();
 document.getElementById('bReset').onclick=()=>{blocks=[];render();toast('Сценарий очищен')};
 document.getElementById('bOpen').onclick=()=>document.getElementById('fIn').click();
 document.getElementById('fIn').onchange=e=>{const f=e.target.files&&e.target.files[0];if(!f)return;const r=new FileReader();
   r.onload=()=>loadMod(String(r.result));r.readAsText(f);e.target.value=''};
 document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{
   document.querySelectorAll('.tabs button').forEach(x=>x.classList.toggle('on',x===b));
-  for(const id of ['json','ai','how'])document.getElementById('tab-'+id).style.display=(id===b.dataset.tab)?'':'none';
+  const TABS=[...document.querySelectorAll('.tabs button')].map(x=>x.dataset.tab);
+  for(const id of TABS){const el=document.getElementById('tab-'+id);if(el)el.style.display=(id===b.dataset.tab)?'':'none';}
 });
 document.getElementById('bCat').onclick=()=>{
   blocks=[];
@@ -535,8 +1801,171 @@ document.getElementById('bEx').onclick=()=>{
   toast('Пример загружен');
 };
 
+/* мостик для тестов и отладки */
+try{window.RAPI={get blocks(){return blocks},set blocks(v){blocks=v},addBlock,loadMod,render,meDraw,aiRun,aiModel:aiModelRaw,aiWeapon,aiMob,aiScript,aiMap,rmModelBlock,rmReadModelText,
+  openModelEditor,buildMod,modText,promptText,ME};}catch(e){}
 /* стартовый сценарий */
 loadMod({format:'rmod/1',id:'my_mod',name:'Мой первый мод',author:'я',desc:'Неоновый нож и быстрый бег',
   skins:{knife:{a:'#123046',b:'#39f6ff',c:'#ffffff',scale:1.2}},tuning:{meleeMul:1.5,runMul:1.3}});
 </script>
-</body></html>
+
+<style>
+#jsMod{display:none;position:fixed;inset:0;z-index:130;background:#070b12;color:#dbe8ff;font:13px/1.5 ui-monospace,SFMono-Regular,Consolas,monospace;flex-direction:column}
+#jsMod .jh{display:flex;align-items:center;gap:10px;padding:9px 14px;background:linear-gradient(90deg,#101a2c,#1a1030);border-bottom:1px solid #2b3b57;font:800 13.5px system-ui}
+#jsMod .jh .tag{font:700 11px system-ui;background:#7a3cff33;border:1px solid #7a3cff88;color:#d9c6ff;border-radius:999px;padding:2px 9px}
+#jsMod .jw{display:flex;flex:1;min-height:0}
+#jsMod .jt{width:220px;border-right:1px solid #1c2740;padding:10px;overflow:auto;background:#0a101c}
+#jsMod .jt h4{margin:0 0 8px;font:800 11px system-ui;letter-spacing:.08em;color:#7f93b5;text-transform:uppercase}
+#jsMod .jt button{display:block;width:100%;text-align:left;margin:0 0 7px;background:#131e33;border:1px solid #22314b;color:#cfe0ff;border-radius:9px;padding:8px 10px;font:600 12.5px system-ui;cursor:pointer}
+#jsMod .jt button:hover{background:#1b2b47;border-color:#3a5580}
+#jsMod .jc{flex:1;display:flex;flex-direction:column;min-width:0}
+#jsCode{flex:1;width:100%;border:0;outline:0;resize:none;background:#080d16;color:#c9f7ff;padding:12px 14px;font:13px/1.55 ui-monospace,Consolas,monospace;tab-size:2}
+#jsMod .jb{display:flex;align-items:center;gap:8px;padding:8px 12px;background:#0c1424;border-top:1px solid #1c2740;flex-wrap:wrap}
+#jsMod .jb button{background:#16233a;border:1px solid #2b3b57;color:#dbe8ff;border-radius:9px;padding:8px 13px;font:700 12.5px system-ui;cursor:pointer}
+#jsMod .jb button.ok{background:#1c7a4d;border-color:#2ea36a}
+#jsMod .jb button.gr{background:linear-gradient(135deg,#7a3cff,#ff3c9a);border:0;color:#fff}
+#jsMod #jsInfo{font:600 12px system-ui;color:#8fa6c8;margin-left:auto}
+#jsMod .jshelp{width:300px;border-left:1px solid #1c2740;background:#0a101c;overflow:auto;padding:10px}
+#jsMod .jshelp details{margin-bottom:6px;background:#101a2c;border:1px solid #1e2b45;border-radius:9px;padding:6px 9px}
+#jsMod .jshelp summary{cursor:pointer;font:800 12px system-ui;color:#9fd6ff}
+#jsMod .jshelp pre{margin:6px 0 0;white-space:pre-wrap;font:11.5px/1.5 ui-monospace,Consolas,monospace;color:#b9c9e0}
+</style>
+<div id="jsMod">
+  <div class="jh">🧠 JS-мод <span class="tag">api v3 · полный доступ к движку</span>
+    <span style="font:600 12px system-ui;color:#8fa6c8">пиши код — он уйдёт в поле "script" мода</span>
+    <button id="jsClose" style="margin-left:auto;background:#22304a;color:#dbe8ff;border:1px solid #33456b;border-radius:8px;padding:6px 12px;cursor:pointer;font:700 12.5px system-ui">✕ Закрыть</button>
+  </div>
+  <div class="jw">
+    <div class="jt" id="jsTpl"><h4>Шаблоны</h4></div>
+    <div class="jc">
+      <textarea id="jsCode" spellcheck="false" placeholder="// твой JS-мод. Объект api даёт всё: события, физику, шейдеры, окна..."></textarea>
+      <div class="jb">
+        <button id="jsCheck">✔ Проверить код</button>
+        <button id="jsExp" class="gr">⬇ Экспорт .rmod</button>
+        <button id="jsExpJs">⬇ Только .js</button>
+        <button id="jsHot" class="ok" style="background:#7a3cff;border-color:#a07bff">⚡ Жить в игре</button>
+        <label style="display:flex;align-items:center;gap:5px;font:700 12px system-ui;color:#9fd6ff;cursor:pointer"><input type="checkbox" id="jsAuto"> авто</label>
+        <button id="jsPrompt">📄 Промпт для ИИ</button>
+        <button id="jsClear">🧹 Очистить</button>
+        <span id="jsInfo"></span>
+      </div>
+    </div>
+    <div class="jshelp" id="jsHelp"></div>
+  </div>
+</div>
+<script>
+(function(){
+  var $=function(id){return document.getElementById(id)};
+  var KEY='rmodder_js_code';
+  var help=[
+    ['СОБЫТИЯ','api.on(\'tick\',d=>{})   // d.dt\napi.on(\'render\',d=>{}) // d.gl,d.W,d.H\napi.on(\'key\',d=>{})    // d.code\napi.on(\'shoot\',d=>{})\napi.on(\'boom\',d=>{})   // d.x,y,z,R,dmg\napi.on(\'hurt\',d=>{})   // d.dmg,src\napi.on(\'mobSpawn\',d=>{})\napi.on(\'mobKill\',d=>{})\napi.on(\'map\',d=>{})    // d.id\napi.emit(\'my_ev\',{})  api.once(name,fn)\napi.onFrame((dt,ctx)=>{})'],
+    ['МИР','api.world.gravity(0.4)\napi.world.sky(\'#120022\',\'#ff2e88\')\napi.world.fog(30,0,60,70)\napi.world.filter(\'hue-rotate(90deg)\')\napi.world.weather(\'night\')\napi.world.shake(.8)  .slowmo(3,.25)\napi.world.items(\'melon\',x,y,z)\napi.world.mob(spec,x,y,z)\napi.world.boom(x,y,z,R,dmg)\napi.world.map(\'flatgrass\')\napi.world.P .MOBS .balls .ents .MAP'],
+    ['ИГРОК','api.player.hp = 50\napi.player.pos = {x,y,z}\napi.player.vel = {x,y,z}\napi.player.teleport(x,y,z)\napi.player.damage(20)\napi.player.heal(20) .kill()\napi.player.onGround\napi.player.look(yaw,pit)'],
+    ['ИНТЕРФЕЙС','api.ui.hud(\'id\',\'текст\')\napi.ui.big(\'БОСС!\',2000)\napi.ui.screen(\'<h1>hi</h1>\',{click:true})\napi.ui.panel({title,html,x,y,w})\napi.ui.toolbar([{text,fn}])\napi.ui.css(\'...\')  api.msg(\'текст\')'],
+    ['МЕШИ','var m = api.mesh.obj(objText)\nvar h = api.mesh.draw(m,x,y,z,{scale:2,yaw:.5,color:\'#f0f\'})\nh.move() .yaw() .scale() .rm()\napi.addMob({id,hp,speed,model:{mesh:m}})'],
+    ['ШЕЙДЕРЫ','var fx = api.gfx.screen(`\n precision highp float;\n uniform vec2 u_res; uniform float u_time;\n void main(){ vec2 uv=gl_FragCoord.xy/u_res;\n  float v=0.5+0.5*sin(uv.x*60.0+u_time*3.0);\n  gl_FragColor=vec4(v*.3,0.,uv.y*.4,.25); }`);\nfx.set(\'u_x\',1) .tex(tex) .rm()\napi.gfx.texture(w,h,ctx=>{})\napi.gfx.imageTexture(url,cb)\napi.checkShader(frag)'],
+    ['ЗВУК / ФАЙЛЫ','api.audio.snd(\'boom\')\napi.audio.tone(440,.2,\'square\',.2,2)\napi.audio.noise(.3,.4,900)\napi.fx.burst(x,y,z,40,[\'#ff0\'],3)\nvar t = await api.files.text(url)\nvar f = await api.files.pick(\'.obj\')\napi.save(\'k\',v)  api.load(\'k\',def)\napi.log()  api.stats()  api.E (весь движок)'],
+  ];
+  var hh=$('jsHelp');
+  for(var i=0;i<help.length;i++){var d=document.createElement('details');
+    if(i<2)d.open=true;
+    d.innerHTML='<summary>'+help[i][0]+'</summary><pre>'+help[i][1].replace(/</g,'&lt;')+'</pre>';hh.appendChild(d)}
+
+  var T={
+    start:'// Мой JS-мод. api — полный доступ к движку.\napi.msg(\'Мод на связи\');\nvar jumps=0,rec=0;\napi.on(\'key\',function(d){if(d.code===\'Space\')jumps++});\napi.onFrame(function(dt,ctx){\n  var sp=Math.hypot(ctx.P.vx,ctx.P.vz);\n  if(sp>rec)rec=sp;\n  api.ui.hud(\'hud\',\'⚡ \'+sp.toFixed(1)+\' м/с · прыжков: \'+jumps+\' · рекорд \'+rec.toFixed(1));\n});\napi.ui.toolbar([{text:\'Сброс\',fn:function(){jumps=0;rec=0;api.msg(\'счёт сброшен\')}}]);\n',
+    mobs:'// 1. Свои существа + спавнер\napi.addMob({id:\'reaver\',name:\'Жнец\',color:\'#b06bff\',color2:\'#e8c6ff\',hp:40,speed:3.4,size:1.4,touchDmg:10});\napi.addSpawner({mob:\'reaver\',every:9,count:1,max:3});\napi.msg(\'Жнецы пошли\');\n// при смерти — фейерверк\napi.on(\'mobKill\',function(d){api.fx.burst(d.x,d.y,d.z,26,[\'#b06bff\',\'#fff\',\'#ff7ad9\'],3)});\n',
+    shader:'// 2. Полноэкранный шейдер (GLSL, WebGL1)\nvar fx=api.gfx.screen([\n\'precision highp float;\',\n\'uniform vec2 u_res;uniform float u_time;uniform float u_power;\',\n\'void main(){\',\n\'  vec2 uv=gl_FragCoord.xy/u_res;\',\n\'  float v=0.5+0.5*sin(uv.x*80.0*u_power+u_time*3.0);\',\n\'  gl_FragColor=vec4(v*0.28,uv.y*0.10,uv.y*0.55,0.22);\',\n\'}\'].join(\'\\n\'),{uniforms:{u_power:1.0}});\nvar p=1;\napi.ui.toolbar([\n {text:\'Шейдер: сила+\',fn:function(){p+=.5;fx.set(\'u_power\',p)}},\n {text:\'Шейдер: выкл\',fn:function(){fx.rm()}}]);\n',
+    gravity:'// 3. Гравитация и физика\nvar g=1;\napi.ui.toolbar([\n {text:\'Гравитация ×0.3\',fn:function(){api.world.gravity(.3)}},\n {text:\'Луна 0.16\',fn:function(){api.world.gravity(.16)}},\n {text:\'Антиграв\',fn:function(){api.world.gravity(-1)}},\n {text:\'Норма\',fn:function(){api.world.gravity(1)}}]);\napi.on(\'hurt\',function(){api.world.shake(.7);api.world.filter(\'hue-rotate(-20deg)\')});\napi.on(\'tick\',function(d){if(api.player.hp<30){api.world.slowmo(.5,.7)}});\n',
+    panel:'// 4. Своё окно и меню мода\nvar p=api.ui.panel({title:\'Мой мод\',html:\'<b>Правила:</b><br>сбей 10 жнецов\',x:40,y:120,w:280});\nvar kills=0;\napi.on(\'mobKill\',function(){kills++;p.set(\'<b>Убито:</b> \'+kills+\'/10\');\n  if(kills>=10){api.ui.big(\'ПОБЕДА\',2200);api.audio.tone(880,.4,\'square\',.2,.5)}});\napi.ui.screen(\'<div style="position:fixed;left:0;bottom:0;padding:8px 12px;background:#0008;color:#9fe;font:12px system-ui">мой мод · уровень 1</div>\');\n',
+    mesh:'// 5. Своя гладкая модель (вставь mesh из скульптора в JSON)\nvar txt=\'v 0 0 0\\nv 1 0 0\\nv 0 0 1\\nv 0 1 0\\nf 1 2 3\\nf 1 2 4\\nf 2 3 4\\nf 3 1 4\';\nvar m=api.mesh.obj(txt);\nvar h=api.mesh.draw(m,0,3,6,{scale:3,color:\'#39f6ff\'});\nvar a=0;api.onFrame(function(dt){a+=dt;h.yaw(a);h.move(api.world.P.x+Math.sin(a)*6,3,api.world.P.z+Math.cos(a)*6)});\n',
+    virus:'// 6. Вирус-режим: заражение, волны, свой шейдер\napi.world.gravity(.7);\napi.ui.hud(\'v\',\'🦠 ВИРУС АКТИВЕН\');\nvar t=0,n=0;\napi.on(\'tick\',function(d){\n  t+=d.dt;\n  if(t>5){t=0;var a=Math.random()*6.28,P=api.world.P;\n    api.world.mob({id:\'iacre\',name:\'Заражённый\',color:\'#7dff4d\',hp:20,speed:4,touchDmg:8,size:1.1},\n      P.x+Math.cos(a)*11,P.y+1,P.z+Math.sin(a)*11);\n    n++;api.ui.hud(\'v\',\'🦠 ВИРУС · волна \'+n);}\n});\napi.on(\'hurt\',function(d){api.world.filter(\'saturate(2) hue-rotate(-25deg)\')});\napi.on(\'mobKill\',function(d){api.fx.burst(d.x,d.y,d.z,20,[\'#7dff4d\',\'#fff\'],3)});\n'
+  };
+  var codeEl=$('jsCode');
+  function setCode(t){codeEl.value=t||'';try{localStorage.setItem(KEY,codeEl.value)}catch(e){}info()}
+  function info(){var v=codeEl.value.trim();$('jsInfo').textContent=v?(v.split('\n').length+' строк · '+v.length+' симв. · уйдёт в script мода'):'пусто — код не попадёт в мод'}
+  codeEl.value=(function(){try{return localStorage.getItem(KEY)||T.start}catch(e){return T.start}})();
+  codeEl.oninput=function(){try{localStorage.setItem(KEY,codeEl.value)}catch(e){}info()};
+  info();
+  // шаблоны
+  var TL=[['Стартовый HUD','start'],['Свои существа','mobs'],['Шейдер поверх экрана','shader'],
+    ['Гравитация и физика','gravity'],['Окно-панель и меню','panel'],['Свой гладкий меш','mesh'],['Вирус-режим','virus']];
+  var tp=$('jsTpl');
+  TL.forEach(function(it){
+    var b=document.createElement('button');b.textContent=it[0];
+    b.onclick=function(){setCode(T[it[1]]);toast('Шаблон: '+it[0])};
+    tp.appendChild(b);
+  });
+  var reset=document.createElement('button');reset.textContent='↺ Пустой мод';reset.onclick=function(){setCode('// пусто\n')};tp.appendChild(reset);
+  var open=$('bJS');
+  function show(){ $('jsMod').style.display='flex'; }
+  function hide(){ $('jsMod').style.display='none'; }
+  if(open)open.onclick=show;
+  $('jsClose').onclick=hide;
+  // ---- ЖИВОЙ КОДИНГ: код уходит в открытую игру без пересборки .rmod ----
+  var hotCh=null;try{hotCh=new BroadcastChannel('rmod-hotreload')}catch(e){}
+  function publish(code){
+    var c=(code==null?codeEl.value:code);
+    if(!c||!c.trim()){toast('код пустой');return}
+    try{if(hotCh)hotCh.postMessage({code:c,name:'⚡ Живой мод'})}catch(e){}
+    try{localStorage.setItem('rmod_hot_code',c);localStorage.setItem('rmod_hot_v',String(Date.now()))}catch(e){}
+    $('jsInfo').textContent='⚡ отправлено в игру ('+c.length+' симв.)';
+  }
+  $('jsHot').onclick=function(){publish();toast('⚡ в игру: hot-reload через 0.2 сек')};
+  var autoT=null;
+  codeEl.addEventListener('input',function(){
+    if($('jsAuto')&&$('jsAuto').checked){clearTimeout(autoT);autoT=setTimeout(function(){publish()},900)}
+  });
+  $('jsCheck').onclick=function(){
+    var src=codeEl.value;
+    try{ new Function('api','mod',src); toast('✅ Синтаксис в порядке'); $('jsInfo').textContent='✅ синтаксис ок'; }
+    catch(e){ toast('❌ '+e.message); $('jsInfo').textContent='❌ '+e.message; }
+    if($('jsAuto')&&$('jsAuto').checked)publish();
+  };
+  $('jsClear').onclick=function(){setCode('')};
+  $('jsExp').onclick=function(){ try{ download(); toast('Мод с JS-скриптом сохранён'); }catch(e){ toast('Не вышло: '+e.message) } };
+  $('jsExpJs').onclick=function(){
+    var b=new Blob([codeEl.value],{type:'text/javascript;charset=utf-8'});
+    var a=document.createElement('a');a.href=URL.createObjectURL(b);
+    a.download=((buildMod().id||'mod')+'.js');a.click();
+    setTimeout(function(){URL.revokeObjectURL(a.href)},4000);toast('.js сохранён');
+  };
+  $('jsPrompt').onclick=function(){
+    try{
+      var task=(document.getElementById('aiIn')||{}).value||'';
+      var txt=(typeof AI_DOC!=='undefined'?AI_DOC+'\n':'')+(typeof JS_DOC!=='undefined'?JS_DOC+'\n':'')+
+        '\n=====================================================================\n ЗАДАНИЕ\n=====================================================================\n'+(task||'придумай крутой JS-мод для Rphysics')+
+        '\n\n=====================================================================\n МОЙ ТЕКУЩИЙ КОД (доработай или перепиши)\n=====================================================================\n'+codeEl.value+
+        '\n\nОтветь ОДНИМ JSON-объектом мода (format rmod/2), без markdown, код мода — в поле "script".\n';
+      var b=new Blob([txt],{type:'text/plain;charset=utf-8'});
+      var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='JS-МОД-ПРОМПТ.txt';a.click();
+      setTimeout(function(){URL.revokeObjectURL(a.href)},4000);toast('Промпт с API сохранён');
+    }catch(e){toast('Не вышло: '+e.message)}
+  };
+  // код попадает в мод всегда, даже если пользователь ничего не нажимал
+  try{
+    var _bm=buildMod;
+    buildMod=function(){
+      var m=_bm();
+      var c=codeEl.value.trim();
+      if(c){ m.script = m.script ? (c+'\n\n'+m.script) : c; }
+      return m;
+    };
+    if(window.RAPI)RAPI.buildMod=buildMod;
+    var _lm=loadMod;
+    loadMod=function(o){
+      var r=_lm(o);
+      try{
+        var sc=(o&&typeof o==='object')?o.script:null;
+        if(typeof sc!=='string'&&o&&Array.isArray(o.scripts))sc=o.scripts.join('\n\n');
+        if(typeof sc==='string'&&sc.trim())setCode(sc);
+      }catch(e){}
+      return r;
+    };
+    if(window.RAPI)RAPI.loadMod=loadMod;
+  }catch(e){console.warn('JS-мод: не удалось перехватить buildMod',e)}
+  window.RAPI_JS={get code(){return codeEl.value},set code(v){setCode(v)},open:show,close:hide,check:function(){return $('jsCheck').onclick()},
+    publish:publish,hot:function(){publish()},templates:T};
+})();
+</script>
+
+<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a548df572f0fe920',t:'MTc5MzY4MjYyNQ=='};var l=window.parent.location,o;try{o=new URL(l.origin).origin}catch(e){try{o=new URL(new URL(l.href).origin).origin}catch(e){o=''}}var u='/cdn-cgi/challenge-platform/scripts/jsd/main.js?ray=a548df572f0fe920',a=document.createElement('script');a.src=o?new URL(u,o).href:u;document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body></html>
