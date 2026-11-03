@@ -1,25 +1,278 @@
-// Rphysics: локальный сервер комнат (без установки пакетов).
-// Запуск:  node rphysics-server.js     (игра: rphystestwebgl.html или index.html рядом)
-// Для интернета: залей на Render.com как Web Service (Start Command: node rphysics-server.js), адрес вписать в игре.
-// Потом открой на всех телефонах/ПК в одной Wi‑Fi сети адрес, который выведет сервер.
-const http=require('http'),fs=require('fs'),path=require('path'),crypto=require('crypto'),os=require('os');
-const PORT=+process.env.PORT||8080,GAME=['rphystestwebgl.html','index.html','Rphysics.html'].map(n=>path.join(__dirname,n)).find(p=>fs.existsSync(p))||path.join(__dirname,'rphystestwebgl.html');
-const rooms=new Map();let nid=0;
-const srv=http.createServer((q,r)=>{if(q.url==='/health'){r.writeHead(200);r.end('ok');return}if(q.url.split('?')[0]==='/'||q.url.endsWith('.html')){fs.readFile(GAME,(e,b)=>{if(e){r.writeHead(500,{'Content-Type':'text/plain; charset=utf-8'});r.end('Положи rphystestwebgl.html рядом с этим файлом')}else{r.writeHead(200,{'Content-Type':'text/html; charset=utf-8'});r.end(b)}})}else{r.writeHead(404);r.end('404')}});
-function frame(obj){const p=Buffer.from(typeof obj==='string'?obj:JSON.stringify(obj));let h;if(p.length<126)h=Buffer.from([0x81,p.length]);else if(p.length<65536){h=Buffer.alloc(4);h[0]=0x81;h[1]=126;h.writeUInt16BE(p.length,2)}else{h=Buffer.alloc(10);h[0]=0x81;h[1]=127;h.writeBigUInt64BE(BigInt(p.length),2)}return Buffer.concat([h,p])}
-const send=(c,o)=>{try{c.sock.write(frame(o))}catch(e){}};
-function leave(c){const r=c.room;if(!r)return;r.players.delete(c.id);c.room=null;for(const p of r.players.values())send(p,{t:'gone',id:c.id});if(!r.players.size){rooms.delete(r.name);return}if(r.host===c.id){r.host=r.players.keys().next().value;for(const p of r.players.values())send(p,{t:'host',id:r.host})}}
-function onMsg(c,txt){let d;try{d=JSON.parse(txt)}catch(e){return}
- if(d.t==='list')return send(c,{t:'rooms',rooms:[...rooms.values()].map(r=>({name:r.name,map:r.map,n:r.players.size,max:r.max,lock:!!r.pass}))});
- if(d.t==='create'){const name=String(d.name||'room').slice(0,24);if(rooms.has(name))return send(c,{t:'err',m:'Комната с таким названием уже есть'});leave(c);const r={name,pass:String(d.pass||''),map:d.map||'construct',vx:d.vx||.4,max:8,players:new Map(),host:c.id};r.players.set(c.id,c);c.room=r;rooms.set(name,r);console.log('+ комната',name,r.map);return send(c,{t:'joined',id:c.id,host:true,room:name,map:r.map,vx:r.vx})}
- if(d.t==='join'){const r=rooms.get(String(d.name));if(!r)return send(c,{t:'err',m:'Комната не найдена'});if(r.pass&&r.pass!==String(d.pass||''))return send(c,{t:'err',m:'Неверный пароль'});if(r.players.size>=r.max)return send(c,{t:'err',m:'Комната заполнена'});leave(c);r.players.set(c.id,c);c.room=r;return send(c,{t:'joined',id:c.id,host:r.host===c.id,room:r.name,map:r.map,vx:r.vx})}
- if(d.t==='msg'&&c.room){if(d.d&&d.d.k==='map'&&c.room.host===c.id){c.room.map=d.d.id;c.room.vx=d.d.vx||c.room.vx}for(const p of c.room.players.values())if(p!==c)send(p,{t:'m',from:c.id,d:d.d})}}
-srv.on('upgrade',(req,sock)=>{const key=req.headers['sec-websocket-key'];if(!key){sock.destroy();return}
- sock.write('HTTP/1.1 101 Switching Protocols\r\nUpgrade: websocket\r\nConnection: Upgrade\r\nSec-WebSocket-Accept: '+crypto.createHash('sha1').update(key+'258EAFA5-E914-47DA-95CA-C5AB0DC85B11').digest('base64')+'\r\n\r\n');
- const c={sock,id:++nid,room:null};let buf=Buffer.alloc(0);sock.setNoDelay(true);
- sock.on('data',d=>{buf=Buffer.concat([buf,d]);for(;;){if(buf.length<2)return;const op=buf[0]&15,m=buf[1]&128;let len=buf[1]&127,off=2;
-  if(len===126){if(buf.length<4)return;len=buf.readUInt16BE(2);off=4}else if(len===127){if(buf.length<10)return;len=Number(buf.readBigUInt64BE(2));off=10}
-  const mk=m?buf.slice(off,off+4):null;if(m)off+=4;if(buf.length<off+len)return;const pl=Buffer.from(buf.slice(off,off+len));if(mk)for(let i=0;i<len;i++)pl[i]^=mk[i&3];buf=buf.slice(off+len);
-  if(op===8){sock.end();return}if(op===9){sock.write(Buffer.concat([Buffer.from([0x8A,pl.length]),pl]));continue}if(op===1)onMsg(c,pl.toString('utf8'))}});
- const bye=()=>leave(c);sock.on('close',bye);sock.on('error',bye)});
-srv.listen(PORT,'0.0.0.0',()=>{console.log('Rphysics: сервер запущен. Открой на устройствах в этой Wi‑Fi сети:');for(const l of Object.values(os.networkInterfaces()))for(const a of l)if(a.family==='IPv4'&&!a.internal)console.log('   http://'+a.address+':'+PORT)});
+#!/usr/bin/env node
+/* ============================================================================
+   rphysics-server.js — сервер для Rphysics: статика + WebSocket + комнаты + моды
+   Без npm-зависимостей. Запуск:  node rphysics-server.js
+   Потом открыть:  http://localhost:8080/rphysics/index.html
+   В игре: меню карт → «Мультиплеер» → адрес пустой (= этот сайт) → Создать комнату.
+
+   Порт: PORT=8080 (или переменная окружения PORT — удобно для хостингов).
+   Что умеет:
+     • отдаёт index.html / rmodder.html / modelmaker.html и любые файлы рядом
+     • комнаты: создать / список / вход по паролю / лимит игроков
+     • пересылка игровых сообщений (позиции, физика, чат) между участниками
+     • хост — первый вошедший; при выходе хоста он назначается автоматически
+     • раздача модов: хост жмёт «📤 Поделиться модами» → остальные получают их
+       (код модов НЕ пересылается — только предметы, мобы, карты; правило безопасности)
+   ========================================================================== */
+'use strict';
+const http = require('http');
+const fs = require('fs');
+const path = require('path');
+const crypto = require('crypto');
+
+const PORT = +(process.env.PORT || 8080);
+const ROOT = __dirname;
+const MAX_PLAYERS = 12;
+const MAX_PAYLOAD = 4 * 1024 * 1024;      // 4 МБ на сообщение
+const TICK_LOG = 30000;
+
+/* ----------------------------- WebSocket ---------------------------------- */
+const GUID = '258EAFA5-E914-47DA-95CA-C5AB0DC85B11';
+const wsAccept = key => crypto.createHash('sha1').update(key + GUID).digest('base64');
+
+function wsFrame(str) {
+  const data = Buffer.from(str, 'utf8');
+  const len = data.length;
+  let head;
+  if (len < 126) { head = Buffer.from([0x81, len]); }
+  else if (len < 65536) { head = Buffer.alloc(4); head[0] = 0x81; head[1] = 126; head.writeUInt16BE(len, 2); }
+  else { head = Buffer.alloc(10); head[0] = 0x81; head[1] = 127; head.writeBigUInt64BE(BigInt(len), 2); }
+  return Buffer.concat([head, data]);
+}
+function wsPong(payload) {
+  const len = payload.length;
+  let head;
+  if (len < 126) head = Buffer.from([0x8A, len]);
+  else { head = Buffer.alloc(4); head[0] = 0x8A; head[1] = 126; head.writeUInt16BE(len, 2); }
+  return Buffer.concat([head, payload]);
+}
+function wsClose() { return Buffer.from([0x88, 0x00]); }
+
+function wsSend(client, obj) {
+  if (!client || client.dead) return;
+  try { client.socket.write(wsFrame(typeof obj === 'string' ? obj : JSON.stringify(obj))); }
+  catch (e) { client.dead = true; }
+}
+
+/* ------------------------------ комнаты ----------------------------------- */
+let nextId = 1;
+const clients = new Map();       // id -> {id, socket, room, host, alive}
+const rooms = new Map();         // name -> {name, pass, map, vx, max, members:Set, mods:[]}
+
+function roomInfo(r) {
+  return { name: r.name, map: r.map, n: r.members.size, max: r.max, lock: !!r.pass };
+}
+function roomsList() { return [...rooms.values()].map(roomInfo); }
+function roomMembers(r) { return [...r.members].map(id => clients.get(id)).filter(Boolean); }
+function broadcast(r, obj, exceptId) {
+  for (const c of roomMembers(r)) if (c.id !== exceptId) wsSend(c, obj);
+}
+function sendRoomsToAll() {
+  const list = roomsList();
+  for (const c of clients.values()) if (!c.room) wsSend(c, { t: 'rooms', rooms: list });
+}
+function leaveRoom(c) {
+  if (!c.room) return;
+  const r = rooms.get(c.room);
+  c.room = null;
+  if (!r) return;
+  r.members.delete(c.id);
+  broadcast(r, { t: 'gone', id: c.id });
+  if (r.members.size === 0) {
+    rooms.delete(r.name);
+  } else if (r.host === c.id) {
+    r.host = [...r.members][0];               // новый хост
+    const hc = clients.get(r.host);
+    if (hc) { hc.host = true; broadcast(r, { t: 'host', id: r.host }); }
+  }
+  sendRoomsToAll();
+}
+
+/* --------------------------- логика сообщений ----------------------------- */
+function handle(c, m) {
+  switch (m.t) {
+    case 'list': {
+      wsSend(c, { t: 'rooms', rooms: roomsList() });
+      break;
+    }
+    case 'create': {
+      leaveRoom(c);
+      const name = String(m.name || 'room').slice(0, 40) || 'room';
+      if (rooms.has(name)) { wsSend(c, { t: 'err', m: 'Комната «' + name + '» уже есть' }); break; }
+      const r = {
+        name, pass: String(m.pass || ''), map: String(m.map || 'construct'),
+        vx: +m.vx || 0.4, max: Math.min(MAX_PLAYERS, +m.max || MAX_PLAYERS),
+        members: new Set([c.id]), host: c.id, mods: []
+      };
+      rooms.set(name, r);
+      c.room = name; c.host = true;
+      wsSend(c, { t: 'joined', id: c.id, host: true, room: name, map: r.map, vx: r.vx });
+      console.log('[комната] создана «%s» карта %s (игрок %d)', name, r.map, c.id);
+      sendRoomsToAll();
+      break;
+    }
+    case 'join': {
+      const name = String(m.name || '');
+      const r = rooms.get(name);
+      if (!r) { wsSend(c, { t: 'err', m: 'Комната «' + name + '» не найдена' }); break; }
+      if (r.pass && String(m.pass || '') !== r.pass) { wsSend(c, { t: 'err', m: 'Неверный пароль' }); break; }
+      if (r.members.size >= r.max) { wsSend(c, { t: 'err', m: 'Комната заполнена' }); break; }
+      leaveRoom(c);
+      r.members.add(c.id); c.room = name; c.host = (r.host === c.id);
+      wsSend(c, { t: 'joined', id: c.id, host: c.host, room: name, map: r.map, vx: r.vx });
+      broadcast(r, { t: 'host', id: r.host });            // все узнают, кто хост
+      if (r.mods && r.mods.length) wsSend(c, { t: 'mods', mods: r.mods });
+      console.log('[комната] игрок %d вошёл в «%s» (%d/%d)', c.id, name, r.members.size, r.max);
+      sendRoomsToAll();
+      break;
+    }
+    case 'leave': {
+      leaveRoom(c);
+      break;
+    }
+    case 'msg': {
+      const r = rooms.get(c.room);
+      if (!r) break;
+      broadcast(r, { t: 'm', from: c.id, d: m.d });
+      break;
+    }
+    case 'shareMods': {
+      const r = rooms.get(c.room);
+      if (!r) break;
+      if (r.host !== c.id) { wsSend(c, { t: 'err', m: 'Моды раздаёт только хост' }); break; }
+      const mods = Array.isArray(m.mods) ? m.mods.slice(0, 40).map(safeMod) : [];
+      r.mods = mods;
+      broadcast(r, { t: 'mods', mods }, c.id);
+      wsSend(c, { t: 'err', m: '📤 Моды розданы: ' + mods.length + ' (без кода)' });
+      console.log('[моды] комната «%s»: роздано %d мод(ов)', r.name, mods.length);
+      break;
+    }
+    default: break;
+  }
+}
+/* из мода вырезаем всё исполняемое: чужой код не должен прилетать по сети */
+function safeMod(m) {
+  const c = JSON.parse(JSON.stringify(m || {}));
+  delete c.script; delete c.js; delete c.scripts;
+  if (Array.isArray(c.files)) c.files = c.files.filter(f => !f || typeof f.code !== 'string');
+  delete c.permissions;
+  return c;
+}
+
+/* ------------------------------ статика ----------------------------------- */
+const MIME = {
+  '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8',
+  '.css': 'text/css; charset=utf-8', '.json': 'application/json; charset=utf-8',
+  '.rmod': 'application/json; charset=utf-8', '.txt': 'text/plain; charset=utf-8',
+  '.md': 'text/plain; charset=utf-8', '.png': 'image/png', '.jpg': 'image/jpeg',
+  '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.svg': 'image/svg+xml',
+  '.ico': 'image/x-icon', '.webm': 'video/webm', '.mp3': 'audio/mpeg', '.wav': 'audio/wav'
+};
+const server = http.createServer((req, res) => {
+  const url = decodeURIComponent((req.url || '/').split('?')[0]);
+  if (url === '/health') { res.writeHead(200, { 'Content-Type': 'text/plain' }); return res.end('ok'); }
+  if (url === '/' || url === '') {
+    res.writeHead(302, { Location: '/rphysics/index.html' }); return res.end();
+  }
+  if (url === '/rmodder') { res.writeHead(302, { Location: '/rmodder.html' }); return res.end(); }
+  const file = path.normalize(path.join(ROOT, url));
+  if (!file.startsWith(ROOT)) { res.writeHead(403); return res.end('no'); }
+  fs.stat(file, (err, st) => {
+    if (err || !st.isFile()) {
+      // красивая 404 с подсказкой
+      res.writeHead(404, { 'Content-Type': 'text/html; charset=utf-8' });
+      return res.end('<h1>404</h1><p>Нет файла <b>' + url + '</b>. Открой <a href="/rphysics/index.html">/rphysics/index.html</a></p>');
+    }
+    res.writeHead(200, {
+      'Content-Type': MIME[path.extname(file).toLowerCase()] || 'application/octet-stream',
+      'Cache-Control': 'no-cache', 'Content-Length': st.size
+    });
+    fs.createReadStream(file).pipe(res);
+  });
+});
+
+/* ---------------------------- WS upgrade ---------------------------------- */
+server.on('upgrade', (req, socket) => {
+  const key = req.headers['sec-websocket-key'];
+  if (!key) { socket.destroy(); return; }
+  socket.write(
+    'HTTP/1.1 101 Switching Protocols\r\n' +
+    'Upgrade: websocket\r\nConnection: Upgrade\r\n' +
+    'Sec-WebSocket-Accept: ' + wsAccept(key) + '\r\n\r\n'
+  );
+  const c = { id: nextId++, socket, room: null, host: false, dead: false, buf: Buffer.alloc(0), frag: null };
+  clients.set(c.id, c);
+  console.log('[+] игрок %d подключился (%d онлайн)', c.id, clients.size);
+
+  socket.on('data', chunk => {
+    c.buf = Buffer.concat([c.buf, chunk]);
+    if (c.buf.length > MAX_PAYLOAD * 2) { closeClient(c); return; }
+    // разбираем сколько угодно кадров в буфере
+    for (;;) {
+      const b = c.buf;
+      if (b.length < 2) return;
+      const fin = (b[0] & 0x80) !== 0;
+      const op = b[0] & 0x0F;
+      const masked = (b[1] & 0x80) !== 0;
+      let len = b[1] & 0x7F;
+      let off = 2;
+      if (len === 126) { if (b.length < 4) return; len = b.readUInt16BE(2); off = 4; }
+      else if (len === 127) { if (b.length < 10) return; len = Number(b.readBigUInt64BE(2)); off = 10; }
+      if (len > MAX_PAYLOAD) { closeClient(c); return; }
+      const need = off + (masked ? 4 : 0) + len;
+      if (b.length < need) return;
+      let mask = null;
+      if (masked) { mask = b.subarray(off, off + 4); off += 4; }
+      let payload = Buffer.from(b.subarray(off, off + len));
+      if (mask) for (let i = 0; i < payload.length; i++) payload[i] ^= mask[i & 3];
+      c.buf = b.subarray(need);
+
+      if (op === 0x8) { closeClient(c); return; }          // close
+      if (op === 0x9) { try { socket.write(wsPong(payload)); } catch (e) { } continue; }
+      if (op === 0xA) continue;                            // pong
+      if (op === 0x0) {                                    // продолжение
+        if (c.frag) { c.frag = Buffer.concat([c.frag, payload]); payload = c.frag; }
+        else continue;
+        if (!fin) continue;
+        c.frag = null;
+      } else if (!fin) { c.frag = payload; continue; }
+
+      let msg;
+      try { msg = JSON.parse(payload.toString('utf8')); } catch (e) { continue; }
+      if (msg && typeof msg === 'object') {
+        try { handle(c, msg); } catch (e) { console.warn('ошибка сообщения:', e.message); }
+      }
+    }
+  });
+  socket.on('error', () => closeClient(c));
+  socket.on('close', () => closeClient(c));
+
+  function closeClient(cl) {
+    if (cl.dead) return;
+    cl.dead = true;
+    try { cl.socket.write(wsClose()); } catch (e) { }
+    try { cl.socket.destroy(); } catch (e) { }
+    leaveRoom(cl);
+    clients.delete(cl.id);
+    console.log('[-] игрок %d вышел (%d онлайн)', cl.id, clients.size);
+  }
+  c.close = () => closeClient(c);
+});
+
+server.listen(PORT, () => {
+  const lan = Object.values(require('os').networkInterfaces()).flat()
+    .filter(i => i && i.family === 'IPv4' && !i.internal).map(i => i.address);
+  console.log(`
+  ╔══════════════════════════════════════════════════════════╗
+  ║  Rphysics server запущен                                  ║
+  ╚══════════════════════════════════════════════════════════╝
+  Игра:      http://localhost:${PORT}/rphysics/index.html
+  Моддер:    http://localhost:${PORT}/rmodder.html
+  ${lan.length ? 'Для друзей в сети: http://' + lan[0] + ':' + PORT + '/rphysics/index.html' : ''}
+  В игре: меню карты → «Мультиплеер» → адрес пустой (= этот сайт) → Создать комнату.
+  Останов: Ctrl+C
+  `);
+  setInterval(() => {   // пульс для прокси (Render/Heroku) и чистка мёртвых
+    for (const c of clients.values()) if (c.dead) clients.delete(c.id);
+  }, TICK_LOG).unref?.();
+});
